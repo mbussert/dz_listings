@@ -2,11 +2,11 @@ var _ = require('underscore');
 const fs = require('fs')
 var db = {}
 
-// [{ t: 'title1', d: false, MIS: 1 }, { t: 'title2', d: false, MIS: 3 }, { t: 'title3', d: true, MIS:4}]
+// [{ t: 'title1', d: false, c: 'oipfjezojifze'}, { t: 'title2', d: false, c: 'oipfjezojifze' }, { t: 'title3', d: true, c: 'oipfjezojifze' }]
 
 const storeData = (data, path) => {
     try {
-        fs.writeFileSync(path, JSON.stringify(data))
+        fs.writeFileSync(path, JSON.stringify({data: data}))
     } catch (err) {
         console.error(err)
         return (err.message)
@@ -15,7 +15,7 @@ const storeData = (data, path) => {
 
 const loadData = (path) => {
     try {
-        return fs.readFileSync(path, 'utf8')
+        return JSON.parse(fs.readFileSync(path, 'utf8'))
     } catch (err) {
         console.error(err)
         return (err.message)
@@ -61,14 +61,36 @@ db.clean = function clean() {
     }
 }
 
-// get one with ID
-db.get = function get() {
-
+// Get one
+db.get = function get(query) {
+    return _.findWhere(global.listings, query)
 }
 
 // With limit and order
-db.fetch = function fetch() {
+db.fetch = function fetch(query) {
+    return _.where(global.listings, query)
+}
 
+// Reject some
+// query ~= function(item){ return item.title != 'blablab'; }
+db.rejectDeep = function rejectDeep(key, value) {
+    query = (item) => { return item[key].indexOf(value) > -1; }
+    return _.reject(global.listings, query)
+}
+
+// query ~= function(item){ return item.title != 'blablab'; }
+db.fetchDeep = function fetchDeep(key, value) {
+    query = (item) => { return item[key].indexOf(value) > -1; }
+    return _.filter(global.listings, query)
+}
+
+// sort
+db.sortBy = function sortBy(key, asc) {
+    return asc ? _.sortBy(global.listings, key) : _.sortBy(global.listings, key).reverse()
+}
+
+db.paginate = function paginate(length) {
+    return _.chunk(global.listings, length)
 }
 
 module.exports.db = db;
