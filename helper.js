@@ -2,7 +2,7 @@ var _ = require('underscore');
 const fs = require('fs')
 var db = {}
 
-// [{ t: 'title1', d: false, c: 'oipfjezojifze'}, { t: 'title2', d: false, c: 'oipfjezojifze' }, { t: 'title3', d: true, c: 'oipfjezojifze' }]
+// [{ title: 'title1', d: false, c: 'oipfjezojifze'}, { title: 'title2', d: false, c: 'oipfjezojifze' }, { title: 'title3', d: true, c: 'oipfjezojifze' }]
 
 const storeData = (data, path) => {
     try {
@@ -30,7 +30,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ d: 0, MIS: 1 }, { d: 0, MIS: 3 }, { d: 1, MIS: 4 }]
+        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze'}]
         db.persist()
     }
 }

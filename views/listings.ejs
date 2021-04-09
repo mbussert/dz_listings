@@ -15,7 +15,7 @@
     <thead class="thead-light">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Date of birth</th>
+        <th scope="col">Title</th>
         <th scope="col">URL</th>
       </tr>
     </thead>
@@ -23,12 +23,12 @@
       <% for (var i=0; listings.length> 0 && i< listings.length && i < 5 ; i++) { %>
           <tr>
             <th scope="row">
-              <%= i %>
+              <%= listings[i].id %>
             </th>
             <td>
-              <%= listings[i].HR %>
+              <%= listings[i].title %>
             </td>
-            <td><a href='earlier/<%= listings[i].MIS %>' style="opacity:<%= 1/(i+0.01) %>;">earlier/<%= listings[i].MIS
+            <td><a href='earlier/<%= listings[i].desc %>' style="opacity:<%= 1/(i+0.01) %>;">earlier/<%= listings[i].desc
                   %></a></td>
           </tr>
           <% } %>
@@ -42,11 +42,7 @@
     </div>
     <div>
       <label for="description">What description do you want to say?</label>
-      <input name="description" id="description" value="description...">
-    </div>
-    <div>
-      <label for="authorId">What authorId do you want to say?</label>
-      <input name="authorId" id="authorId" value="authorId...">
+      <input name="desc" id="description" value="description...">
     </div>
     <div>
       <button>Send my data</button>

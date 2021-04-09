@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var _ = require('underscore');
 var db = require('./helper').db
 const dotenv = require('dotenv')
 
@@ -24,9 +25,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var trimmer = function(req, res, next){
+  req.body = _.object(_.map(req.body, function (value, key) {
+    return [key, value.trim()];
+  }));
+  next();
+}
+
+app.use(trimmer);
 // get bigVar from disk
 db.backup()
 db.persist()
+
 app.use('/', indexRouter);
 app.use('/listings', listingsRouter);
 
