@@ -1,10 +1,58 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%- include('partials/head'); %>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+  <%- include('partials/head'); %>
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>
+  </p>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Date of birth</th>
+        <th scope="col">URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i=0; listings.length> 0 && i< listings.length && i < 5 ; i++) { %>
+          <tr>
+            <th scope="row">
+              <%= i %>
+            </th>
+            <td>
+              <%= listings[i].HR %>
+            </td>
+            <td><a href='earlier/<%= listings[i].MIS %>' style="opacity:<%= 1/(i+0.01) %>;">earlier/<%= listings[i].MIS
+                  %></a></td>
+          </tr>
+          <% } %>
+    </tbody>
+  </table>
+
+  <form action="listings/add" method="POST">
+    <div>
+      <label for="title">What title do you want to say?</label>
+      <input name="title" id="title" value="title...">
+    </div>
+    <div>
+      <label for="description">What description do you want to say?</label>
+      <input name="description" id="description" value="description...">
+    </div>
+    <div>
+      <label for="authorId">What authorId do you want to say?</label>
+      <input name="authorId" id="authorId" value="authorId...">
+    </div>
+    <div>
+      <button>Send my data</button>
+    </div>
+  </form>
+
+</body>
+
 </html>
