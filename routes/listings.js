@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var bigVar = global.listings
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render('listings', { title: 'Express', listings: global.listings });
+    res.render('listings', { title: 'Express', listings: bigVar });
 });
 
 const Joi = require('joi');
@@ -27,12 +28,6 @@ router.post('/add', async (req, res, next) => {
     res.json({ message: 'Resource created', data: data }) 
   } 
 });
-
-
-// router.get('/add', function (req, res, next) {
-
-//   res.render('listings', { title: 'Express', message: 'Item added' });
-// });
 
 router.get('/deactivate', function (req, res, next) {
   res.render('listings', { title: 'Express', message: 'Item deactivated' });

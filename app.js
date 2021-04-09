@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var db = require('./helper').db
 const dotenv = require('dotenv')
 
 var indexRouter = require('./routes/index');
@@ -23,7 +23,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-global.listings = [{ HR: 0, MIS: 1 }, { HR: 2, MIS: 3 }]
+
+// get bigVar from disk
+db.backup()
+db.persist()
 app.use('/', indexRouter);
 app.use('/listings', listingsRouter);
 
