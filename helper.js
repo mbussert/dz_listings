@@ -77,6 +77,19 @@ db.get = function get(query) {
     return _.findWhere(global.listings, query)
 }
 
+// Get one
+db.deactivate = function deactivate(id) {
+    console.log("===== DB +++++")
+    console.log("===== get +++++ ")
+    ll.forEach(elem => {
+        if (elem.id === id) {
+            elem.d = true;
+            return;
+        }
+    })
+}
+
+
 // With limit and order
 db.fetch = function fetch(query) {
     console.log("===== DB +++++")

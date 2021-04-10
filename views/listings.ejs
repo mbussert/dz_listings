@@ -6,49 +6,51 @@
 </head>
 
 <body>
-  <h1>
-    <%= title %>
-  </h1>
-  <p>Welcome to <%= title %>
-  </p>
-  <table class="table">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (var i=0; listings.length> 0 && i< listings.length && i < 5 ; i++) { %>
-          <tr>
-            <th scope="row">
-              <%= listings[i].id %>
-            </th>
-            <td>
-              <%= listings[i].title %>
-            </td>
-            <td><a href='earlier/<%= listings[i].desc %>' style="opacity:<%= 1/(i+0.01) %>;">earlier/<%= listings[i].desc
-                  %></a></td>
-          </tr>
-          <% } %>
-    </tbody>
-  </table>
+  <div class="container">
+    <h1>
+      <%= title %>
+    </h1>
+    <p>Welcome to <%= title %>
+    </p>
 
-  <form action="listings/add" method="POST">
-    <div>
-      <label for="title">What title do you want to say?</label>
-      <input name="title" id="title" value="title...">
-    </div>
-    <div>
-      <label for="description">What description do you want to say?</label>
-      <input name="desc" id="description" value="description...">
-    </div>
-    <div>
-      <button>Send my data</button>
-    </div>
-  </form>
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i=0; listings.length > 0 && i < listings.length && i < 5 ; i++) { %>
+            <tr>
+              <th scope="row">
+                <%= listings[i].id %>
+              </th>
+              <td>
+                <%= listings[i].title %>
+              </td>
+              <td><a href='listing/<%= listings[i].desc %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%=
+                    listings[i].desc %></a></td>
+            </tr>
+            <% } %>
+      </tbody>
+    </table>
 
+    <form action="listings/add" method="POST">
+      <div>
+        <label for="title">What title do you want to say?</label>
+        <input name="title" id="title" value="title...">
+      </div>
+      <div>
+        <label for="description">What description do you want to say?</label>
+        <input name="desc" id="description" value="description...">
+      </div>
+      <div>
+        <button>Send my data</button>
+      </div>
+    </form>
+  </div>
 </body>
 
 </html>

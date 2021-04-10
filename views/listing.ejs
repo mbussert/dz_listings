@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('partials/head'); %>
+</head>
+
+<body>
+  <div class="container">
+    <h1>
+      <%= title %>
+    </h1>
+    <p>Welcome to <%= title %>
+    </p>
+
+    <%= data.title %>
+    <h2>deactivate</h2>
+    <form action="/deactivate" method="POST">
+      <div>
+        <label for="password">You need the password for the announcement</label>
+        <input name="password" id="password" value="password...">
+      </div>
+      <div>
+        <button>Deactivate</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
