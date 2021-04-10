@@ -71,17 +71,17 @@ db.clean = function clean() {
 }
 
 // Get one
-db.get = function get(query) {
+db.get = function get(subListing=global.listings, query) {
     console.log("===== DB +++++")
     console.log("===== get +++++ ")
-    return _.findWhere(global.listings, query)
+    return _.findWhere(subListing, query)
 }
 
 // Get one
-db.deactivate = function deactivate(id) {
+db.deactivate = function deactivate(subListing=global.listings, id) {
     console.log("===== DB +++++")
     console.log("===== get +++++ ")
-    return _.some(global.listings, elem => {
+    return _.some(subListing, elem => {
         if (elem.title === id) {
             elem.d = 1;
             return true;
@@ -91,49 +91,54 @@ db.deactivate = function deactivate(id) {
 
 
 // With limit and order
-db.fetch = function fetch(query) {
+db.fetch = function fetch(subListing=global.listings, query) {
     console.log("===== DB +++++")
     console.log("===== fetch +++++ ")
-    return _.where(global.listings, query)
+    return _.where(subListing, query)
 }
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
-db.rejectDeep = function rejectDeep(key, value) {
+db.rejectDeep = function rejectDeep(subListing=global.listings, key, value) {
     console.log("===== DB +++++")
     console.log("===== rejectDeep +++++ ")
-    var query = (item) => { return item[key].indexOf(value) > -1; }
-    return _.reject(global.listings, query)
+    var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
+    return _.reject(subListing, query)
 }
 
 // query ~= function(item){ return item.title != 'blablab'; }
-db.fetchDeep = function fetchDeep(key, value) {
+db.fetchDeep = function fetchDeep(subListing=global.listings, key, value) {
     console.log("===== DB +++++")
     console.log("===== fetchDeep +++++ ")
-    var query = (item) => { return item[key].indexOf(value) > -1; }
-    return _.filter(global.listings, query)
+    var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
+    return _.filter(subListing, query)
 }
 
 // sort
-db.sortBy = function sortBy(key, asc) {
+db.sortBy = function sortBy(subListing=global.listings, key, asc) {
     console.log("===== DB +++++")
     console.log("===== sortBy +++++ ")
-    return asc ? _.sortBy(global.listings, key) : _.sortBy(global.listings, key).reverse()
+    return asc ? _.sortBy(subListing, key) : _.sortBy(subListing, key).reverse()
 }
 
-db.paginate = function paginate(length) {
+db.paginate = function paginate(subListing=global.listings, length) {
     console.log("===== DB +++++")
     console.log("===== paginate +++++ ")
-    return _.chunk(global.listings, length)
+    return _.chunk(subListing, length)
 }
 
-db.since = function since(minutes) {
+db.since = function since(subListing=global.listings, minutes) {
     console.log("===== DB +++++")
     console.log("===== since +++++ ")
     var now = Math.floor(new Date().getTime() / 1000)
     var then = now - minutes
     var compare = (item) => { return item.id > then; }
-    return _.filter(global.listings, compare)
+    return _.filter(subListing, compare)
+}
+
+// Default limit to 100
+db.toPublic = function toPublic() {
+    return _.map(global.listings, entrie => { return _.pick(entrie, 'id', 'title', 'desc') }).filter(elem => { return !elem.deactivate }).slice(0, 100)
 }
 
 module.exports.db = db;

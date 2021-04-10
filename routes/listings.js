@@ -7,18 +7,46 @@ var _ = require('underscore');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   // without password 
-  var pubListings = _.map(global.listings, entrie => { return _.pick(entrie, 'id', 'title', 'desc') })
+  var pubListings = 
+
+  res.render('listings', { title: 'Express', listings: pubListings });
+});
+
+router.post('/query', async (req, res, next) => {
+  const { body } = req;
+
+  const querySchema = Joi.object().keys({
+    title: Joi.string().alphanum().min(3).max(100),
+    exactTitle: Joi.boolean().default(false),
+    desc: Joi.string().min(10).max(500),
+    exactDesc: Joi.boolean().default(false),
+  }).or('title', 'desc');
+
+  const result = querySchema.validate(body);
+  const { value, error } = result;
+  const valid = error == null;
+  if (!valid) {
+    res.status(422).json({
+      message: 'Invalid request',
+      data: body,
+      error: error
+    })
+  } else {
+    var queriedListings = 
+  }
+
+  var pubListings = db.toPublic()
   res.render('listings', { title: 'Express', listings: pubListings });
 });
 
 const Joi = require('joi');
 router.post('/add', async (req, res, next) => {
   const { body } = req;
-  const listing = Joi.object().keys({
+  const listingSchema = Joi.object().keys({
     title: Joi.string().alphanum().min(10).max(100).required(),
     desc: Joi.string().min(10).max(500).required(),
   });
-  const result = listing.validate(body);
+  const result = listingSchema.validate(body);
   const { value, error } = result;
   const valid = error == null;
   if (!valid) {
@@ -50,21 +78,21 @@ router.post('/add', async (req, res, next) => {
 router.post('/deactivate', function (req, res, next) {
   const { body } = req;
   const listing = Joi.object().keys({
-      password: Joi.string().min(6).max(9).required(),
+    password: Joi.string().min(6).max(9).required(),
   });
   const result = listing.validate(body);
   const { value, error } = result;
   const valid = error == null;
   if (!valid) {
-      res.status(422).json({
-          message: 'Invalid request',
-          data: body,
-          error: error
-      })
+    res.status(422).json({
+      message: 'Invalid request',
+      data: body,
+      error: error
+    })
   } else {
-      var elem = db.get({ pass: body.password })
-      db.deactivate(elem.id)
-      res.render('messages', { title: 'Express', message: 'Item deactivated' });
+    var elem = db.get({ pass: body.password })
+    db.deactivate(elem.id)
+    res.render('messages', { title: 'Express', message: 'Item deactivated' });
   }
 
 });

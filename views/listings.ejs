@@ -13,6 +13,20 @@
     <p>Welcome to <%= title %>
     </p>
 
+    <form action="listings/query" method="POST">
+      <div>
+        <label for="title">What title do you want to search?</label>
+        <input name="title" id="title" value="title...">
+      </div>
+      <div>
+        <label for="description">What description do you want to search?</label>
+        <input name="desc" id="description" value="description...">
+      </div>
+      <div>
+        <button>Send my data</button>
+      </div>
+    </form>
+
     <table class="table">
       <thead class="thead-light">
         <tr>
