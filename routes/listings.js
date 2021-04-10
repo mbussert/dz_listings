@@ -30,7 +30,6 @@ router.post('/add', async (req, res, next) => {
     var now = Math.floor(new Date().getTime() / 1000)
     var entry = _.extend(body, { id: now })
     var err = db.push(entry)
-    db.persist()
     if (!err)
       res.json({ message: 'Resource created', data: entry })
     else

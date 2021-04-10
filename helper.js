@@ -30,7 +30,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze'}]
+        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze' }]
         db.persist()
     }
 }
@@ -89,7 +89,7 @@ db.fetch = function fetch(query) {
 db.rejectDeep = function rejectDeep(key, value) {
     console.log("===== DB +++++")
     console.log("===== rejectDeep +++++ ")
-    query = (item) => { return item[key].indexOf(value) > -1; }
+    var query = (item) => { return item[key].indexOf(value) > -1; }
     return _.reject(global.listings, query)
 }
 
@@ -97,7 +97,7 @@ db.rejectDeep = function rejectDeep(key, value) {
 db.fetchDeep = function fetchDeep(key, value) {
     console.log("===== DB +++++")
     console.log("===== fetchDeep +++++ ")
-    query = (item) => { return item[key].indexOf(value) > -1; }
+    var query = (item) => { return item[key].indexOf(value) > -1; }
     return _.filter(global.listings, query)
 }
 
@@ -112,6 +112,15 @@ db.paginate = function paginate(length) {
     console.log("===== DB +++++")
     console.log("===== paginate +++++ ")
     return _.chunk(global.listings, length)
+}
+
+db.since = function since(minutes) {
+    console.log("===== DB +++++")
+    console.log("===== since +++++ ")
+    var now = Math.floor(new Date().getTime() / 1000)
+    var then = now - minutes
+    var compare = (item) => { return item.id > then; }
+    return _.filter(global.listings, compare)
 }
 
 module.exports.db = db;
