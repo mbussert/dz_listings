@@ -81,10 +81,10 @@ db.get = function get(query) {
 db.deactivate = function deactivate(id) {
     console.log("===== DB +++++")
     console.log("===== get +++++ ")
-    ll.forEach(elem => {
-        if (elem.id === id) {
-            elem.d = true;
-            return;
+    return _.some(global.listings, elem => {
+        if (elem.title === id) {
+            elem.d = 1;
+            return true;
         }
     })
 }

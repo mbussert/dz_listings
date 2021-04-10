@@ -7,7 +7,7 @@ var _ = require('underscore');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   // without password 
-  var pubListings = _.map(global.listings, entrie => { return _.pick(entrie, 'id', 'title', 'desc')})
+  var pubListings = _.map(global.listings, entrie => { return _.pick(entrie, 'id', 'title', 'desc') })
   res.render('listings', { title: 'Express', listings: pubListings });
 });
 
@@ -28,7 +28,7 @@ router.post('/add', async (req, res, next) => {
       error: error
     })
   } else {
-    var password = (Math.random().toString(36).substr(4)).slice(0,9)
+    var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
@@ -46,25 +46,28 @@ router.post('/add', async (req, res, next) => {
   }
 });
 
-router.get('/deactivate', function (req, res, next) {
+
+router.post('/deactivate', function (req, res, next) {
   const { body } = req;
   const listing = Joi.object().keys({
-    password: Joi.string().min(6).max(9).required(),
+      password: Joi.string().min(6).max(9).required(),
   });
   const result = listing.validate(body);
   const { value, error } = result;
   const valid = error == null;
   if (!valid) {
-    res.status(422).json({
-      message: 'Invalid request',
-      data: body,
-      error: error
-    })
+      res.status(422).json({
+          message: 'Invalid request',
+          data: body,
+          error: error
+      })
   } else {
-    db.get(global.listings, {pass: body})
-    // res.render('listings', { title: 'Express', message: 'Item deactivated' });
+      var elem = db.get({ pass: body.password })
+      db.deactivate(elem.id)
+      res.render('messages', { title: 'Express', message: 'Item deactivated' });
   }
-  
+
 });
+
 
 module.exports = router;

@@ -40,6 +40,7 @@ db.persist()
 app.use('/', indexRouter);
 app.use('/listings', listingsRouter);
 
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -1,7 +1,8 @@
 var db = require('./helper').db
 
 db.backup()
-
+// var vv = db.get({ pass: "ynfrwbv8w" })
+// console.log(vv)
 var array = global.listings
 var err = db.push({ "id": 2, "d": 1, "title": 4 })
 console.log(err)
