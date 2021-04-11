@@ -116,10 +116,16 @@ db.paginate = function paginate(length, subListing = global.listings) {
     return _.chunk(subListing, length)
 }
 
-db.since = function since(minutes, subListing = global.listings) {
+db.sinceDelta = function sinceDelta(minutes, subListing = global.listings) {
     console.log("===== since ===== ")
     var now = Math.floor(new Date().getTime() / 1000)
     var then = now - minutes
+    var compare = (item) => { return item.id > then; }
+    return _.filter(subListing, compare)
+}
+
+db.since = function since(then, subListing = global.listings) {
+    console.log("===== since ===== ")
     var compare = (item) => { return item.id > then; }
     return _.filter(subListing, compare)
 }

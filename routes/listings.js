@@ -25,6 +25,7 @@ router.post('/query', async (req, res, next) => {
     exactTitle: Joi.boolean().truthy('on').falsy('off').default(false),
     desc: Joi.string().min(10).max(500),
     exactDesc: Joi.boolean().truthy('on').falsy('off').default(false),
+    since: Joi.date().iso()
   }).or('title', 'desc');
 
   const result = querySchema.validate(body);
@@ -46,7 +47,8 @@ router.post('/query', async (req, res, next) => {
     else
       activeListings = db.fetchDeep('desc', body.desc, activeListings)
   }
-
+  var then = Math.floor(new Date(body.since).getTime() / 1000)
+  activeListings = db.since(then, activeListings)
   res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
 });
 

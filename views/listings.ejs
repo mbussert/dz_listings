@@ -12,7 +12,7 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
-
+    <h2>Search</h2>
     <form action="listings/query" method="POST">
       <div>
         <label for="title">What title do you want to search?</label>
@@ -30,10 +30,16 @@
         <label for="exactDesc">exactDesc ?</label>
         <input type="checkbox" name="exactDesc" id="exactDesc" checked>
       </div>
+      <label for="since">Since date (defaults to all):</label>
+      <input type="date" id="since" name="since" value="2021-04-01" min="2021-04-01">
+
       <div>
         <button>Send my data</button>
       </div>
     </form>
+    <br>
+    <hr>
+    <h2>Listings</h2>
 
     <table class="table">
       <thead class="thead-light">
@@ -44,7 +50,7 @@
         </tr>
       </thead>
       <tbody>
-        <% for (var i=0; listings.length > 0 && i < listings.length && i < 5 ; i++) { %>
+        <% for (var i=0; listings.length> 0 && i < listings.length && i < 5 ; i++) { %>
             <tr>
               <th scope="row">
                 <%= listings[i].id %>
@@ -58,6 +64,9 @@
             <% } %>
       </tbody>
     </table>
+    <br>
+    <hr>
+    <h2>Add a listing</h2>
 
     <form action="listings/add" method="POST">
       <div>
