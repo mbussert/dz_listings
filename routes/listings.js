@@ -4,21 +4,19 @@ var db = require('../helper').db
 var _ = require('underscore');
 
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
-/* GET listings. */
+/* GET listings not including deactivated. */
 router.get('/', function (req, res, next) {
-  // without password 
   var pubListings = db.toPublic(100)
   res.render('listings', { title: 'Express', listings: pubListings });
 });
 
-/* GET one listing. */
+/* GET one listing; must be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  console.log(id)
-  res.render('listing', { title: 'Express', data: db.get({id: id}) });
+  res.render('listing', { title: 'Express', data: db.get({ id: id, d: 0 }) });
 });
 
-
+/* Query listings not including deactivated. */
 router.post('/query', async (req, res, next) => {
   const { body } = req;
   var activeListings = db.toPublic()
@@ -43,7 +41,6 @@ router.post('/query', async (req, res, next) => {
       activeListings = db.fetch({ title: body.title }, activeListings)
     else
       activeListings = db.fetchDeep('title', body.title, activeListings)
-    console.log('on: ' + body.desc)
     if (body.exactDesc)
       activeListings = db.fetch({ desc: body.desc }, activeListings)
     else
@@ -53,6 +50,7 @@ router.post('/query', async (req, res, next) => {
   res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
 });
 
+/* Add one listing. */
 const Joi = require('joi');
 router.post('/add', async (req, res, next) => {
   const { body } = req;
@@ -88,7 +86,7 @@ router.post('/add', async (req, res, next) => {
   }
 });
 
-
+/* Deactivate one listing. */
 router.post('/deactivate', function (req, res, next) {
   const { body } = req;
   const listing = Joi.object().keys({
