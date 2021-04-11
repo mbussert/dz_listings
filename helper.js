@@ -24,7 +24,6 @@ const loadData = (path) => {
 
 // Get from disk
 db.backup = function backup() {
-    console.log("===== DB +++++")
     console.log("===== backup +++++ ")
     if (!global.listings || global.listings.length == 0) {
         global.listings = loadData('listings.json')
@@ -37,14 +36,12 @@ db.backup = function backup() {
 
 // Set from disk
 db.persist = function persist() {
-    console.log("===== DB +++++")
     console.log("===== persist +++++ ")
     storeData(global.listings, 'listings.json')
 }
 
 // Push item
 db.push = function push(item) {
-    console.log("===== DB +++++")
     console.log("===== push +++++ ")
     var ids = _.pluck(global.listings, 'id')
     if (!item.id || ids.indexOf(item.id) >= 0)
@@ -54,13 +51,11 @@ db.push = function push(item) {
 
 // After some conditions persist
 db.cycle = function cycle() {
-    console.log("===== DB +++++")
     console.log("===== cycle +++++ ")
 }
 
 // Purge deactivated items
 db.clean = function clean() {
-    console.log("===== DB +++++")
     console.log("===== clean +++++ ")
     for (var i = 0; i < global.listings.length; i++) {
         if (global.listings[i].d) {
@@ -71,15 +66,13 @@ db.clean = function clean() {
 }
 
 // Get one
-db.get = function get(subListing=global.listings, query) {
-    console.log("===== DB +++++")
+db.get = function get(query, subListing = global.listings,) {
     console.log("===== get +++++ ")
     return _.findWhere(subListing, query)
 }
 
 // Get one
-db.deactivate = function deactivate(subListing=global.listings, id) {
-    console.log("===== DB +++++")
+db.deactivate = function deactivate(id, subListing = global.listings,) {
     console.log("===== get +++++ ")
     return _.some(subListing, elem => {
         if (elem.title === id) {
@@ -91,44 +84,39 @@ db.deactivate = function deactivate(subListing=global.listings, id) {
 
 
 // With limit and order
-db.fetch = function fetch(subListing=global.listings, query) {
-    console.log("===== DB +++++")
+db.fetch = function fetch(query, subListing = global.listings,) {
     console.log("===== fetch +++++ ")
     return _.where(subListing, query)
 }
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
-db.rejectDeep = function rejectDeep(subListing=global.listings, key, value) {
-    console.log("===== DB +++++")
+db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
     console.log("===== rejectDeep +++++ ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
     return _.reject(subListing, query)
 }
 
 // query ~= function(item){ return item.title != 'blablab'; }
-db.fetchDeep = function fetchDeep(subListing=global.listings, key, value) {
-    console.log("===== DB +++++")
+db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
     console.log("===== fetchDeep +++++ ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
     return _.filter(subListing, query)
 }
 
+
 // sort
-db.sortBy = function sortBy(subListing=global.listings, key, asc) {
-    console.log("===== DB +++++")
+db.sortBy = function sortBy(key, asc, subListing = global.listings) {
     console.log("===== sortBy +++++ ")
     return asc ? _.sortBy(subListing, key) : _.sortBy(subListing, key).reverse()
 }
 
-db.paginate = function paginate(subListing=global.listings, length) {
-    console.log("===== DB +++++")
+db.paginate = function paginate(length, subListing = global.listings) {
     console.log("===== paginate +++++ ")
     return _.chunk(subListing, length)
 }
 
-db.since = function since(subListing=global.listings, minutes) {
-    console.log("===== DB +++++")
+db.since = function since(minutes, subListing = global.listings) {
     console.log("===== since +++++ ")
     var now = Math.floor(new Date().getTime() / 1000)
     var then = now - minutes
@@ -137,8 +125,11 @@ db.since = function since(subListing=global.listings, minutes) {
 }
 
 // Default limit to 100
-db.toPublic = function toPublic() {
-    return _.map(global.listings, entrie => { return _.pick(entrie, 'id', 'title', 'desc') }).filter(elem => { return !elem.deactivate }).slice(0, 100)
+db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
+    if (limit == 999998)
+        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc') })
+    else
+        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc') }).slice(0, limit)
 }
 
 module.exports.db = db;

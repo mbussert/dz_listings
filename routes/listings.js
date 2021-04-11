@@ -7,19 +7,18 @@ var _ = require('underscore');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   // without password 
-  var pubListings = 
-
+  var pubListings = db.toPublic(100)
   res.render('listings', { title: 'Express', listings: pubListings });
 });
 
 router.post('/query', async (req, res, next) => {
   const { body } = req;
-
+  var activeListings = db.toPublic()
   const querySchema = Joi.object().keys({
     title: Joi.string().alphanum().min(3).max(100),
-    exactTitle: Joi.boolean().default(false),
+    exactTitle: Joi.boolean().truthy('on').falsy('off').default(false),
     desc: Joi.string().min(10).max(500),
-    exactDesc: Joi.boolean().default(false),
+    exactDesc: Joi.boolean().truthy('on').falsy('off').default(false),
   }).or('title', 'desc');
 
   const result = querySchema.validate(body);
@@ -32,11 +31,18 @@ router.post('/query', async (req, res, next) => {
       error: error
     })
   } else {
-    var queriedListings = 
+    if (body.exactTitle)
+      activeListings = db.fetch({ title: body.title }, activeListings)
+    else
+      activeListings = db.fetchDeep('title', body.title, activeListings)
+    console.log('on: ' + body.desc)
+    if (body.exactDesc)
+      activeListings = db.fetch({ desc: body.desc }, activeListings)
+    else
+      activeListings = db.fetchDeep('desc', body.desc, activeListings)
   }
 
-  var pubListings = db.toPublic()
-  res.render('listings', { title: 'Express', listings: pubListings });
+  res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
 });
 
 const Joi = require('joi');
