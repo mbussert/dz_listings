@@ -24,7 +24,7 @@ const loadData = (path) => {
 
 // Get from disk
 db.backup = function backup() {
-    console.log("===== backup +++++ ")
+    console.log("===== backup ===== ")
     if (!global.listings || global.listings.length == 0) {
         global.listings = loadData('listings.json')
     }
@@ -36,13 +36,13 @@ db.backup = function backup() {
 
 // Set from disk
 db.persist = function persist() {
-    console.log("===== persist +++++ ")
+    console.log("===== persist ===== ")
     storeData(global.listings, 'listings.json')
 }
 
 // Push item
 db.push = function push(item) {
-    console.log("===== push +++++ ")
+    console.log("===== push ===== ")
     var ids = _.pluck(global.listings, 'id')
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
@@ -51,12 +51,12 @@ db.push = function push(item) {
 
 // After some conditions persist
 db.cycle = function cycle() {
-    console.log("===== cycle +++++ ")
+    console.log("===== cycle ===== ")
 }
 
 // Purge deactivated items
 db.clean = function clean() {
-    console.log("===== clean +++++ ")
+    console.log("===== clean ===== ")
     for (var i = 0; i < global.listings.length; i++) {
         if (global.listings[i].d) {
             global.listings.splice(i, 1);
@@ -66,14 +66,14 @@ db.clean = function clean() {
 }
 
 // Get one
-db.get = function get(query, subListing = global.listings,) {
-    console.log("===== get +++++ ")
-    return _.findWhere(subListing, query)
+db.get = function get(query, subListing = global.listings) {
+    console.log("===== get ===== ")
+    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc')
 }
 
-// Get one
+// Deactivate one
 db.deactivate = function deactivate(id, subListing = global.listings,) {
-    console.log("===== get +++++ ")
+    console.log("===== deactivate ===== ")
     return _.some(subListing, elem => {
         if (elem.title === id) {
             elem.d = 1;
@@ -83,41 +83,41 @@ db.deactivate = function deactivate(id, subListing = global.listings,) {
 }
 
 
-// With limit and order
-db.fetch = function fetch(query, subListing = global.listings,) {
-    console.log("===== fetch +++++ ")
+// Fetch some
+db.fetch = function fetch(query, subListing = global.listings) {
+    console.log("===== fetch ===== ")
     return _.where(subListing, query)
 }
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
 db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
-    console.log("===== rejectDeep +++++ ")
+    console.log("===== rejectDeep ===== ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
     return _.reject(subListing, query)
 }
 
-// query ~= function(item){ return item.title != 'blablab'; }
+// query ~= function(item){ return item.title == 'blablab'; }
 db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
-    console.log("===== fetchDeep +++++ ")
+    console.log("===== fetchDeep ===== ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
     return _.filter(subListing, query)
 }
 
 
-// sort
+// Sort
 db.sortBy = function sortBy(key, asc, subListing = global.listings) {
-    console.log("===== sortBy +++++ ")
+    console.log("===== sortBy ===== ")
     return asc ? _.sortBy(subListing, key) : _.sortBy(subListing, key).reverse()
 }
 
 db.paginate = function paginate(length, subListing = global.listings) {
-    console.log("===== paginate +++++ ")
+    console.log("===== paginate ===== ")
     return _.chunk(subListing, length)
 }
 
 db.since = function since(minutes, subListing = global.listings) {
-    console.log("===== since +++++ ")
+    console.log("===== since ===== ")
     var now = Math.floor(new Date().getTime() / 1000)
     var then = now - minutes
     var compare = (item) => { return item.id > then; }

@@ -4,12 +4,20 @@ var db = require('../helper').db
 var _ = require('underscore');
 
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
-/* GET users listing. */
+/* GET listings. */
 router.get('/', function (req, res, next) {
   // without password 
   var pubListings = db.toPublic(100)
   res.render('listings', { title: 'Express', listings: pubListings });
 });
+
+/* GET one listing. */
+router.get('/:id', function (req, res, next) {
+  var id = parseInt(req.params.id)
+  console.log(id)
+  res.render('listing', { title: 'Express', data: db.get({id: id}) });
+});
+
 
 router.post('/query', async (req, res, next) => {
   const { body } = req;
@@ -100,7 +108,6 @@ router.post('/deactivate', function (req, res, next) {
     db.deactivate(elem.id)
     res.render('messages', { title: 'Express', message: 'Item deactivated' });
   }
-
 });
 
 
