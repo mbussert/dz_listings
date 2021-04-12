@@ -1,0 +1,33 @@
+.pell {
+    border: 1px solid hsla(0, 0%, 4%, .1)
+}
+
+.pell, .pell-content {
+    box-sizing: border-box
+}
+
+.pell-content {
+    height: 300px;
+    outline: 0;
+    overflow-y: auto;
+    padding: 10px
+}
+
+.pell-actionbar {
+    background-color: #fff;
+    border-bottom: 1px solid hsla(0, 0%, 4%, .1)
+}
+
+.pell-button {
+    background-color: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    height: 30px !important;
+    outline: 0 !important;
+    width: 30px !important;
+    vertical-align: bottom !important
+}
+
+.pell-button-selected {
+    background-color: #f0f0f0
+}
