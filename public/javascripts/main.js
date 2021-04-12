@@ -25,7 +25,7 @@ const editor = pell.init({
 editor.content.innerHTML = '<b><u><i>Initial content!</i></u></b>'
 
 // The DOM element you wish to replace with Tagify
-var inputTags = document.querySelector('input[name=basic]');
+var inputTags = document.querySelector('input[name=tags]');
 
 // initialize Tagify on the above input node reference
 new Tagify(inputTags)

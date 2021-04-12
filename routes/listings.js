@@ -63,10 +63,19 @@ router.post('/add', async (req, res, next) => {
   const listingSchema = Joi.object().keys({
     title: Joi.string().alphanum().min(10).max(100).required(),
     desc: Joi.string().min(10).max(500).required(),
+    tags: Joi.array().items(Joi.string().min(3).max(20)).required()
   });
+  var tags;
+  var validJson = true
+  try {
+    tags = JSON.parse(body.tags)
+    body.tags = _.pluck(tags, 'value')
+  } catch (e) {
+    validJson = false
+  }
   const result = listingSchema.validate(body);
   const { value, error } = result;
-  const valid = error == null;
+  valid = (error == null) && validJson;
   if (!valid) {
     res.status(422).json({
       message: 'Invalid request',
@@ -77,7 +86,7 @@ router.post('/add', async (req, res, next) => {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
     // body.desc = sanitizeHtml(body.desc)
-    
+
     body.desc = give.sanitize(body.desc)
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
