@@ -1,7 +1,7 @@
 var _ = require('underscore');
 const fs = require('fs')
 var db = {}
-
+var give = {}
 // [{ title: 'title1', d: false, c: 'oipfjezojifze'}, { title: 'title2', d: false, c: 'oipfjezojifze' }, { title: 'title3', d: true, c: 'oipfjezojifze' }]
 
 const storeData = (data, path) => {
@@ -138,4 +138,29 @@ db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
         return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc') }).slice(0, limit)
 }
 
+const sanitizeHtml = require('sanitize-html');
+give.sanitize = function sanitize(str) {
+    str = str.replaceAll('h1', 'h3').replaceAll('h2', 'h4')
+    return sanitizeHtml(str, {
+        allowedTags: ['a', 'b', 'i', 'u', 'strike', 'ul', 'li', 'ol', 'pre', 'h3', 'h4', 'blockquote', 'hr', 'span', 'code'],
+        allowedAttributes: {
+            'span': ["style"],
+        },
+        allowedStyles: {
+            '*': {
+                // Match HEX and RGB
+                'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+                'text-align': [/^left$/, /^right$/, /^center$/],
+                // Match any number with px, em, or %
+                'font-size': [/^\d+(?:px|em|%)$/]
+            },
+            'span': {
+                'font-size': [/^\d+rem$/],
+                'background-color': [/^pink$/]
+            }
+        }
+    });
+}
+
 module.exports.db = db;
+module.exports.give = give;

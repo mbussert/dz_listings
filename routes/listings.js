@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helper').db
+var give = require('../helper').give
 var _ = require('underscore');
 
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
@@ -10,11 +11,13 @@ router.get('/', function (req, res, next) {
   res.render('listings', { title: 'Express', listings: pubListings });
 });
 
+
 /* GET one listing; must be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
   res.render('listing', { title: 'Express', data: db.get({ id: id, d: 0 }) });
 });
+
 
 /* Query listings not including deactivated. */
 router.post('/query', async (req, res, next) => {
@@ -52,6 +55,7 @@ router.post('/query', async (req, res, next) => {
   res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
 });
 
+
 /* Add one listing. */
 const Joi = require('joi');
 router.post('/add', async (req, res, next) => {
@@ -72,6 +76,8 @@ router.post('/add', async (req, res, next) => {
   } else {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
+    // body.desc = sanitizeHtml(body.desc)
+    body.desc = give.sanitize(body.desc)
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
     // TODO: not here, in a cron job
@@ -87,6 +93,7 @@ router.post('/add', async (req, res, next) => {
       })
   }
 });
+
 
 /* Deactivate one listing. */
 router.post('/deactivate', function (req, res, next) {

@@ -16,22 +16,22 @@
     <form action="listings/query" method="POST">
       <div>
         <label for="title">What title do you want to search?</label>
-        <input name="title" id="title" value="title...">
+        <input name="title" class="query" id="title" value="title...">
       </div>
       <div>
         <label for="exactTitle">exactTitle ?</label>
-        <input type="checkbox" name="exactTitle" id="exactTitle" checked>
+        <input type="checkbox" class="query" name="exactTitle" id="exactTitle" checked>
       </div>
       <div>
         <label for="description">What description do you want to search?</label>
-        <input name="desc" id="description" value="description...">
+        <input name="desc" class="query" id="description" value="description...">
       </div>
       <div>
         <label for="exactDesc">exactDesc ?</label>
-        <input type="checkbox" name="exactDesc" id="exactDesc" checked>
+        <input type="checkbox" class="query" name="exactDesc" id="exactDesc" checked>
       </div>
       <label for="since">Since date (defaults to all):</label>
-      <input type="date" id="since" name="since" value="2021-04-01" min="2021-04-01">
+      <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
 
       <div>
         <button>Send my data</button>
@@ -68,32 +68,33 @@
             <% } %>
       </tbody>
     </table>
+
+
     <br>
     <hr>
     <h2>Add a listing</h2>
 
+    <div id="editor" class="pell"></div>
+    <div>
+      HTML output:
+      <div id="html-output" style="white-space:pre-wrap;"></div>
+    </div>
+    <br>
     <form action="listings/add" method="POST">
       <div>
-        <label for="title">What title do you want to say?</label>
-        <input name="title" id="title" value="title...">
+        <label for="title">Choose a title</label>
+        <input name="title" class="add" id="title" value="title...">
       </div>
       <div>
-        <label for="description">What description do you want to say?</label>
-        <input name="desc" id="description" value="description...">
+        <!-- <label for="description">What description do you want to say?</label> -->
+        <input name="desc" class="add" id="description" value="description..." type="hidden">
       </div>
       <div>
         <button>Send my data</button>
       </div>
     </form>
 
-    <br>
-    <hr>
-    <h2>Add a listing</h2>
-    <div id="editor" class="pell"></div>
-    <div>
-      HTML output:
-      <div id="html-output" style="white-space:pre-wrap;"></div>
-    </div>
+
 
   </div>
 </body>
