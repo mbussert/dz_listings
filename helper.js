@@ -140,7 +140,11 @@ db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
 
 const sanitizeHtml = require('sanitize-html');
 give.sanitize = function sanitize(str) {
-    str = str.replaceAll('h1', 'h3').replaceAll('h2', 'h4')
+    const search1 = 'h1'
+    const replacer1 = new RegExp(search1, 'g')
+    const search2 = 'h2'
+    const replacer2 = new RegExp(search2, 'g')
+    str = str.replace(replacer1, 'h3').replace(replacer2, 'h4')
     return sanitizeHtml(str, {
         allowedTags: ['a', 'b', 'i', 'u', 'strike', 'ul', 'li', 'ol', 'pre', 'h3', 'h4', 'blockquote', 'hr', 'span', 'code'],
         allowedAttributes: {
