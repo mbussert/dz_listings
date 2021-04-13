@@ -28,16 +28,7 @@
     <% } else {    %>
     <% } %>
 
-    <% if(typeof success != 'undefined'){ %>
-      <script>
-        successes.push('ahaaaaaaaaa')
-      </script>
-    <% } %>
-    <% if(typeof error != 'undefined'){ %>
-      <script>
-        errors.push('boff')
-      </script>
-    <% } %>
+  <%- include('partials/prepare_toast'); %>
 
   </div>
 </body>
