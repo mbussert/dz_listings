@@ -18,13 +18,14 @@ router.get('/:id', function (req, res, next) {
   res.render('listing', { title: 'Express', data: db.get({ id: id, d: 0 }) });
 });
 
-
+// https://regex101.com/r/1Q2EcU/1
+// Working, téomorrow with Jude.
 /* Query listings not including deactivated. */
 router.post('/query', async (req, res, next) => {
   const { body } = req;
   var activeListings = db.toPublic()
   const querySchema = Joi.object().keys({
-    title: Joi.string().alphanum().min(3).max(100),
+    title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(3).max(100),
     exactTitle: Joi.boolean().truthy('on').falsy('off').default(false),
     desc: Joi.string().min(10).max(500),
     exactDesc: Joi.boolean().truthy('on').falsy('off').default(false),
@@ -55,13 +56,38 @@ router.post('/query', async (req, res, next) => {
   res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
 });
 
+/* Query listings not including deactivated. */
+router.post('/queryV2', async (req, res, next) => {
+  const { body } = req;
+  const querySchema = Joi.object().keys({
+    title_desc: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(3).max(100).required(),
+    since: Joi.date().iso()
+  });
+
+  const result = querySchema.validate(body);
+  const { value, error } = result;
+  const valid = error == null;
+  var listings;
+  if (!valid) {
+    res.status(422).json({
+      message: 'Invalid request',
+      data: body,
+      error: error
+    })
+  } else {
+    listings = db.fuzzy(body.title_desc)
+  }
+  var then = Math.floor(new Date(body.since).getTime() / 1000)
+  listings = db.since(then, listings)
+  res.json({ title: 'Express', listings: db.toPublic(100, listings) });
+});
 
 /* Add one listing. */
 const Joi = require('joi');
 router.post('/add', async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
-    title: Joi.string().alphanum().min(10).max(100).required(),
+    title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(500).required(),
     tags: Joi.array().items(Joi.string().min(3).max(20)).required()
   });

@@ -32,6 +32,7 @@ db.backup = function backup() {
         global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze' }]
         db.persist()
     }
+
 }
 
 // Set from disk
@@ -84,6 +85,7 @@ db.deactivate = function deactivate(id, subListing = global.listings,) {
 
 
 // Fetch some
+// sanitize for desc key before fetch
 db.fetch = function fetch(query, subListing = global.listings) {
     console.log("===== fetch ===== ")
     return _.where(subListing, query)
@@ -91,6 +93,7 @@ db.fetch = function fetch(query, subListing = global.listings) {
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
+// sanitize for desc key before reject
 db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
     console.log("===== rejectDeep ===== ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
@@ -98,12 +101,25 @@ db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
 }
 
 // query ~= function(item){ return item.title == 'blablab'; }
+// sanitize for desc key before filter
 db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
     console.log("===== fetchDeep ===== ")
     var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
     return _.filter(subListing, query)
 }
 
+// fuzzy search on all
+const MiniSearch = require('minisearch')
+let miniSearch = new MiniSearch({
+    fields: ['title', 'desc'], // fields to index for full-text search
+    storeFields: ['id', 'title', 'desc', 'd'] // fields to return with search results
+})
+
+db.fuzzy = function fuzzy(str) {
+    if (miniSearch.documentCount === 0)
+        miniSearch.addAll(global.listings)
+    return miniSearch.search(str)
+}
 
 // Sort
 db.sortBy = function sortBy(key, asc, subListing = global.listings) {

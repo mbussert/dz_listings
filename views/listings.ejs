@@ -39,6 +39,21 @@
     </form>
     <br>
     <hr>
+    <h2>Fuzzy search</h2>
+    <form action="listings/queryV2" method="POST">
+      <div>
+        <label for="title_desc">What search for title and description?</label>
+        <input name="title_desc" value="title_desc...">
+      </div>
+      <label for="since">Since date (defaults to all):</label>
+      <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+
+      <div>
+        <button>Send my data</button>
+      </div>
+    </form>
+    <br>
+    <hr>
     <h2>Listings</h2>
 
     <table class="table">
@@ -80,7 +95,7 @@
       <div id="html-output" style="white-space:pre-wrap;"></div>
     </div>
     <br>
-    
+
     <form action="listings/add" method="POST">
       <div>
         <label for="title">Choose a title</label>
