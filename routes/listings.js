@@ -8,7 +8,7 @@ var _ = require('underscore');
 /* GET listings not including deactivated. */
 router.get('/', function (req, res, next) {
   var pubListings = db.toPublic(100)
-  res.render('listings', { title: 'Express', listings: pubListings });
+  res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)" });
 });
 
 
@@ -57,7 +57,7 @@ router.post('/query', async (req, res, next) => {
   }
   var then = Math.floor(new Date(body.since).getTime() / 1000)
   activeListings = db.since(then, activeListings)
-  res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings) });
+  res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings), success: "Yep, we got some :)" });
 });
 
 /* Query listings not including deactivated. */
@@ -73,17 +73,18 @@ router.post('/queryV2', async (req, res, next) => {
   const valid = error == null;
   var listings;
   if (!valid) {
-    res.status(422).json({
-      message: 'Invalid request',
-      data: body,
-      error: error
-    })
+    res.render('listing', { title: 'Express', data: elem, error: "No listing found :(" });
+    // res.status(422).json({
+    //   message: 'Invalid request',
+    //   data: body,
+    //   error: error
+    // })
   } else {
     listings = db.fuzzy(body.title_desc)
   }
   var then = Math.floor(new Date(body.since).getTime() / 1000)
   listings = db.since(then, listings)
-  res.json({ title: 'Express', listings: db.toPublic(100, listings) });
+  res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings), success: "Yep, we got some :)" });
 });
 
 /* Add one listing. */
@@ -123,14 +124,15 @@ router.post('/add', async (req, res, next) => {
     // TODO: not here, in a cron job
     db.persist()
     if (!err)
-      res.render('listing', { title: 'One listing', data: entry })
+      res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" })
     else
       // if error
-      res.status(500).json({
-        message: 'Internal error: mapping posted object in /add',
-        data: entry,
-        error: err
-      })
+      res.render('listing', { title: 'Express', data: elem, error: "Oops, an error accured :(" });
+      // res.status(500).json({
+      //   message: 'Internal error: mapping posted object in /add',
+      //   data: entry,
+      //   error: err
+      // })
   }
 });
 
