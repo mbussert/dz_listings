@@ -1,28 +1,40 @@
+var toast = new Toasty(options);
+errors.forEach(error => {
+  toast.error(error)
+});
+successes.forEach(success => {
+  toast.success(success)
+});
 function stripHtml(html) {
   let tmp = document.createElement("DIV");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
 }
 
-const editor = pell.init({
-  element: document.getElementById('editor'),
-  onChange: html => {
-    document.getElementById('html-output').textContent = html
-    document.querySelectorAll('.add#description2')[0].value = stripHtml(html)
-    document.querySelectorAll('.add#description')[0].value = (html)
+// on succeeds on pages with `editor` and `html-output` and other inputs
+try {
+  const editor = pell.init({
+    element: document.getElementById('editor'),
+    onChange: html => {
+      document.getElementById('html-output').textContent = html
+      document.querySelectorAll('.add#description2')[0].value = stripHtml(html)
+      document.querySelectorAll('.add#description')[0].value = (html)
+  
+    },
+    classes: {
+      actionbar: 'pell-actionbar',
+      button: 'pell-button',
+      content: 'pell-content',
+      selected: 'pell-button-selected'
+    }
+  })
+  // editor.content<HTMLElement>
+  // To change the editor's content:
+  editor.content.innerHTML = '<b><u><i>Initial content!</i></u></b>'
+} catch (error) {
+  console.log("Probably running where pen is not in HTML | ERROR: ", error.message)
+}
 
-  },
-  classes: {
-    actionbar: 'pell-actionbar',
-    button: 'pell-button',
-    content: 'pell-content',
-    selected: 'pell-button-selected'
-  }
-})
-
-// editor.content<HTMLElement>
-// To change the editor's content:
-editor.content.innerHTML = '<b><u><i>Initial content!</i></u></b>'
 
 // The DOM element you wish to replace with Tagify
 var inputTags = document.querySelector('input[name=tags]');
@@ -51,5 +63,3 @@ var options = {
 
   prependTo: document.body.childNodes[0]
 };
-
-var toast = new Toasty(options);

@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 /* GET one listing; must be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  res.render('listing', { title: 'Express', data: db.get({ id: id, d: 0 }) });
+  res.render('listing', { title: 'Express', data: db.get({ id: id, d: 0 }), success: "yep" });
 });
 
 // https://regex101.com/r/1Q2EcU/1

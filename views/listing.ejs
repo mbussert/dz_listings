@@ -12,21 +12,34 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
+    <% if (data.title && data.desc) { %>
+      <h2><%= data.title %></h2>
+      <p><%- data.desc %></p>
+      <h2>deactivate</h2>
+      <form action="deactivate" method="POST">
+        <div>
+          <label for="password">You need the password for the announcement</label>
+          <input name="password" id="password" value="password...">
+        </div>
+        <div>
+          <button>Deactivate</button>
+        </div>
+      </form>
+    <% } else {    %>
+    <% } %>
 
-    <h2><%= data.title %></h2>
+    <% if(typeof success != 'undefined'){ %>
+      <script>
+        successes.push('ahaaaaaaaaa')
+      </script>
+    <% } %>
+    <% if(typeof error != 'undefined'){ %>
+      <script>
+        errors.push('boff')
+      </script>
+    <% } %>
 
-    <p><%- data.desc %></p>
-    <h2>deactivate</h2>
-    <form action="deactivate" method="POST">
-      <div>
-        <label for="password">You need the password for the announcement</label>
-        <input name="password" id="password" value="password...">
-      </div>
-      <div>
-        <button>Deactivate</button>
-      </div>
-    </form>
   </div>
 </body>
-
+<%- include('partials/afterbody'); %>
 </html>
