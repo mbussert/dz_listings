@@ -29,7 +29,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze' }]
+        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
         db.persist()
     }
 
@@ -111,7 +111,7 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
 // fuzzy search on all
 const MiniSearch = require('minisearch')
 let miniSearch = new MiniSearch({
-    fields: ['title', 'desc'], // fields to index for full-text search
+    fields: ['title', 'desc_'], // fields to index for full-text search
     storeFields: ['id', 'title', 'desc', 'd'] // fields to return with search results
 })
 
@@ -165,6 +165,7 @@ give.sanitize = function sanitize(str) {
         allowedTags: ['a', 'b', 'i', 'u', 'strike', 'ul', 'li', 'ol', 'pre', 'h3', 'h4', 'blockquote', 'hr', 'span', 'code'],
         allowedAttributes: {
             'span': ["style"],
+            'a': ['href', 'name', 'target']
         },
         allowedStyles: {
             '*': {
