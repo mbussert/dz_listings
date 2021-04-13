@@ -93,7 +93,6 @@ router.post('/add', async (req, res, next) => {
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(5000).required(),
-    desc_: Joi.string().min(10).max(4000).required(),
     tags: Joi.array().items(Joi.string().min(3).max(20)).required()
   });
   var tags;

@@ -29,7 +29,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze', desc_: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
+        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
         db.persist()
     }
 
@@ -109,7 +109,6 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
 }
 
 // fuzzy search on all
-// TODO: rather use extractField "desc_" from sanitize(desc) and omit "desc_" from the app
 const MiniSearch = require('minisearch')
 let miniSearch = new MiniSearch({
     fields: ['title', 'description'], // fields to index for full-text search

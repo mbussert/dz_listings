@@ -17,7 +17,7 @@ try {
     element: document.getElementById('editor'),
     onChange: html => {
       document.getElementById('html-output').textContent = html
-      document.querySelectorAll('.add#description2')[0].value = stripHtml(html)
+      // document.querySelectorAll('.add#description2')[0].value = stripHtml(html)
       document.querySelectorAll('.add#description')[0].value = (html)
   
     },
