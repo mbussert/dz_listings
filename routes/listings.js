@@ -155,7 +155,7 @@ router.post('/deactivate', function (req, res, next) {
   } else {
     var elem = db.get({ pass: body.password })
     db.deactivate(elem.id)
-    res.render('messages', { title: 'Express', message: 'Item deactivated' });
+    res.render('messages', { title: 'Express', message: 'Item deactivated', success: "Listing has been successfully deactivated. Users will not see it again :)"});
   }
 });
 

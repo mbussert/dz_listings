@@ -2,7 +2,17 @@ var _ = require('underscore');
 const fs = require('fs')
 var db = {}
 var give = {}
-// [{ title: 'title1', d: false, c: 'oipfjezojifze'}, { title: 'title2', d: false, c: 'oipfjezojifze' }, { title: 'title3', d: true, c: 'oipfjezojifze' }]
+// [{ title: 'title1', d: 0, c: 'oipfjezojifze'}, { title: 'title2', d: 0, c: 'oipfjezojifze' }, { title: 'title3', d: 1, c: 'oipfjezojifze' }]
+
+// Clean and persist every 3 hours
+var CronJob = require('cron').CronJob;
+var job = new CronJob('0 0 */3 * * *', function () {
+    console.log("===== cycle ===== ")
+    db.cycle()
+}, null, true, 'America/Los_Angeles');
+
+job.start();
+
 
 const storeData = (data, path) => {
     try {
@@ -29,7 +39,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', d: false, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
+        global.listings = [{ title: 'title1', d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
         db.persist()
     }
 
@@ -52,7 +62,9 @@ db.push = function push(item) {
 
 // After some conditions persist
 db.cycle = function cycle() {
-    console.log("===== cycle ===== ")
+    db.clean()
+    db.persist()
+    // db.backup()
 }
 
 // Purge deactivated items
@@ -61,7 +73,6 @@ db.clean = function clean() {
     for (var i = 0; i < global.listings.length; i++) {
         if (global.listings[i].d) {
             global.listings.splice(i, 1);
-            break;
         }
     }
 }
@@ -73,10 +84,10 @@ db.get = function get(query, subListing = global.listings) {
 }
 
 // Deactivate one
-db.deactivate = function deactivate(id, subListing = global.listings,) {
+db.deactivate = function deactivate(id, subListing = global.listings) {
     console.log("===== deactivate ===== ")
     return _.some(subListing, elem => {
-        if (elem.title === id) {
+        if (elem.id === id) {
             elem.d = 1;
             return true;
         }

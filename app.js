@@ -36,7 +36,6 @@ var trimmer = function(req, res, next){
 app.use(trimmer);
 // get bigVar from disk
 db.backup()
-db.persist()
 
 app.use('/', indexRouter);
 app.use('/listings', listingsRouter);
