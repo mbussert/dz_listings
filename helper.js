@@ -223,5 +223,46 @@ give.sanitize = function sanitize(str) {
     });
 }
 
+const merge = require('deepmerge')
+const file_content = [
+    '1 - Animals & Pet Supplies',
+    '3237 - Animals & Pet Supplies > Live Animals',
+    '2 - Animals & Pet Supplies > Pet Supplies',
+    '3 - Animals & Pet Supplies > Pet Supplies > Bird Supplies',
+    '7385 - Animals & Pet Supplies > Pet Supplies > Bird Supplies > Bird Cage Accessories',
+];
+const splitBy = sep => str =>
+    str.split(sep).map(x => x.trim());
+
+const splitLine = splitBy('-');
+const splitCategories = splitBy('>');
+
+const nest = xs =>
+    xs.length === 2
+        ? typeof xs[1] === 'string'
+            ? { [xs[0]]: { id: xs[1] } }
+            : { [xs[0]]: nest(xs[1]) }
+        : nest([xs[0], xs.slice(1)]);
+
+const load = lines =>
+    // put all lines into a "container"
+    // we want to process all lines all the time as opposed to each line individually
+    [lines]
+        // separate id and categories
+        // e.g ['3237', 'Animals & Pet Supplies > Live Animals']
+        .map(lines => lines.map(splitLine))
+        // split categories and put id last
+        // e.g. ['Animals & Pet Supplies', 'Live Animals', 3237]
+        .map(lines => lines.map(([id, cats]) => splitCategories(cats).concat(id)))
+        // created nested objects
+        // e.g. {"Animals & Pet Supplies": {"Live Animals": {"id": 3237}}}
+        .map(lines => lines.map(nest))
+        // merge all objects into one
+        .map(lines => merge.all(lines))
+        // pop the result out of the container
+        .pop();
+
+
+give.googleTags = (load(file_content))
 module.exports.db = db;
 module.exports.give = give;

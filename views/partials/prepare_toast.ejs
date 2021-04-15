@@ -1,12 +1,17 @@
 <% if(typeof success != 'undefined'){ %>
-    <script>
-      var getTest = "<%= success  %>"
-      successes.push(getTest)
-    </script>
-  <% } %>
-  <% if(typeof error != 'undefined'){ %>
-    <script>
-      var getTest = "<%= error  %>"
-      errors.push(getTest)
-    </script>
-  <% } %>
+  <script>
+    var getTest = "<%= success  %>"
+    successes.push(getTest)
+  </script>
+<% } %>
+<% if(typeof error != 'undefined'){ %>
+  <script>
+    var getTest = "<%= error  %>"
+    errors.push(getTest)
+  </script>
+<% } %>
+<% if(typeof tags != 'undefined'){ %>
+  <script>
+    tags = JSON.parse('<%- JSON.stringify(tags)  %>')
+  </script>
+<% } %>

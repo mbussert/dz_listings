@@ -8,7 +8,7 @@ var _ = require('underscore');
 /* GET listings not including deactivated. */
 router.get('/', function (req, res, next) {
   var pubListings = db.toPublic(100)
-  res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)" });
+  res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)", tags: give.googleTags});
 });
 
 
@@ -76,11 +76,6 @@ router.post('/queryV2', async (req, res, next) => {
   var listings;
   if (!valid) {
     res.render('listing', { title: 'Express', data: elem, error: "No listing found :(" });
-    // res.status(422).json({
-    //   message: 'Invalid request',
-    //   data: body,
-    //   error: error
-    // })
   } else {
     listings = db.fuzzy(body.title_desc)
   }
@@ -130,11 +125,6 @@ router.post('/add', async (req, res, next) => {
     else
       // if error
       res.render('listing', { title: 'Express', data: elem, error: "Oops, an error accured :(" });
-      // res.status(500).json({
-      //   message: 'Internal error: mapping posted object in /add',
-      //   data: entry,
-      //   error: err
-      // })
   }
 });
 

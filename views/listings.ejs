@@ -10,8 +10,10 @@
     <h1>
       <%= title %>
     </h1>
-    <p>Welcome to <%= title %>
+    <p>
+      Welcome to <%= title %>
     </p>
+    <%= tags %>
     <h2>Search</h2>
     <form action="listings/query" method="POST">
       <div>
@@ -116,7 +118,7 @@
     </form>
 
 
-
+    <%- include('partials/prepare_toast'); %>
   </div>
 </body>
 <%- include('partials/afterbody'); %>
