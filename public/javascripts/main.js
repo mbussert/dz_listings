@@ -17,9 +17,12 @@ try {
     element: document.getElementById('editor'),
     onChange: html => {
       document.getElementById('html-output').textContent = html
-      // document.querySelectorAll('.add#description2')[0].value = stripHtml(html)
+      var raw = stripHtml(html)
+      var charactersLeft = 200 - raw.length;
+      var count = document.getElementById('characters-left');
+      count.innerHTML = "Characters left: " + charactersLeft;
       document.querySelectorAll('.add#description')[0].value = (html)
-  
+
     },
     classes: {
       actionbar: 'pell-actionbar',
@@ -51,10 +54,10 @@ var options = {
   autoClose: false,
   progressBar: true,
   sounds: {
-      info: "../sounds/info/1.mp3",
-      success: "../sounds/success/1.mp3",
-      warning: "../sounds/warning/1.mp3",
-      error: "../sounds/error/1.mp3",
+    info: "../sounds/info/1.mp3",
+    success: "../sounds/success/1.mp3",
+    warning: "../sounds/warning/1.mp3",
+    error: "../sounds/error/1.mp3",
   },
 
   onShow: function (type) { },

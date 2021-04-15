@@ -7,6 +7,7 @@ var _ = require('underscore');
 var db = require('./helper').db
 const dotenv = require('dotenv')
 var Filter = require('bad-words');
+// var CensorifyIt = require('censorify-it')
 
 var indexRouter = require('./routes/index');
 var listingsRouter = require('./routes/listings');
@@ -25,10 +26,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-var customFilter = new Filter({ placeHolder: 'x'});
-var trimmer = function(req, res, next){
+var customFilter = new Filter({ placeHolder: 'x' });
+
+var trimmer = function (req, res, next) {
   req.body = _.object(_.map(req.body, function (value, key) {
-    return [key, customFilter.clean(value.trim())];
+    if (value && value.length)
+      return [key, value.trim()];
+    else
+      return [key, value];
   }));
   next();
 }

@@ -75,7 +75,7 @@
                 <%= listings[i].title %>
               </td>
               <td>
-                <%= listings[i].desc %>
+                <%- listings[i].desc.slice(0,200) %> ...
               </td>
               <td><a href='listings/<%= listings[i].id %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%= listings[i].id
                     %></a></td>
@@ -89,7 +89,8 @@
     <hr>
     <h2>Add a listing</h2>
 
-    <div id="editor" class="pell"></div>
+    <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
+    <div id="characters-left"></div>
     <div>
       HTML output:
       <div id="html-output" style="white-space:pre-wrap;"></div>

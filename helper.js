@@ -99,15 +99,26 @@ db.deactivate = function deactivate(id, subListing = global.listings) {
 // sanitize for desc key before fetch
 db.fetch = function fetch(query, subListing = global.listings) {
     console.log("===== fetch ===== ")
+    var isEmpty = _.filter(_.values(query), elem => { return elem })
+    if (isEmpty)
+        return subListing
     return _.where(subListing, query)
 }
+
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
 // sanitize for desc key before reject
 db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
     console.log("===== rejectDeep ===== ")
-    var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
+    if (!value)
+        return subListing
+    var query = (item) => {
+        return sanitizeHtml(item[key], {
+            allowedTags: [],
+            allowedAttributes: {}
+        }).toLowerCase().indexOf(value.toLowerCase()) > -1;
+    }
     return _.reject(subListing, query)
 }
 
@@ -115,7 +126,14 @@ db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
 // sanitize for desc key before filter
 db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
     console.log("===== fetchDeep ===== ")
-    var query = (item) => { return item[key].toLowerCase().indexOf(value.toLowerCase()) > -1; }
+    if (!value)
+        return subListing
+    var query = (item) => {
+        return sanitizeHtml(item[key], {
+            allowedTags: [],
+            allowedAttributes: {}
+        }).toLowerCase().indexOf(value.toLowerCase()) > -1;
+    }
     return _.filter(subListing, query)
 }
 
