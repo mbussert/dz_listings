@@ -222,15 +222,11 @@ give.sanitize = function sanitize(str) {
         }
     });
 }
+const path = require('path')
 
-const merge = require('deepmerge')
-const file_content = [
-    '1 - Animals & Pet Supplies',
-    '3237 - Animals & Pet Supplies > Live Animals',
-    '2 - Animals & Pet Supplies > Pet Supplies',
-    '3 - Animals & Pet Supplies > Pet Supplies > Bird Supplies',
-    '7385 - Animals & Pet Supplies > Pet Supplies > Bird Supplies > Bird Cage Accessories',
-];
+// const merge = require('deepmerge')
+var file_content = fs.readFileSync(path.join(__dirname, 'taxonomy-with-ids.en-US.txt')).toString().replace(',', '_').split("\n").filter(elem => { return elem });
+
 const splitBy = sep => str =>
     str.split(sep).map(x => x.trim());
 
@@ -254,15 +250,9 @@ const load = lines =>
         // split categories and put id last
         // e.g. ['Animals & Pet Supplies', 'Live Animals', 3237]
         .map(lines => lines.map(([id, cats]) => splitCategories(cats).concat(id)))
-        // created nested objects
-        // e.g. {"Animals & Pet Supplies": {"Live Animals": {"id": 3237}}}
-        .map(lines => lines.map(nest))
-        // merge all objects into one
-        .map(lines => merge.all(lines))
-        // pop the result out of the container
         .pop();
 
 
-give.googleTags = (load(file_content))
+give.googleTags = (load(file_content).slice(0, 200))
 module.exports.db = db;
 module.exports.give = give;
