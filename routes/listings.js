@@ -11,6 +11,9 @@ router.get('/', function (req, res, next) {
   res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)", tags: give.googleTags});
 });
 
+router.get('/tags', function (req, res, next) {
+  res.render('tags', { title: 'Express', success: "Hello there :)", tags: give.googleTags});
+});
 
 /* GET one listing; must be deactivated. */
 router.get('/:id', function (req, res, next) {
