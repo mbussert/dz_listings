@@ -249,10 +249,11 @@ const load = lines =>
         .map(lines => lines.map(splitLine))
         // split categories and put id last
         // e.g. ['Animals & Pet Supplies', 'Live Animals', 3237]
-        .map(lines => lines.map(([id, cats]) => splitCategories(cats).concat(id)))
+        .map(lines => lines.map(([id, cats]) => splitCategories(cats)))
         .pop();
 
 
-give.googleTags = (load(file_content).slice(0, 200))
+give.googleTags = _.uniq(load(file_content).filter(arr => { return arr.length == 3 }), function (x) { return x.join(''); }).slice(0, 200)
+
 module.exports.db = db;
 module.exports.give = give;
