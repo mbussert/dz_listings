@@ -1,4 +1,9 @@
 #characters-left {
   font-family: Lucida Console;
   background-color: antiquewhite;
+  color: black;
+}
+
+.pell-content {
+  background-color: slateblue;
 }

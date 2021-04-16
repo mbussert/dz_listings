@@ -7,13 +7,21 @@
 
 <body>
   <div class="container">
+    
+    <nav class="tabs is-center">
+      <a href="#features">features</a>
+      <a href="#start">start</a>
+      <a href="#docs">docs</a>
+      <a href="https://github.com/jenil/chota">GitHub</a>
+      <a href="javascript:void(0)" id="theme-switch" onclick="switchMode(this)">☀️</a>
+    </nav>
+    
     <h1>
       <%= title %>
     </h1>
     <p>
       Welcome to <%= title %>
     </p>
-    <%= tags %>
     <h2>Search</h2>
     <form action="listings/query" method="POST">
       <div>
