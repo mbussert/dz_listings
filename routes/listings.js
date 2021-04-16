@@ -8,11 +8,15 @@ var _ = require('underscore');
 /* GET listings not including deactivated. */
 router.get('/', function (req, res, next) {
   var pubListings = db.toPublic(100)
-  res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)", tags: give.googleTags});
+  res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)" });
+});
+
+router.get('/get_tags', function (req, res, next) {
+  res.json(200, { tags: give.googleTags });
 });
 
 router.get('/tags', function (req, res, next) {
-  res.render('tags', { title: 'Express', success: "Hello there :)", tags: give.googleTags});
+  res.render('tags', { title: 'Express', success: "Hello there :)" });
 });
 
 /* GET one listing; must be deactivated. */
@@ -31,7 +35,7 @@ router.get('/:id', function (req, res, next) {
 router.post('/query', async (req, res, next) => {
   const { body } = req;
   var activeListings = db.toPublic()
-  
+
   const querySchema = Joi.object().keys({
     title: Joi.string().optional().allow('').min(3).max(100).regex(/^\W*\w+(?:\W+\w+)*\W*$/),
     exactTitle: Joi.boolean().truthy('on').falsy('off').default(false),
@@ -39,7 +43,7 @@ router.post('/query', async (req, res, next) => {
     exactDesc: Joi.boolean().truthy('on').falsy('off').default(false),
     since: Joi.date().iso()
   }).or('title', 'desc');
-  
+
   const result = querySchema.validate(body);
   const { value, error } = result;
   const valid = error == null;
@@ -50,7 +54,7 @@ router.post('/query', async (req, res, next) => {
       error: error
     })
   } else {
-    
+
     if (body.exactTitle)
       activeListings = db.fetch({ title: body.title }, activeListings)
     else
@@ -150,7 +154,7 @@ router.post('/deactivate', function (req, res, next) {
   } else {
     var elem = db.get({ pass: body.password })
     db.deactivate(elem.id)
-    res.render('messages', { title: 'Express', message: 'Item deactivated', success: "Listing has been successfully deactivated. Users will not see it again :)"});
+    res.render('messages', { title: 'Express', message: 'Item deactivated', success: "Listing has been successfully deactivated. Users will not see it again :)" });
   }
 });
 

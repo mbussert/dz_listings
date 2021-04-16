@@ -253,7 +253,7 @@ const load = lines =>
         .pop();
 
 
-give.googleTags = _.uniq(load(file_content).filter(arr => { return arr.length == 3 }), function (x) { return x.join(''); }).slice(0, 200)
+give.googleTags = _.uniq(load(file_content).filter(arr => { return arr.length == 3 }), function (x) { return x.join(''); })
 
 module.exports.db = db;
 module.exports.give = give;
