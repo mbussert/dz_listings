@@ -23,7 +23,7 @@
       Welcome to <%= title %>
     </p>
     <h2>Search</h2>
-    <form action="listings/query" method="POST">
+    <form action="/listings/query" method="POST">
       <div>
         <label for="title">What title do you want to search?</label>
         <input name="title" class="query" id="title" value="title...">
@@ -50,7 +50,7 @@
     <br>
     <hr>
     <h2>Fuzzy search</h2>
-    <form action="listings/queryV2" method="POST">
+    <form action="/listings/queryV2" method="POST">
       <div>
         <label for="title_desc">What search for title and description?</label>
         <input name="title_desc" value="title_desc...">
@@ -85,7 +85,7 @@
                 <%= listings[i].title %>
               </td>
               <td>
-                <%- listings[i].desc.slice(0,200) %> ...
+                <%- listings[i].desc_.slice(0,200) %> ...
               </td>
               <td><a href='listings/<%= listings[i].id %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%= listings[i].id
                     %></a></td>
@@ -107,7 +107,7 @@
     </div>
     <br>
 
-    <form action="listings/add" method="POST">
+    <form action="/listings/add" method="POST">
       <div>
         <label for="title">Choose a title</label>
         <input name="title" class="add" id="title" value="title...">

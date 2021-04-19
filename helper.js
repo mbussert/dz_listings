@@ -13,7 +13,6 @@ var job = new CronJob('0 0 */3 * * *', function () {
 
 job.start();
 
-
 const storeData = (data, path) => {
     try {
         fs.writeFileSync(path, JSON.stringify({ data: data }))
@@ -42,6 +41,11 @@ db.backup = function backup() {
         global.listings = [{ title: 'title1', d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
         db.persist()
     }
+    global.listings.forEach(item => {
+        Object.defineProperty(item, 'desc_', {
+            get: function () { return (this.desc.toUpperCase()) }
+        });
+    });
 
 }
 
@@ -57,6 +61,9 @@ db.push = function push(item) {
     var ids = _.pluck(global.listings, 'id')
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
+    Object.defineProperty(item, 'desc_', {
+        get: function () { return (this.desc.toUpperCase()) }
+    });
     global.listings.push(item)
 }
 
@@ -80,7 +87,7 @@ db.clean = function clean() {
 // Get one
 db.get = function get(query, subListing = global.listings) {
     console.log("===== get ===== ")
-    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc')
+    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_')
 }
 
 // Deactivate one
@@ -99,7 +106,8 @@ db.deactivate = function deactivate(id, subListing = global.listings) {
 // sanitize for desc key before fetch
 db.fetch = function fetch(query, subListing = global.listings) {
     console.log("===== fetch ===== ")
-    var isEmpty = _.filter(_.values(query), elem => { return elem })
+    var isEmpty = _.isEmpty(_.filter(_.values(query), elem => { return elem }))
+
     if (isEmpty)
         return subListing
     return _.where(subListing, query)
@@ -142,10 +150,10 @@ const MiniSearch = require('minisearch')
 let miniSearch = new MiniSearch({
     fields: ['title', 'description'], // fields to index for full-text search
     idFields: 'id',
-    storeFields: ['id', 'title', 'd', 'desc'], // fields to return with search results
+    storeFields: ['id', 'title', 'd', 'desc_'], // fields to return with search results
     extractField: (document, fieldName) => {
         if (fieldName === 'description') {
-            const desc = document['desc']
+            const desc = document['desc_']
             return desc && sanitizeHtml(desc, {
                 allowedTags: [],
                 allowedAttributes: {}
@@ -158,7 +166,7 @@ let miniSearch = new MiniSearch({
 db.fuzzy = function fuzzy(str) {
     if (miniSearch.documentCount === 0)
         miniSearch.addAll(global.listings)
-    return miniSearch.search(str).map(entrie => { return _.pick(entrie, 'id', 'title', 'desc', 'd') })
+    return miniSearch.search(str).map(entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'd') })
 }
 
 // Sort
@@ -189,9 +197,9 @@ db.since = function since(then, subListing = global.listings) {
 // Default limit to 100
 db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
-        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc') })
+        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') })
     else
-        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc') }).slice(0, limit)
+        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') }).slice(0, limit)
 }
 
 const sanitizeHtml = require('sanitize-html');

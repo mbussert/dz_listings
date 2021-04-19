@@ -60,9 +60,9 @@ router.post('/query', async (req, res, next) => {
     else
       activeListings = db.fetchDeep('title', body.title, activeListings)
     if (body.exactDesc)
-      activeListings = db.fetch({ desc: body.desc }, activeListings)
+      activeListings = db.fetch({ desc_: body.desc }, activeListings)
     else
-      activeListings = db.fetchDeep('desc', body.desc, activeListings)
+      activeListings = db.fetchDeep('desc_', body.desc, activeListings)
   }
   var then = Math.floor(new Date(body.since).getTime() / 1000)
   activeListings = db.since(then, activeListings)
