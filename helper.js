@@ -1,5 +1,6 @@
 var _ = require('underscore');
 const fs = require('fs')
+var smaz = require("smaz")
 var db = {}
 var give = {}
 // [{ title: 'title1', d: 0, c: 'oipfjezojifze'}, { title: 'title2', d: 0, c: 'oipfjezojifze' }, { title: 'title3', d: 1, c: 'oipfjezojifze' }]
@@ -43,7 +44,7 @@ db.backup = function backup() {
     }
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
-            get: function () { return (this.desc.toUpperCase()) }
+            get: function () { return (smaz.decompress(this.desc)) }
         });
     });
 
@@ -62,7 +63,7 @@ db.push = function push(item) {
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
     Object.defineProperty(item, 'desc_', {
-        get: function () { return (this.desc.toUpperCase()) }
+        get: function () { return (smaz.decompress(this.desc)) }
     });
     global.listings.push(item)
 }

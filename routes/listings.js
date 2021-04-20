@@ -91,6 +91,7 @@ router.post('/queryV2', async (req, res, next) => {
   res.render('listings', { title: 'Express', listings: db.toPublic(100, listings), success: "Yep, we got some :)" });
 });
 
+var smaz = require("smaz")
 /* Add one listing. */
 const Joi = require('joi');
 router.post('/add', async (req, res, next) => {
@@ -122,7 +123,7 @@ router.post('/add', async (req, res, next) => {
     var now = Math.floor(new Date().getTime() / 1000)
     // body.desc = sanitizeHtml(body.desc)
 
-    body.desc = give.sanitize(body.desc)
+    body.desc = smaz.compress(give.sanitize(body.desc))
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
     // TODO: not here, in a cron job

@@ -20,6 +20,7 @@
     "minisearch": "^3.0.2",
     "morgan": "~1.9.1",
     "sanitize-html": "^2.3.3",
+    "smaz": "^1.0.0",
     "underscore": "^1.12.1"
   }
 }
