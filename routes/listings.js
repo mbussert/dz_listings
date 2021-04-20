@@ -132,7 +132,7 @@ router.post('/add', async (req, res, next) => {
       res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" })
     else
       // if error
-      res.render('listing', { title: 'Express', data: elem, error: "Oops, an error accured :(" });
+      res.render('listing', { title: 'Express', data: err, error: "Oops, an error accured :(" });
   }
 });
 

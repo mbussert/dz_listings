@@ -12,9 +12,9 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
-    <% if (data.title && data.desc) { %>
+    <% if (data.title && data.desc_) { %>
       <h2><%= data.title %></h2>
-      <p><%- data.desc %></p>
+      <p><%- data.desc_ %></p>
       <% if (data.pass) { %>
         <p>Only with this password <code><%- data.pass %></code> you could deactivate this listing. Please keep it safe.</p>
       <% } %>
