@@ -20,6 +20,22 @@ Take a look as a starting point here:
 
 [helpers simple API](https://github.com/bacloud14/dz_listings/blob/main/helper.js)
 
+#### Routes 
+Routes reflect what is possible. See https://github.com/bacloud14/dz_listings/blob/main/routes/listings.js 
+Otherwise, this is the list of routes (queries and views):
+
+  - localhost:3000/listings -> listings.ejs : is for showing some of items. Also to initiate the following post queries
+  - localhost:3000/listings/query -> listings.ejs : for exact search of items
+  - localhost:3000/listings/queryV2 -> listings.ejs : for fuzzy search items
+  - localhost:3000/listings/add -> listing.ejs : for adding an item
+  - localhost:3000/listings/deactivate -> messages.ejs : to deactivate an item
+  - localhost:3000/listings/{some_id} -> listing.ejs : to show an item --> 
+  - localhost:3000/listings/tags -> tags.ejs : for exposing contant list of possible tags
+  - localhost:3000/ exposts all other routes (contact, tags, listings, ...)
+
+  you can tell everything necessary is under /listings/ route so why not attach all to index (/) ? Yes, probably, for now I think it's OK but if fewer than expected routes are added, we move listings routes to index. 
+
+
 ### Contribution
 As always, all my repositories are firstcomers friendly ! 
 
