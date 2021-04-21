@@ -3,6 +3,9 @@ $(document).ready(function () {
     // result.tags = result.tags.map(arr => { return {col1: arr[0], col2: arr[1], col3: arr[2]}})
     $('#table_id').DataTable(
       {
+        searchPanes: {
+          cascadePanes: true
+        },
         data: result.tags,
         dom: 'Plfrtip',
         // data: dataSet,
@@ -19,6 +22,11 @@ $(document).ready(function () {
         }]
       }
     );
+    var table = $('#table_id').DataTable();
+    table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+      var cell = table.cell({ row: rowIdx, column: 2 }).node();
+      $(cell).addClass('tags');
+    });
   });
 });
 

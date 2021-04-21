@@ -59,6 +59,8 @@ db.persist = function persist() {
 // Push item
 db.push = function push(item) {
     console.log("===== push ===== ")
+    // small memory gain.
+    // item.desc = Uint8Array.from(item.desc)
     var ids = _.pluck(global.listings, 'id')
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
