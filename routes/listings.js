@@ -122,8 +122,8 @@ router.post('/add', async (req, res, next) => {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
     // body.desc = sanitizeHtml(body.desc)
-
-    body.desc = Array.from(smaz.compress(give.sanitize(body.desc)))
+    var betterDescription = cleanSensitive(give.sanitize(body.desc))
+    body.desc = Array.from(smaz.compress(betterDescription))
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
     // TODO: not here, in a cron job
