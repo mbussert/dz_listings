@@ -3,9 +3,11 @@ var router = express.Router();
 var db = require('../helper').db
 var give = require('../helper').give
 var _ = require('underscore');
+const dotenv    = require('dotenv')
 
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
 /* GET listings not including deactivated. */
+
 router.get('/', function (req, res, next) {
   var pubListings = db.toPublic(100)
   res.render('listings', { title: 'Express', listings: pubListings, success: "Hello there :)" });
@@ -19,10 +21,10 @@ router.get('/tags', function (req, res, next) {
   res.render('tags', { title: 'Express', success: "Hello there :)" });
 });
 
-/* GET one listing; must be deactivated. */
+/* GET one listing; must not be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, d: 0 })
+  var elem = db.get({ id: id, d: 0, a: 1 })
   if (_.isEmpty(elem))
     res.render('listing', { title: 'Express', data: elem, error: "No listing found :(" });
   else
@@ -122,7 +124,7 @@ router.post('/add', async (req, res, next) => {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
     // body.desc = sanitizeHtml(body.desc)
-    var betterDescription = cleanSensitive(give.sanitize(body.desc))
+    var betterDescription = give.cleanSensitive(give.sanitize(body.desc))
     body.desc = Array.from(smaz.compress(betterDescription))
     var entry = _.extend(body, { id: now, pass: password, d: 0 })
     var err = db.push(entry)
@@ -159,5 +161,18 @@ router.post('/deactivate', function (req, res, next) {
   }
 });
 
+let pass = process.env.PASS
+/* Approve one listing. */
+router.get(`/${pass}/:id`, function (req, res, next) {
+  var id = parseInt(req.params.id)
+  var elem = db.get({ id: id, a: 0 })
+
+  if (_.isEmpty(elem))
+    res.render('messages', { title: 'Express', message: 'Item approval', error: "Listing not found or already approved" });
+  var success = db.approve(elem.id)
+  if (success) {
+    res.render('messages', { title: 'Express', message: 'Item approval', success: "Listing has been successfully approved :)" });
+  }
+});
 
 module.exports = router;

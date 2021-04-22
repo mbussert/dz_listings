@@ -3,7 +3,13 @@ const fs = require('fs')
 var smaz = require("smaz")
 var db = {}
 var give = {}
-// [{ title: 'title1', d: 0, c: 'oipfjezojifze'}, { title: 'title2', d: 0, c: 'oipfjezojifze' }, { title: 'title3', d: 1, c: 'oipfjezojifze' }]
+
+// title: 'title1' => is a title
+// a: 0 => approved by admin
+// d: 0 => deactivated by user
+// desc: 'oipfjezojifze' => extended description
+// pass: 'qub7s1ya' => password to deactivate
+// tags: ["tag1", "tag2"] => tags
 
 // Clean and persist every 3 hours
 var CronJob = require('cron').CronJob;
@@ -39,7 +45,7 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
+        global.listings = [{ title: 'title1', a: 0, d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
         db.persist()
     }
     global.listings.forEach(item => {
@@ -104,6 +110,16 @@ db.deactivate = function deactivate(id, subListing = global.listings) {
     })
 }
 
+// Approve one
+db.approve = function approve(id, subListing = global.listings) {
+    console.log("===== approve ===== ")
+    return _.some(subListing, elem => {
+        if (elem.id === id) {
+            elem.a = 1;
+            return true;
+        }
+    })
+}
 
 // Fetch some
 // sanitize for desc key before fetch
@@ -200,9 +216,9 @@ db.since = function since(then, subListing = global.listings) {
 // Default limit to 100
 db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
-        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') })
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') })
     else
-        return _.map(subListing.filter(elem => { return !elem.deactivate }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') }).slice(0, limit)
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') }).slice(0, limit)
 }
 
 const sanitizeHtml = require('sanitize-html');
@@ -271,71 +287,71 @@ give.googleTags = _.uniq(load(file_content).filter(arr => { return arr.length ==
 give.cleanSensitive = function cleanSensitive(blob, maxlen) {
     // If max length is 0..
     if (maxlen === 0) {
-      return "";
+        return "";
     }
     // If max length is smaller than any sensitive pattern (ssn is 9)
     if (maxlen < 9) {
-      return blob;
+        return blob;
     }
-  
+
     if (blob.length > 9) {
-      // regexp whitelist
-      // List of things that should not be censored, like phone numbers
-      const rew = {
-        phone: /\b(?:(?:\(\d{3}\)?)|(?:\d{3}))[ -./\\]?\d{3}[ -./\\]?\d{4}\b/g,
-      };
-      // regexp blacklist
-      // List of things to censor
-      // helpful: http://www.richardsramblings.com/regex/credit-card-numbers/
-      // helpful: https://codepen.io/gpeu/pen/eEdvmO
-      const reb = {
-        electron: /\b(4026|417500|4405|4508|4844|4913|4917)[ -./\\]?\d{4}[ -./\\]?\d{4}\d{3,4}\b/g,
-        maestro: /\b(?:5[0678]\d\d|6304|6390|67\d\d)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?(?:\d{4})?[ -./\\]?(?:\d{1,3})?\b/g,
-        dankort: /\b(5019)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
-        instaPayment: /\b(637|638|639)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{1}\b/g,
-        visa: /\b4\d{3}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{1,4}\b/g,
-        mastercard: /\b5[1-5]\d{2}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
-        amex: /\b3[47]\d{2}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{3}\b/g,
-        diners: /\b3(?:0[0-5]|[68]\d)\d{1}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{2}\b/g,
-        discover: /\b6(?:011|5\d{2}|22[19]|4[56789]\d{1})[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
-        jcb: /\b(?:2131|1800|35\d[28-89])[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
-        ssn: /\b\d{3}[ -./\\]?\d{2}[ -./\\]?\d{4}\b/g,
-      };
-  
-      // Look for text that should not be censored following the regexp whitelist,
-      // and remember where it is to be able to restore it later.
-      const whitelisted = [];
-      for (const regexw in rew) {
-        blob = blob.replace(
-          rew[regexw],
-          function(match, index) {
-            this.push({ i: index, m: match });
-            return "";
-          }.bind(whitelisted)
-        );
-      }
-  
-      // utils to replace a matched string with Xs
-      const maskStr = match => new Array(match.length + 1).join("X");
-  
-      // Censor sensitive data following the above regexp blacklist
-      for (const regexb in reb) {
-        // If there are, mask them
-        blob = blob.replace(reb[regexb], maskStr);
-      }
-  
-      // Restore whitelisted strings
-      whitelisted.forEach(w => {
-        blob = blob.slice(0, w.i) + w.m + blob.slice(w.i);
-      });
+        // regexp whitelist
+        // List of things that should not be censored, like phone numbers
+        const rew = {
+            phone: /\b(?:(?:\(\d{3}\)?)|(?:\d{3}))[ -./\\]?\d{3}[ -./\\]?\d{4}\b/g,
+        };
+        // regexp blacklist
+        // List of things to censor
+        // helpful: http://www.richardsramblings.com/regex/credit-card-numbers/
+        // helpful: https://codepen.io/gpeu/pen/eEdvmO
+        const reb = {
+            electron: /\b(4026|417500|4405|4508|4844|4913|4917)[ -./\\]?\d{4}[ -./\\]?\d{4}\d{3,4}\b/g,
+            maestro: /\b(?:5[0678]\d\d|6304|6390|67\d\d)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?(?:\d{4})?[ -./\\]?(?:\d{1,3})?\b/g,
+            dankort: /\b(5019)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
+            instaPayment: /\b(637|638|639)[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{1}\b/g,
+            visa: /\b4\d{3}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{1,4}\b/g,
+            mastercard: /\b5[1-5]\d{2}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
+            amex: /\b3[47]\d{2}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{3}\b/g,
+            diners: /\b3(?:0[0-5]|[68]\d)\d{1}[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{2}\b/g,
+            discover: /\b6(?:011|5\d{2}|22[19]|4[56789]\d{1})[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
+            jcb: /\b(?:2131|1800|35\d[28-89])[ -./\\]?\d{4}[ -./\\]?\d{4}[ -./\\]?\d{4}\b/g,
+            ssn: /\b\d{3}[ -./\\]?\d{2}[ -./\\]?\d{4}\b/g,
+        };
+
+        // Look for text that should not be censored following the regexp whitelist,
+        // and remember where it is to be able to restore it later.
+        const whitelisted = [];
+        for (const regexw in rew) {
+            blob = blob.replace(
+                rew[regexw],
+                function (match, index) {
+                    this.push({ i: index, m: match });
+                    return "";
+                }.bind(whitelisted)
+            );
+        }
+
+        // utils to replace a matched string with Xs
+        const maskStr = match => new Array(match.length + 1).join("X");
+
+        // Censor sensitive data following the above regexp blacklist
+        for (const regexb in reb) {
+            // If there are, mask them
+            blob = blob.replace(reb[regexb], maskStr);
+        }
+
+        // Restore whitelisted strings
+        whitelisted.forEach(w => {
+            blob = blob.slice(0, w.i) + w.m + blob.slice(w.i);
+        });
     }
-  
+
     if (maxlen && blob.length >= this.maxlen) {
-      blob = blob.substr(0, this.maxlen - 1);
+        blob = blob.substr(0, this.maxlen - 1);
     }
-  
+
     return blob;
-  }
-  
+}
+
 module.exports.db = db;
 module.exports.give = give;
