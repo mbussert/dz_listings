@@ -3,7 +3,7 @@ var router = express.Router();
 var db = require('../helper').db
 var give = require('../helper').give
 var _ = require('underscore');
-const dotenv    = require('dotenv')
+const dotenv = require('dotenv')
 dotenv.config()
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
 /* GET listings not including deactivated. */
@@ -130,8 +130,10 @@ router.post('/add', async (req, res, next) => {
     var err = db.push(entry)
     // TODO: not here, in a cron job
     db.persist()
-    if (!err)
-      res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" })
+    if (!err) {
+      mail(`<a href="https://dzlistings.com/listings/${pass}/${entry.id}"`)
+      res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" }) 
+    }
     else
       // if error
       res.render('listing', { title: 'Express', data: err, error: "Oops, an error accured :(" });
@@ -175,5 +177,27 @@ router.get(`/${pass}/:id`, function (req, res, next) {
     res.render('messages', { title: 'Express', message: 'Item approval', success: "Listing has been successfully approved :)" });
   }
 });
+
+var nodeoutlook = require('nodejs-nodemailer-outlook')
+let EMAIL_TO = process.env.EMAIL_TO
+let EMAIL_PASS = process.env.EMAIL_PASS
+let EMAIL_FROM = process.env.EMAIL_FROM
+
+function mail(mailMessage) {
+  nodeoutlook.sendEmail({
+    auth: {
+      user: EMAIL_FROM,
+      pass: EMAIL_PASS
+    },
+    from: EMAIL_FROM,
+    to: EMAIL_TO,
+    subject: '@@LISTINGS@@',
+    html: mailMessage,
+    text: mailMessage,
+    replyTo: EMAIL_FROM,
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i)
+  });
+}
 
 module.exports = router;
