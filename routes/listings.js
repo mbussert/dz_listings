@@ -126,12 +126,12 @@ router.post('/add', async (req, res, next) => {
     // body.desc = sanitizeHtml(body.desc)
     var betterDescription = give.cleanSensitive(give.sanitize(body.desc))
     body.desc = Array.from(smaz.compress(betterDescription))
-    var entry = _.extend(body, { id: now, pass: password, d: 0 })
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 0 })
     var err = db.push(entry)
     // TODO: not here, in a cron job
     db.persist()
     if (!err) {
-      mail(`<a href="https://dzlistings.com/listings/${pass}/${entry.id}"`)
+      mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
       res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" }) 
     }
     else
@@ -164,7 +164,19 @@ router.post('/deactivate', function (req, res, next) {
 });
 
 let pass = process.env.PASS
-console.log(pass)
+let pass2 = process.env.PASS2
+
+/* GET one listing; must not be unnapproved yet. */
+router.get(`/${pass2}/:id`, function (req, res, next) {
+  var id = parseInt(req.params.id)
+  var elem = db.get({ id: id, d: 0, a: 0 })
+  if (_.isEmpty(elem))
+    res.render('listing', { title: 'Express', data: elem, error: "No listing found, it can be deactivated or not approved yet :(" });
+  else
+    res.render('listing', { title: 'Express', data: elem, success: "Yep :)" });
+});
+
+
 /* Approve one listing. */
 router.get(`/${pass}/:id`, function (req, res, next) {
   var id = parseInt(req.params.id)
