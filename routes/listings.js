@@ -4,7 +4,7 @@ var db = require('../helper').db
 var give = require('../helper').give
 var _ = require('underscore');
 const dotenv    = require('dotenv')
-
+dotenv.config()
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
 /* GET listings not including deactivated. */
 
@@ -26,7 +26,7 @@ router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
   var elem = db.get({ id: id, d: 0, a: 1 })
   if (_.isEmpty(elem))
-    res.render('listing', { title: 'Express', data: elem, error: "No listing found :(" });
+    res.render('listing', { title: 'Express', data: elem, error: "No listing found, it can be deactivated or not approved yet :(" });
   else
     res.render('listing', { title: 'Express', data: elem, success: "Yep :)" });
 });
@@ -162,6 +162,7 @@ router.post('/deactivate', function (req, res, next) {
 });
 
 let pass = process.env.PASS
+console.log(pass)
 /* Approve one listing. */
 router.get(`/${pass}/:id`, function (req, res, next) {
   var id = parseInt(req.params.id)
