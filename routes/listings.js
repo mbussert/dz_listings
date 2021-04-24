@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../helper').db
-var give = require('../helper').give
+var db = require('../helper_data').db
+var giveData = require('../helper_data').give
 var _ = require('underscore');
 const dotenv = require('dotenv')
 dotenv.config()
@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/get_tags', function (req, res, next) {
-  res.json(200, { tags: give.googleTags });
+  res.json(200, { tags: giveData.googleTags });
 });
 
 router.get('/tags', function (req, res, next) {
@@ -96,27 +96,11 @@ router.post('/queryV2', async (req, res, next) => {
 var smaz = require("smaz")
 /* Add one listing. */
 const Joi = require('joi');
-var multer = require('multer')
-var path = require('path')
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, '../uploads'))
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
-  }
-})
-
-var upload = multer({
-  storage: storage,
-  onFileUploadStart: function (file) {
-    console.log(file.originalname + ' is starting ...')
-  },
-})
 
 
-router.post('/add', upload.single('avatar'), async (req, res, next) => {
+var giveObj = require('../helper_ops').give
+var giveOp = require('../helper_ops').ops
+router.post('/add', giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -145,7 +129,7 @@ router.post('/add', upload.single('avatar'), async (req, res, next) => {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
     // body.desc = sanitizeHtml(body.desc)
-    var betterDescription = give.cleanSensitive(give.sanitize(body.desc))
+    var betterDescription = giveOp.cleanSensitive(giveOp.sanitize(body.desc))
     body.desc = Array.from(smaz.compress(betterDescription))
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 0 })
     var err = db.push(entry)
