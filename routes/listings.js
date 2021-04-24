@@ -96,12 +96,33 @@ router.post('/queryV2', async (req, res, next) => {
 var smaz = require("smaz")
 /* Add one listing. */
 const Joi = require('joi');
-router.post('/add', async (req, res, next) => {
+var multer = require('multer')
+var path = require('path')
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(__dirname, '../uploads'))
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+})
+
+var upload = multer({
+  storage: storage,
+  onFileUploadStart: function (file) {
+    console.log(file.originalname + ' is starting ...')
+  },
+})
+
+
+router.post('/add', upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(5000).required(),
-    tags: Joi.array().items(Joi.string().min(3).max(20)).required()
+    tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
+    // avatar: Joi.string().required()
   });
   var tags;
   var validJson = true
@@ -132,7 +153,7 @@ router.post('/add', async (req, res, next) => {
     db.persist()
     if (!err) {
       mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
-      res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" }) 
+      res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" })
     }
     else
       // if error

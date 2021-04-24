@@ -106,7 +106,7 @@
     </div>
     <br>
 
-    <form action="/listings/add" method="POST">
+    <form action="/listings/add" enctype="multipart/form-data" method="POST">
       <div>
         <label for="title">Choose a title</label>
         <input name="title" class="add" id="title" value="title...">
@@ -118,6 +118,9 @@
       <div>
         <!-- <label for="description">What description do you want to say?</label> -->
         <input name="desc" class="add" id="description" value="description..." type="hidden">
+      </div>
+      <div>
+        <input type="file" value="image" name="avatar" />
       </div>
       <div>
         <button>Send my data</button>
