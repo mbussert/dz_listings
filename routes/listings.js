@@ -14,7 +14,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/get_tags', function (req, res, next) {
-  res.json(200, { tags: giveData.googleTags });
+  res.status(200).json({ tags: giveData.googleTags });
+  // res.json(200, { tags: giveData.googleTags });
 });
 
 router.get('/tags', function (req, res, next) {

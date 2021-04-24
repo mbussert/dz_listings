@@ -225,7 +225,7 @@ db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
 const path = require('path')
 
 // const merge = require('deepmerge')
-var file_content = fs.readFileSync(path.join(__dirname, 'taxonomy-with-ids.en-US.txt')).toString().replace(',', '_').split("\n").filter(elem => { return elem });
+var file_content = fs.readFileSync(path.join(__dirname, 'taxonomy-with-ids.ar-SA.txt')).toString().replace(',', '_').split("\n").filter(elem => { return elem });
 
 const splitBy = sep => str =>
     str.split(sep).map(x => x.trim());
