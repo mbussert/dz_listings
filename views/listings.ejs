@@ -7,7 +7,7 @@
 
 <body>
   <div class="container">
-    
+
     <nav class="tabs is-center">
       <a href="#features">features</a>
       <a href="#start">start</a>
@@ -15,53 +15,63 @@
       <a href="https://github.com/jenil/chota">GitHub</a>
       <a href="javascript:void(0)" id="theme-switch" onclick="switchMode(this)">☀️</a>
     </nav>
-    
+
     <h1>
       <%= title %>
     </h1>
     <p>
       Welcome to <%= title %>
     </p>
-    <h2>Search</h2>
-    <form action="/listings/query" method="POST">
-      <div>
-        <label for="title">What title do you want to search?</label>
-        <input name="title" class="query" id="title" value="title...">
-      </div>
-      <div>
-        <label for="exactTitle">exactTitle ?</label>
-        <input type="checkbox" class="query" name="exactTitle" id="exactTitle" checked>
-      </div>
-      <div>
-        <label for="description">What description do you want to search?</label>
-        <input name="desc" class="query" id="description" value="description...">
-      </div>
-      <div>
-        <label for="exactDesc">exactDesc ?</label>
-        <input type="checkbox" class="query" name="exactDesc" id="exactDesc" checked>
-      </div>
-      <label for="since">Since date (defaults to all):</label>
-      <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
 
-      <div>
-        <button>Send my data</button>
-      </div>
-    </form>
+    <details>
+      <summary>Search</summary>
+      <h2>Search</h2>
+      <form action="/listings/query" method="POST">
+        <div>
+          <label for="title">What title do you want to search?</label>
+          <input name="title" class="query" id="title" value="title...">
+        </div>
+        <div>
+          <label for="exactTitle">exactTitle ?</label>
+          <input type="checkbox" class="query" name="exactTitle" id="exactTitle" checked>
+        </div>
+        <div>
+          <label for="description">What description do you want to search?</label>
+          <input name="desc" class="query" id="description" value="description...">
+        </div>
+        <div>
+          <label for="exactDesc">exactDesc ?</label>
+          <input type="checkbox" class="query" name="exactDesc" id="exactDesc" checked>
+        </div>
+        <label for="since">Since date (defaults to all):</label>
+        <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
+
+        <div>
+          <button>Send my data</button>
+        </div>
+      </form>
+    </details>
+
+
     <br>
     <hr>
-    <h2>Fuzzy search</h2>
-    <form action="/listings/queryV2" method="POST">
-      <div>
-        <label for="title_desc">What search for title and description?</label>
-        <input name="title_desc" value="title_desc...">
-      </div>
-      <label for="since">Since date (defaults to all):</label>
-      <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+    <details>
+      <summary>Fuzzy search</summary>
+      <h2>Fuzzy search</h2>
+      <form action="/listings/queryV2" method="POST">
+        <div>
+          <label for="title_desc">What search for title and description?</label>
+          <input name="title_desc" value="title_desc...">
+        </div>
+        <label for="since">Since date (defaults to all):</label>
+        <input type="date" name="since" value="2021-04-01" min="2021-04-01">
 
-      <div>
-        <button>Send my data</button>
-      </div>
-    </form>
+        <div>
+          <button>Send my data</button>
+        </div>
+      </form>
+    </details>
+
     <br>
     <hr>
     <h2>Listings</h2>
@@ -87,8 +97,8 @@
               <td>
                 <%- listings[i].desc_.slice(0,200) %> ...
               </td>
-              <td><a href='/listings/<%= listings[i].id %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%= listings[i].id
-                    %></a></td>
+              <td><a href='/listings/<%= listings[i].id %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%=
+                    listings[i].id %></a></td>
             </tr>
             <% } %>
       </tbody>
@@ -96,40 +106,51 @@
 
     <br>
     <hr>
-    <h2>Add a listing</h2>
+    <details>
+      <summary>Add a listing</summary>
+      <h2>Add a listing</h2>
 
-    <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
-    <div id="characters-left"></div>
-    <div>
-      HTML output:
-      <div id="html-output" style="white-space:pre-wrap;"></div>
-    </div>
-    <br>
+      <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
+      <div id="characters-left"></div>
+      <div>
+        HTML output:
+        <div id="html-output" style="white-space:pre-wrap;"></div>
+      </div>
+      <br>
 
-    <form action="/listings/add" enctype="multipart/form-data" method="POST">
-      <div>
-        <label for="title">Choose a title</label>
-        <input name="title" class="add" id="title" value="title...">
-      </div>
-      <div>
-        <label>Choose tags</label>
-        <input name='tags' value='tag1, tag2 autofocus'>
-      </div>
-      <div>
-        <!-- <label for="description">What description do you want to say?</label> -->
-        <input name="desc" class="add" id="description" value="description..." type="hidden">
-      </div>
-      <div>
-        <input type="file" value="image" name="avatar" />
-      </div>
-      <div>
-        <button>Send my data</button>
-      </div>
-    </form>
+      <form action="/listings/add" enctype="multipart/form-data" method="POST">
+        <div>
+          <label for="title">Choose a title</label>
+          <input name="title" class="add" id="title" value="title...">
+        </div>
+        <div>
+          <label>Choose tags</label>
+          <input name='tags' value='tag1, tag2 autofocus'>
+        </div>
+        <div>
+          <!-- <label for="description">What description do you want to say?</label> -->
+          <input name="desc" class="add" id="description" value="description..." type="hidden">
+        </div>
+        <div>
+          <input type="file" value="image" name="avatar" />
+        </div>
+        <div>
+          <button>Send my data</button>
+        </div>
+      </form>
+    </details>
+
 
 
     <%- include('partials/prepare_toast'); %>
   </div>
+  
+  <footer class="is-text-center">
+    <p><a href="#top">🔝 Back to top</a> • <a href="https://github.com/jenil/chota">🐛 Report an issue</a> • <a href="https://paypal.me/jgog/10" target="_blank" onclick="ga('send', 'event', 'navigation', 'click', 'donate');">🎗 Donate</a></p>
+    <p>Want icons for your project too? Checkout <a href="https://icongr.am" target="_blank">Icongr.am 🚀</a></p>
+    <h5>Made by <a href="https://jgog.in" target="_blank">Jenil Gogari</a></h5>
+  </footer>
+
 </body>
 <%- include('partials/afterbody'); %>
 
