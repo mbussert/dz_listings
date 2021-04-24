@@ -1,4 +1,4 @@
-var db = require('./helper').db
+var db = require('./helper_data').db
 
 db.backup()
 // var vv = db.get({ pass: "ynfrwbv8w" })

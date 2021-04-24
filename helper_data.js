@@ -3,6 +3,7 @@ const fs = require('fs')
 var smaz = require("smaz")
 var db = {}
 var give = {}
+var giveOp = require('./helper_ops').ops
 
 // title: 'title1' => is a title
 // a: 0 => approved by admin
@@ -141,7 +142,7 @@ db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
     if (!value)
         return subListing
     var query = (item) => {
-        return sanitizeHtml(item[key], {
+        return giveOp.sanitize(item[key], {
             allowedTags: [],
             allowedAttributes: {}
         }).toLowerCase().indexOf(value.toLowerCase()) > -1;
@@ -156,7 +157,7 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
     if (!value)
         return subListing
     var query = (item) => {
-        return sanitizeHtml(item[key], {
+        return giveOp.sanitize(item[key], {
             allowedTags: [],
             allowedAttributes: {}
         }).toLowerCase().indexOf(value.toLowerCase()) > -1;
@@ -173,7 +174,7 @@ let miniSearch = new MiniSearch({
     extractField: (document, fieldName) => {
         if (fieldName === 'description') {
             const desc = document['desc_']
-            return desc && sanitizeHtml(desc, {
+            return desc && giveOp.sanitize(desc, {
                 allowedTags: [],
                 allowedAttributes: {}
             })
