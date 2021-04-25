@@ -8,6 +8,7 @@
   "dependencies": {
     "bad-words": "^3.0.4",
     "censorify-it": "^3.0.2",
+    "compress-images": "^1.9.9",
     "cookie-parser": "~1.4.4",
     "cron": "^1.8.2",
     "debug": "~2.6.9",
@@ -15,12 +16,14 @@
     "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "gifsicle": "^5.2.0",
     "http-errors": "~1.6.3",
     "joi": "^17.4.0",
     "minisearch": "^3.0.2",
     "morgan": "~1.9.1",
     "multer": "^1.4.2",
     "nodejs-nodemailer-outlook": "^1.2.3",
+    "pngquant-bin": "^6.0.0",
     "sanitize-html": "^2.3.3",
     "smaz": "^1.0.0",
     "underscore": "^1.12.1"

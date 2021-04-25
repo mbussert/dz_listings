@@ -137,7 +137,7 @@ router.post('/add', giveObj.upload.single('avatar'), async (req, res, next) => {
     // TODO: not here, in a cron job
     db.persist()
     if (!err) {
-      mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
+      giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
       res.render('listing', { title: 'One listing', data: entry, success: "Success. Here is the password whenever you want to deactivate the listing :)" })
     }
     else
@@ -196,26 +196,5 @@ router.get(`/${pass}/:id`, function (req, res, next) {
   }
 });
 
-var nodeoutlook = require('nodejs-nodemailer-outlook')
-let EMAIL_TO = process.env.EMAIL_TO
-let EMAIL_PASS = process.env.EMAIL_PASS
-let EMAIL_FROM = process.env.EMAIL_FROM
-
-function mail(mailMessage) {
-  nodeoutlook.sendEmail({
-    auth: {
-      user: EMAIL_FROM,
-      pass: EMAIL_PASS
-    },
-    from: EMAIL_FROM,
-    to: EMAIL_TO,
-    subject: '@@LISTINGS@@',
-    html: mailMessage,
-    text: mailMessage,
-    replyTo: EMAIL_FROM,
-    onError: (e) => console.log(e),
-    onSuccess: (i) => console.log(i)
-  });
-}
 
 module.exports = router;

@@ -15,9 +15,7 @@ var storage = multer.diskStorage({
 
 give.upload = multer({
   storage: storage,
-  onFileUploadStart: function (file) {
-    console.log(file.originalname + ' is starting ...')
-  },
+  limits: { fileSize: 2 * 1024 * 1024 }
 })
 
 const sanitizeHtml = require('sanitize-html');
@@ -120,6 +118,30 @@ ops.cleanSensitive = function cleanSensitive(blob, maxlen) {
 
     return blob;
 }
+
+
+var nodeoutlook = require('nodejs-nodemailer-outlook')
+let EMAIL_TO = process.env.EMAIL_TO
+let EMAIL_PASS = process.env.EMAIL_PASS
+let EMAIL_FROM = process.env.EMAIL_FROM
+
+ops.mail = function mail(mailMessage) {
+  nodeoutlook.sendEmail({
+    auth: {
+      user: EMAIL_FROM,
+      pass: EMAIL_PASS
+    },
+    from: EMAIL_FROM,
+    to: EMAIL_TO,
+    subject: '@@LISTINGS@@',
+    html: mailMessage,
+    text: mailMessage,
+    replyTo: EMAIL_FROM,
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i)
+  });
+}
+
 
 module.exports.give = give;
 module.exports.ops = ops;
