@@ -4,18 +4,18 @@ var give = {}
 var multer = require('multer')
 var path = require('path')
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, './uploads'))
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
-  }
+    destination: function (req, file, cb) {
+        cb(null, path.resolve(__dirname, './uploads'))
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + path.extname(file.originalname))
+    }
 })
 
 give.upload = multer({
-  storage: storage,
-  limits: { fileSize: 2 * 1024 * 1024 }
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }
 })
 
 const sanitizeHtml = require('sanitize-html');
@@ -126,20 +126,20 @@ let EMAIL_PASS = process.env.EMAIL_PASS
 let EMAIL_FROM = process.env.EMAIL_FROM
 
 ops.mail = function mail(mailMessage) {
-  nodeoutlook.sendEmail({
-    auth: {
-      user: EMAIL_FROM,
-      pass: EMAIL_PASS
-    },
-    from: EMAIL_FROM,
-    to: EMAIL_TO,
-    subject: '@@LISTINGS@@',
-    html: mailMessage,
-    text: mailMessage,
-    replyTo: EMAIL_FROM,
-    onError: (e) => console.log(e),
-    onSuccess: (i) => console.log(i)
-  });
+    nodeoutlook.sendEmail({
+        auth: {
+            user: EMAIL_FROM,
+            pass: EMAIL_PASS
+        },
+        from: EMAIL_FROM,
+        to: EMAIL_TO,
+        subject: '@@LISTINGS@@',
+        html: mailMessage,
+        text: mailMessage,
+        replyTo: EMAIL_FROM,
+        onError: (e) => console.log(e),
+        onSuccess: (i) => console.log(i)
+    });
 }
 
 

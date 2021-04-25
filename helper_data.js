@@ -15,31 +15,44 @@ var giveOp = require('./helper_ops').ops
 
 const compress_images = require("compress-images");
 const path = require('path');
+const chokidar = require('chokidar');
 
-const INPUT_path_images = "uploads/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}";
+const INPUT_path_images = "uploads/*.{jpg,JPG,jpeg,JPEG,png,PNG,svg,gif}";
 const INPUT_path = "uploads/";
 const OUTPUT_path = "compressed/";
 
-compress_images(INPUT_path_images, OUTPUT_path, { compress_force: false, statistic: true, autoupdate: true }, false,
-    { jpg: { engine: "mozjpeg", command: ["-quality", "60"] } },
-    { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
-    { svg: { engine: "svgo", command: "--multipass" } },
-    { gif: { engine: "gifsicle", command: ["--colors", "64", "--use-col=web"] } },
-    function (error, completed, statistic) {
-        console.log("-------------");
-        console.log(error);
-        console.log(completed);
-        console.log(statistic);
-        console.log("-------------");
-        // CLEAN FOLDER.
-        if (error === null) {
-            fs.unlink(statistic.input, (err) => {
-                if (err) throw err;
-                console.log('successfully compressed and deleted '+statistic.input);
-          });
-        }
-    }
-);
+var watcher = chokidar.watch(INPUT_path, { persistent: true });
+
+watcher
+    .on('add', function (path) {
+        console.log('File', path, 'has been added');
+    })
+    .on('change', function (path) {
+        console.log('File', path, 'has been changed');
+        compress_images(INPUT_path_images, OUTPUT_path, { compress_force: false, statistic: true, autoupdate: true }, false,
+            { jpg: { engine: "mozjpeg", command: ["-quality", "60"] } },
+            { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
+            { svg: { engine: "svgo", command: "--multipass" } },
+            { gif: { engine: "gifsicle", command: ["--colors", "64", "--use-col=web"] } },
+            function (error, completed, statistic) {
+                console.log("-------------");
+                console.log(error);
+                console.log(completed);
+                console.log(statistic);
+                console.log("-------------");
+                // CLEAN FOLDER.
+                if (error === null) {
+                    fs.unlink(statistic.input, (err) => {
+                        if (err) throw err;
+                        console.log('successfully compressed and deleted ' + statistic.input);
+                    });
+                }
+            }
+        );
+    })
+    .on('unlink', function (path) { console.log('File', path, 'has been removed'); })
+    .on('error', function (error) { console.error('Error happened', error); })
+
 
 // Clean and persist every 3 hours
 var CronJob = require('cron').CronJob;
