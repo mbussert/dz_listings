@@ -1,5 +1,7 @@
 var ops = {}
 var give = {}
+const dotenv = require('dotenv')
+dotenv.config()
 
 var multer = require('multer')
 var path = require('path')
