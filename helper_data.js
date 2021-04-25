@@ -12,6 +12,35 @@ var giveOp = require('./helper_ops').ops
 // pass: 'qub7s1ya' => password to deactivate
 // tags: ["tag1", "tag2"] => tags
 
+
+const compress_images = require("compress-images");
+const path = require('path');
+
+const INPUT_path_images = "uploads/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}";
+const INPUT_path = "uploads/";
+const OUTPUT_path = "compressed/";
+
+compress_images(INPUT_path_images, OUTPUT_path, { compress_force: false, statistic: true, autoupdate: true }, false,
+    { jpg: { engine: "mozjpeg", command: ["-quality", "60"] } },
+    { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
+    { svg: { engine: "svgo", command: "--multipass" } },
+    { gif: { engine: "gifsicle", command: ["--colors", "64", "--use-col=web"] } },
+    function (error, completed, statistic) {
+        console.log("-------------");
+        console.log(error);
+        console.log(completed);
+        console.log(statistic);
+        console.log("-------------");
+        // CLEAN FOLDER.
+        if (error === null) {
+            fs.unlink(statistic.input, (err) => {
+                if (err) throw err;
+                console.log('successfully compressed and deleted '+statistic.input);
+          });
+        }
+    }
+);
+
 // Clean and persist every 3 hours
 var CronJob = require('cron').CronJob;
 var job = new CronJob('0 0 */3 * * *', function () {
@@ -221,8 +250,6 @@ db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     else
         return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') }).slice(0, limit)
 }
-
-const path = require('path')
 
 // const merge = require('deepmerge')
 var file_content = fs.readFileSync(path.join(__dirname, 'taxonomy-with-ids.ar-SA.txt')).toString().replace(',', '_').split("\n").filter(elem => { return elem });
