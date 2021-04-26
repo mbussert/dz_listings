@@ -22,3 +22,7 @@ footer {
   background-color: sienna;
   color: white;
 }
+
+#map {
+  height: 400px;
+}
