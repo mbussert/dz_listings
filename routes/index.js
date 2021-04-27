@@ -17,4 +17,22 @@ router.get('/blog', function (req, res, next) {
   });
 });
 
+router.get('/login', function (req, res) {
+  res.render('login');
+});
+
+router.post(
+  "/sendtoken",
+  // urlencodedParser,
+  global.passwordless.requestToken(
+    // Simply accept every user*
+    function (user, delivery, callback) {
+      callback(null, user);
+    }
+  ),
+  function (req, res) {
+    res.render('messages');
+  }
+);
+
 module.exports = router;
