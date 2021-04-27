@@ -27,12 +27,20 @@ router.post(
   global.passwordless.requestToken(
     // Simply accept every user*
     function (user, delivery, callback) {
+      console.log(user)
       callback(null, user);
     }
   ),
   function (req, res) {
-    res.render('messages');
+    console.log(req.user)
+		res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
   }
 );
+
+router.get('/logged_in', global.passwordless.acceptToken(), 
+	function(req, res) {
+    console.log(req.user)
+		res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
+});
 
 module.exports = router;

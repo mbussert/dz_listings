@@ -44,12 +44,13 @@ passwordless.init(new NodeCacheStore());
 // Set up a delivery service
 passwordless.addDelivery(
   function (tokenToSend, uidToSend, recipient, callback, req) {
-    var host = 'localhost:3000';
+    var host = 'localhost:3000/logged_in';
     var text = 'Hello!\nAccess your account here: http://' + host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend)
     mail(text, recipient)
   });
 app.use(passwordless.sessionSupport());
-app.use(passwordless.acceptToken({ successRedirect: '/' }));
+// app.use(passwordless.acceptToken({ successRedirect: '/' }));
+
 global.passwordless = passwordless
 
 
