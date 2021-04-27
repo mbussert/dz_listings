@@ -1451,6 +1451,9 @@ var dz = {
 }
 var lat = 36.75;
 var lng = 3.05;
+document.getElementById('lat').value = lat;
+document.getElementById('lng').value = lng;
+
 var zoom = 8;
 
 var map = new L.Map('map');

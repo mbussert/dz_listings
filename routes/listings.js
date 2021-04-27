@@ -101,12 +101,15 @@ const Joi = require('joi');
 
 var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
-router.post('/add', giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', global.passwordless.restricted(), giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(5000).required(),
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
+    lat: Joi.number().max(90).min(-90).optional(),
+    lng: Joi.number().max(180).min(-180).optional(),
+    
     // avatar: Joi.string().required()
   });
   var tags;

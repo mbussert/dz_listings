@@ -49,7 +49,7 @@ passwordless.addDelivery(
     mail(text, recipient)
   });
 app.use(passwordless.sessionSupport());
-// app.use(passwordless.acceptToken({ successRedirect: '/' }));
+app.use(passwordless.acceptToken({ successRedirect: '/listings' }));
 
 global.passwordless = passwordless
 

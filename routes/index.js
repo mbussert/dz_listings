@@ -33,7 +33,7 @@ router.post(
   ),
   function (req, res) {
     console.log(req.user)
-		res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
+		res.send('Check your email. You will be able to login from there.');
   }
 );
 
