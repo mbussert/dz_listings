@@ -1486,7 +1486,9 @@ function moveableMarker(map, marker) {
    marker.on("mouseup", () => {
       map.dragging.enable()
       map.off("mousemove", trackCursor)
-      console.log(circle.getBounds().getCenter())
+      var center = circle.getBounds().getCenter()
+      document.getElementById('lat').value = center.lat;
+      document.getElementById('lng').value = center.lng;
 
    })
 

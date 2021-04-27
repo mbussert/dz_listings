@@ -80,4 +80,70 @@ app.use(function (req, res, next) {
   })
 })
 
+var session = require('express-session')
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
+
+var passwordless = require('passwordless');
+var NodeCacheStore = require('passwordless-nodecache');
+
+var nodeoutlook = require('nodejs-nodemailer-outlook')
+let EMAIL_TO = process.env.EMAIL_TO
+let EMAIL_PASS = process.env.EMAIL_PASS
+let EMAIL_FROM = process.env.EMAIL_FROM
+
+function mail(mailMessage, recipient) {
+  nodeoutlook.sendEmail({
+    auth: {
+      user: EMAIL_FROM,
+      pass: EMAIL_PASS
+    },
+    from: EMAIL_FROM,
+    to: recipient,
+    subject: '@@LISTINGS@@',
+    html: mailMessage,
+    text: mailMessage,
+    replyTo: EMAIL_FROM,
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i)
+  });
+}
+
+
+passwordless.init(new NodeCacheStore());
+// Set up a delivery service
+passwordless.addDelivery(
+  function (tokenToSend, uidToSend, recipient, callback, req) {
+    var host = 'localhost:3000';
+    var text = 'Hello!\nAccess your account here: http://' + host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend)
+    mail(text, recipient)
+  });
+
+app.use(passwordless.sessionSupport());
+app.use(passwordless.acceptToken({ successRedirect: '/' }));
+
+
+app.get('/login', function (req, res) {
+  res.render('login');
+});
+
+app.post(
+  "/sendtoken",
+  // urlencodedParser,
+  passwordless.requestToken(
+    // Simply accept every user*
+    function (user, delivery, callback) {
+      callback(null, user);
+    }
+  ),
+  function (req, res) {
+    res.render('messages');
+  }
+);
+
+
 module.exports = app;
