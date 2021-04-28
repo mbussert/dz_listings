@@ -101,7 +101,7 @@ const Joi = require('joi');
 
 var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
-router.post('/add', global.passwordless.restricted(), giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
