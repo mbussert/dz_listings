@@ -7,6 +7,7 @@
 
 <body>
   <div class="container">
+    <%- include('partials/navbar'); %>
     <h1>
       <%= title %>
     </h1>
@@ -15,8 +16,8 @@
 
     <table id="table_id" class="display nowrap" width="100%">
     </table>
-
   </div>
+  <%- include('partials/footer'); %>
 </body>
 <%- include('partials/afterbody_datatable'); %>
 

@@ -8,13 +8,7 @@
 <body>
   <div class="container">
 
-    <nav class="tabs is-center">
-      <a href="#features">about</a>
-      <a href="#start">how-to</a>
-      <a href="#docs">contact</a>
-      <a href="#">policy</a>
-      <a href="javascript:void(0)" id="theme-switch" onclick="switchMode(this)">☀️</a>
-    </nav>
+    <%- include('partials/navbar'); %>
 
     <h1>
       <%= title %>
@@ -50,6 +44,7 @@
 
   </div>
   <%- include('partials/prepare_toast'); %>
+  <%- include('partials/footer'); %>
 </body>
 <%- include('partials/afterbody'); %>
 
