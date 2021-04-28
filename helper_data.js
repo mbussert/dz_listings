@@ -19,7 +19,7 @@ const chokidar = require('chokidar');
 
 const INPUT_path_images = "uploads/*.{jpg,JPG,jpeg,JPEG,png,PNG,svg,gif}";
 const INPUT_path = "uploads/";
-const OUTPUT_path = "compressed/";
+const OUTPUT_path = "public/images/";
 
 var watcher = chokidar.watch(INPUT_path, { persistent: true });
 
@@ -139,7 +139,7 @@ db.clean = function clean() {
 // Get one
 db.get = function get(query, subListing = global.listings) {
     console.log("===== get ===== ")
-    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_', 'lat', 'lng')
+    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_', 'lat', 'lng', 'img')
 }
 
 // Deactivate one

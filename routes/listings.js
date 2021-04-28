@@ -110,7 +110,7 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
     lat: Joi.number().max(90).min(-90).optional(),
     lng: Joi.number().max(180).min(-180).optional(),
-    
+
     // avatar: Joi.string().required()
   });
   var tags;
@@ -136,7 +136,7 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     // body.desc = sanitizeHtml(body.desc)
     var betterDescription = giveOp.cleanSensitive(giveOp.sanitize(body.desc))
     body.desc = Array.from(smaz.compress(betterDescription))
-    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 0 })
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 0, img: req.file.filename })
     var err = db.push(entry)
     // TODO: not here, in a cron job
     db.persist()

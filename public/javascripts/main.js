@@ -1449,8 +1449,9 @@ var dz = {
       }
    ]
 }
-var lat = lat_ || 36.75;
-var lng = lng_ || 3.05;
+
+var lat = typeof lat_ !== "undefined" ? lat_ : 36.75;
+var lng = typeof lng_ !== "undefined" ? lng_ : 3.05;
 var latInput = document.getElementById('lat')
 var lngInput = document.getElementById('lng')
 
