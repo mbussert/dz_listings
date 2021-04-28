@@ -10,6 +10,11 @@
 	<%- include('partials/navbar'); %>
 
     <h1>Login</h1>
+  <div class="card">
+    <p>
+      You need to login and we need only your email. We send you validation link shortly. If you don't receive an email then retry shortly. 
+    </p>
+  </div>
 	<form action="/sendtoken" method="POST">
 		Email:
 		<br><input name="user" type="text">

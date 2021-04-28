@@ -85,7 +85,8 @@ router.post('/queryV2', async (req, res, next) => {
   const valid = error == null;
   var listings;
   if (!valid) {
-    res.render('listing', { title: 'Express', data: elem, error: "No listing found :(" });
+    // TODO: check this
+    res.render('listing', { title: 'Express', data: [], error: "No listing found :(" });
   } else {
     listings = db.fuzzy(body.title_desc)
   }

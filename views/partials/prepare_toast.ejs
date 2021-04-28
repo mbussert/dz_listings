@@ -15,3 +15,13 @@
     tags = JSON.parse('<%- JSON.stringify(tags)  %>')
   </script>
 <% } %>
+<% if(typeof data != 'undefined' && data.lat != 'undefined'){ %>
+  <script>
+    var lat_ =  "<%= data.lat  %>"
+  </script>
+<% } %>
+<% if(typeof data != 'undefined' && data.lng != 'undefined'){ %>
+  <script>
+    var lng_ =  "<%= data.lng  %>"
+  </script>
+<% } %>

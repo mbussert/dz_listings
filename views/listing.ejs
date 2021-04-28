@@ -18,8 +18,9 @@
     <% if (data.title && data.desc_) { %>
       <h2><%= data.title %></h2>
       <p><%- data.desc_ %></p>
+      <div id="map" ></div>
       <% if (data.pass) { %>
-        <p>Only with this password <code><%- data.pass %></code> you could deactivate this listing. Please keep it safe.</p>
+        <p>Your listing has been added. Wait for admin approval. Only with this password <code><%- data.pass %></code> you could deactivate this listing. Please keep it safe.</p>
       <% } %>
 
       <div class="card">

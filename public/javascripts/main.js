@@ -1449,10 +1449,15 @@ var dz = {
       }
    ]
 }
-var lat = 36.75;
-var lng = 3.05;
-document.getElementById('lat').value = lat;
-document.getElementById('lng').value = lng;
+var lat = lat_ || 36.75;
+var lng = lng_ || 3.05;
+var latInput = document.getElementById('lat')
+var lngInput = document.getElementById('lng')
+
+if (latInput != null) {
+   latInput.value = lat;
+   lngInput.value = lng;
+}
 
 var zoom = 8;
 
