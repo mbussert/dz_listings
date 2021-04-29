@@ -102,6 +102,10 @@ const Joi = require('joi');
 
 var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
+var arabic = /[\u0600-\u06FF]/;
+function isArabic(str) {
+  return (str.match(/[\u0600-\u06FF]/g).length / str.length) > 0.5
+}
 router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
@@ -135,9 +139,9 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
   } else {
     var password = (Math.random().toString(36).substr(4)).slice(0, 9)
     var now = Math.floor(new Date().getTime() / 1000)
-    // body.desc = sanitizeHtml(body.desc)
-    var betterDescription = giveOp.cleanSensitive(giveOp.sanitize(body.desc))
-    body.desc = Array.from(smaz.compress(betterDescription))
+    var htmlCleanDesc = giveOp.sanitize(body.desc)
+    var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
+    body.desc = isArabic(maskedDesc) ? maskedDesc : Array.from(smaz.compress(maskedDesc))
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user })
     var err = db.push(entry)
     // TODO: not here, in a cron job

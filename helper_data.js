@@ -26,9 +26,7 @@ var watcher = chokidar.watch(INPUT_path, { persistent: true });
 watcher
     .on('add', function (path) {
         console.log('File', path, 'has been added');
-    })
-    .on('change', function (path) {
-        console.log('File', path, 'has been changed');
+
         compress_images(INPUT_path_images, OUTPUT_path, { compress_force: false, statistic: true, autoupdate: true }, false,
             { jpg: { engine: "mozjpeg", command: ["-quality", "60"] } },
             { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
@@ -49,6 +47,9 @@ watcher
                 }
             }
         );
+    })
+    .on('change', function (path) {
+        console.log('File', path, 'has been changed');
     })
     .on('unlink', function (path) { console.log('File', path, 'has been removed'); })
     .on('error', function (error) { console.error('Error happened', error); })
@@ -82,6 +83,9 @@ const loadData = (path) => {
 }
 
 // Get from disk
+function isArabic(str) {
+    return (str.match(/[\u0600-\u06FF]/g).length / str.length) > 0.5
+  }
 db.backup = function backup() {
     console.log("===== backup ===== ")
     if (!global.listings || global.listings.length == 0) {
@@ -93,7 +97,9 @@ db.backup = function backup() {
     }
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
-            get: function () { return (smaz.decompress(this.desc)) }
+            get: function () { 
+                return isArabic(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
+            }
         });
     });
 
@@ -114,7 +120,9 @@ db.push = function push(item) {
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
     Object.defineProperty(item, 'desc_', {
-        get: function () { return (smaz.decompress(this.desc)) }
+        get: function () { 
+            return arabic.test(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
+        }
     });
     global.listings.push(item)
 }

@@ -127,7 +127,11 @@ app.use(function (req, res, next) {
   })
 })
 
-
+// Session wise: add current login user to all requests
+// app.use(function(req, res, next){
+//   res.locals.user = req.session.user;
+//   next();
+// });
 
 
 
