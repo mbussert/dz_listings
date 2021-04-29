@@ -102,7 +102,7 @@ const Joi = require('joi');
 
 var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
-router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -136,7 +136,7 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     // body.desc = sanitizeHtml(body.desc)
     var betterDescription = giveOp.cleanSensitive(giveOp.sanitize(body.desc))
     body.desc = Array.from(smaz.compress(betterDescription))
-    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 0, img: req.file.filename })
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.user })
     var err = db.push(entry)
     // TODO: not here, in a cron job
     db.persist()

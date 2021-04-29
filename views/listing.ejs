@@ -18,8 +18,22 @@
     <% if (data.title && data.desc_) { %>
       <h2><%= data.title %></h2>
       <p><%- data.desc_ %></p>
-      <img src="<%- data.img %>" width="500" height="600"> 
       <div id="map" ></div>
+      <br>
+      <hr>
+      <img id="imgg" src="/images/<%- data.img %>" width="200rem"> 
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+
+        <!-- The Close Button -->
+        <span class="close">&times;</span>
+
+        <!-- Modal Content (The Image) -->
+        <img class="modal-content" id="img01">
+
+        <!-- Modal Caption (Image Text) -->
+        <div id="caption"></div>
+      </div>
       <% if (data.pass) { %>
         <p>Your listing has been added. Wait for admin approval. Only with this password <code><%- data.pass %></code> you could deactivate this listing. Please keep it safe.</p>
       <% } %>
