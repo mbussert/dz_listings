@@ -5,4 +5,9 @@
     <a href="/contact">contact</a>
     <a href="/policy">policy</a>
     <a href="javascript:void(0)" id="theme-switch" onclick="switchMode(this)">☀️</a>
+    <% if(typeof user == 'undefined'){ %>
+        <a href="/login">Quick login 🔒</a>
+    <% } else { %>
+        <a href="#">Welcome <%= user %></a>
+    <% }%>
 </nav>

@@ -80,7 +80,7 @@ router.post(
 
 router.get('/logged_in', global.passwordless.acceptToken(), 
 	function(req, res) {
-    console.log(req.user)
+    req.session.user = req.user;
 		res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
 });
 
