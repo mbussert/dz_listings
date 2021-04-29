@@ -121,9 +121,11 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
   } catch (e) {
     validJson = false
   }
+  var validPoint = true
+  validPoint = giveOp.isPointInsidePolygon({ lat: body.lat, lng: body.lng })
   const result = listingSchema.validate(body);
   const { value, error } = result;
-  valid = (error == null) && validJson;
+  valid = (error == null) && validJson && validPoint;
   if (!valid) {
     res.status(422).json({
       message: 'Invalid request',
