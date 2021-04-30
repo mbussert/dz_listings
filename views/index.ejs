@@ -3,6 +3,48 @@
 
 <head>
   <%- include('partials/head'); %>
+    <script src="https://cdn.jsdelivr.net/npm/muuri@0.9.3/dist/muuri.min.js"></script>
+    <style>
+      body {
+        padding: 0;
+      }
+      .grid {
+        position: relative;
+      }
+      .item {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        line-height: 200px;
+        margin: 5px;
+        z-index: 1;
+      }
+      .item.muuri-item-hidden {
+        z-index: 0;
+      }
+      .item.muuri-item-releasing {
+        z-index: 2;
+      }
+      .item.muuri-item-dragging {
+        z-index: 3;
+      }
+      .item-content {
+        position: relative;
+        font-family: sans-serif;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        border: 1px solid #F44336;
+        border-radius: 3px;
+        font-size: 25px;
+        color: #F44336;
+        cursor: pointer;
+      }
+      .item.muuri-item-dragging .item-content,
+      .item.muuri-item-releasing .item-content {
+        background: #FFCDD2;
+      }
+    </style>
 </head>
 
 <body>
@@ -13,8 +55,42 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
+
+    <div class="grid grid-1">
+      <div class="item">
+        <div class="item-content">1</div>
+      </div>
+      <div class="item">
+        <div class="item-content">2</div>
+      </div>
+      <div class="item">
+        <div class="item-content">3</div>
+      </div>
+      <div class="item">
+        <div class="item-content">4</div>
+      </div>
+      <div class="item">
+        <div class="item-content">5</div>
+      </div>
+      <div class="item">
+        <div class="item-content">6</div>
+      </div>
+    </div>
+    
+    
+
   </div>
   <%- include('partials/footer'); %>
+  <script>
+    var grid1 = new Muuri('.grid-1', {
+      dragEnabled: true,
+      dragContainer: document.body,
+      dragSort: function () {
+        return [grid1]
+      }
+    });
+  </script>
 </body>
 <%- include('partials/afterbody'); %>
+
 </html>

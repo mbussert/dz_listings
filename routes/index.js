@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var bigVar = global.listings
+var db = require('../helper_data').db
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express', user: req.session.user, listings: bigVar });
+  res.render('index', { title: 'Express', user: req.session.user, listings: db.toPublic(100, global.listings) });
 });
 
 // Blog pages are pages with little server processing

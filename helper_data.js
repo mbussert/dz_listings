@@ -98,7 +98,8 @@ db.backup = function backup() {
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
             get: function () { 
-                return isArabic(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
+                // return isArabic(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
+                return (smaz.decompress(this.desc))
             }
         });
     });
