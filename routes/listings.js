@@ -104,7 +104,8 @@ var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
 var arabic = /[\u0600-\u06FF]/;
 function isArabic(str) {
-  return (str.match(/[\u0600-\u06FF]/g).length / str.length) > 0.5
+  var count = str.match(arabic)
+  return count && ((count.length / str.length) > 0.5)
 }
 router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;

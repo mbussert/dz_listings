@@ -1,3 +1,8 @@
+// Language selector.
+function langChange(el) {
+   document.body.setAttribute('lang', el.value);
+}
+
 var toast = new Toasty(options);
 errors.forEach(error => {
    toast.error(error)
