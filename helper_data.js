@@ -1,6 +1,5 @@
 var _ = require('underscore');
 const fs = require('fs')
-var smaz = require("smaz")
 var db = {}
 var give = {}
 var giveOp = require('./helper_ops').ops
@@ -98,8 +97,7 @@ db.backup = function backup() {
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
             get: function () { 
-                // return isArabic(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
-                return (smaz.decompress(this.desc))
+                return this.ara ? (giveOp.compressors.decompress_ar(this.desc)) : (giveOp.compressors.decompress_en(this.desc))
             }
         });
     });
@@ -122,7 +120,7 @@ db.push = function push(item) {
         return ('item without id or id is already there.')
     Object.defineProperty(item, 'desc_', {
         get: function () { 
-            return arabic.test(this.desc) ? this.desc : (smaz.decompress(this.desc)) 
+            return item.ara ? (giveOp.compressors.decompress_ar(this.desc)) : (giveOp.compressors.decompress_en(this.desc))
         }
     });
     global.listings.push(item)
@@ -217,7 +215,8 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
 }
 
 // fuzzy search on all
-const MiniSearch = require('minisearch')
+const MiniSearch = require('minisearch');
+const { ops } = require('./helper_ops');
 let miniSearch = new MiniSearch({
     fields: ['title', 'description'], // fields to index for full-text search
     idFields: 'id',

@@ -142,8 +142,8 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     var now = Math.floor(new Date().getTime() / 1000)
     var htmlCleanDesc = giveOp.sanitize(body.desc)
     var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
-    body.desc = Array.from(compatto.compress(maskedDesc))
-    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user })
+    body.desc = isArabic(maskedDesc) ? Array.from(giveOp.compressors.compress_ar(maskedDesc)) : Array.from(giveOp.compressors.compress_en(maskedDesc))
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
     // TODO: not here, in a cron job
     db.persist()
