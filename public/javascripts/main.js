@@ -3,6 +3,29 @@ function langChange(el) {
    document.body.setAttribute('lang', el.value);
 }
 
+var options = {
+   classname: "toast",
+   transition: "fade",
+   insertBefore: true,
+   duration: 4000,
+   enableSounds: true,
+   autoClose: false,
+   progressBar: true,
+   sounds: {
+      info: "/sounds/info/1.mp3",
+      success: "/sounds/success/1.mp3",
+      warning: "/sounds/warning/1.mp3",
+      error: "/sounds/error/1.mp3",
+   },
+
+   onShow: function (type) { },
+
+   onHide: function (type) { },
+
+   prependTo: document.body.childNodes[0]
+};
+
+
 var toast = new Toasty(options);
 errors.forEach(error => {
    toast.error(error)
@@ -92,28 +115,6 @@ function stringToColour(str) {
    }
    return colour;
 }
-
-var options = {
-   classname: "toast",
-   transition: "fade",
-   insertBefore: true,
-   duration: 4000,
-   enableSounds: true,
-   autoClose: false,
-   progressBar: true,
-   sounds: {
-      info: "../sounds/info/1.mp3",
-      success: "../sounds/success/1.mp3",
-      warning: "../sounds/warning/1.mp3",
-      error: "../sounds/error/1.mp3",
-   },
-
-   onShow: function (type) { },
-
-   onHide: function (type) { },
-
-   prependTo: document.body.childNodes[0]
-};
 
 // credits: https://github.com/turban/Leaflet.Mask
 // credits: https://github.com/turban/Leaflet.Mask

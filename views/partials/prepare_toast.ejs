@@ -1,13 +1,15 @@
 <% if(typeof success != 'undefined'){ %>
   <script>
     var getTest = "<%= success  %>"
-    successes.push(getTest)
+    if(getTest)
+      successes.push(getTest)
   </script>
 <% } %>
 <% if(typeof error != 'undefined'){ %>
   <script>
     var getTest = "<%= error  %>"
-    errors.push(getTest)
+    if(getTest)
+      errors.push(getTest)
   </script>
 <% } %>
 <% if(typeof tags != 'undefined'){ %>

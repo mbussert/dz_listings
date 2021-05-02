@@ -61,12 +61,11 @@ router.get('/policy', function (req, res, next) {
 
 var freemail = require('freemail');
 router.get('/login', function (req, res) {
-  var errors = req.flash('passwordless'), errHtml;
+  var errors = req.flash('passwordless'), errHtml = '';
   for (var i = errors.length - 1; i >= 0; i--) {
-    errHtml += '<p>' + errors[i] + '</p>';
+    errHtml += errors[i];
   }
-  console.log(errHtml)
-  res.render('login');
+  res.render('login', { error: errHtml });
 });
 
 router.post(
