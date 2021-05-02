@@ -105,7 +105,13 @@ db.backup = function backup() {
 // Set from disk
 db.persist = function persist() {
     console.log("===== persist ===== ")
+    global.listings.forEach(item => {
+        item.desc = Array.from(item.desc)
+    })
     storeData(global.listings, 'listings.json')
+    global.listings.forEach(item => {
+        item.desc = Uint8Array.from(item.desc)
+    })
 }
 
 // Push item

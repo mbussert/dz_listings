@@ -106,7 +106,7 @@ function isArabic(str) {
   var count = str.match(arabic)
   return count && ((count.length / str.length) > 0.5)
 }
-router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -141,9 +141,11 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     var now = Math.floor(new Date().getTime() / 1000)
     var htmlCleanDesc = giveOp.sanitize(body.desc)
     var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
-    body.desc = isArabic(maskedDesc) ? Array.from(giveOp.compress_ar(maskedDesc)) : Array.from(giveOp.compress_en(maskedDesc))
+    body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc)
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
+    console.log('))))))))))))))')
+    console.log(err)
     // TODO: not here, in a cron job
     db.persist()
     if (!err) {
