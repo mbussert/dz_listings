@@ -1,4 +1,5 @@
 // var db = require('./helper_data').db
+var giveOp = require('./helper_ops').ops
 
 // db.backup()
 // // var vv = db.get({ pass: "ynfrwbv8w" })
@@ -23,17 +24,20 @@
 // console.log(db.sortBy("id", true))
 // console.log(db.sortBy("id", false))
 
-var fs = require("fs");
-var text = fs.readFileSync("./arabic.txt").toString('utf-8');
-var arabic = text.split("\n").slice(0, 245)
+// var fs = require("fs");
+// var text = fs.readFileSync("./arabic.txt").toString('utf-8');
+// var arabic = text.split("\n").slice(0, 245)
 
-var { compatto, DecompressError } = require('compatto')
-var english = require("./node_modules/compatto/cjs/dictionary.cjs").dictionary
-const { compress, decompress } = compatto({ dictionary: arabic })
-const compressedString = compress("يعمل الشمندر على إزالة السموم من الدم، ويساعد البرتقال في الحفاظ على البشرة والجسم، إذن ماذا يحدث عند مزج عصير الشمندر والبرتقال معًا؟ تعرف في هذا المقال على فوائد عصير الشمندر والبرتقال. ")
-console.log(compressedString)
-const decompressedString = decompress(compressedString)
+// var { compatto, DecompressError } = require('compatto')
+// var english = require("./node_modules/compatto/cjs/dictionary.cjs").dictionary
+// const { compress, decompress } = compatto({ dictionary: arabic })
+// const compressedString = compress("يعمل الشمندر على إزالة السموم من الدم، ويساعد البرتقال في الحفاظ على البشرة والجسم، إذن ماذا يحدث عند مزج عصير الشمندر والبرتقال معًا؟ تعرف في هذا المقال على فوائد عصير الشمندر والبرتقال. ")
+// console.log(compressedString)
+// const decompressedString = decompress(compressedString)
 
-fs.writeFile('text.txt', decompressedString, function (err) {
-    if (err) return console.log(err);
-  });
+// fs.writeFile('text.txt', decompressedString, function (err) {
+//     if (err) return console.log(err);
+// });
+
+
+console.log(giveOp.compress_en("hello world"))

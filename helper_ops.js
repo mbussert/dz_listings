@@ -5179,17 +5179,18 @@ ops.isPointInsidePolygon = function isPointInsidePolygon(point, vs = coordinates
    return inside;
 };
 
-var { compatto, DecompressError } = require('compatto')
+var fs = require('fs');
+var { compatto, DecompressError } = require('compatto');
 var text = fs.readFileSync("./arabic.txt").toString('utf-8');
-var arabic = text.split("\n").slice(0, 245)
+var arabic = text.split("\n").slice(0, 245);
 var english = require("./node_modules/compatto/cjs/dictionary.cjs").dictionary
-const { compress_en, decompress_en } = compatto({ dictionary: english })
-const { compress_ar, decompress_ar } = compatto({ dictionary: arabic })
+const { compress : compress_en, decompress : decompress_en } = compatto({ dictionary: english })
+const { compress : compress_ar, decompress : decompress_ar } = compatto({ dictionary: arabic })
 
-ops.compressors.compress_en = compress_en
-ops.compressors.decompress_en = decompress_en
-ops.compressors.compress_ar = compress_ar
-ops.compressors.decompress_ar = decompress_ar
+ops.compress_en = compress_en
+ops.decompress_en = decompress_en
+ops.compress_ar = compress_ar
+ops.decompress_ar = decompress_ar
 
 module.exports.give = give;
 module.exports.ops = ops;

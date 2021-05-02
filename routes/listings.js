@@ -95,7 +95,6 @@ router.post('/queryV2', async (req, res, next) => {
   res.render('listings', { title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: "Yep, we got some :)" });
 });
 
-var smaz = require("smaz")
 /* Add one listing. */
 const Joi = require('joi');
 
@@ -142,7 +141,7 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
     var now = Math.floor(new Date().getTime() / 1000)
     var htmlCleanDesc = giveOp.sanitize(body.desc)
     var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
-    body.desc = isArabic(maskedDesc) ? Array.from(giveOp.compressors.compress_ar(maskedDesc)) : Array.from(giveOp.compressors.compress_en(maskedDesc))
+    body.desc = isArabic(maskedDesc) ? Array.from(giveOp.compress_ar(maskedDesc)) : Array.from(giveOp.compress_en(maskedDesc))
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
     // TODO: not here, in a cron job

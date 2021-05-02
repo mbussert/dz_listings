@@ -82,9 +82,6 @@ const loadData = (path) => {
 }
 
 // Get from disk
-function isArabic(str) {
-    return (str.match(/[\u0600-\u06FF]/g).length / str.length) > 0.5
-  }
 db.backup = function backup() {
     console.log("===== backup ===== ")
     if (!global.listings || global.listings.length == 0) {
@@ -97,7 +94,8 @@ db.backup = function backup() {
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
             get: function () { 
-                return this.ara ? (giveOp.compressors.decompress_ar(this.desc)) : (giveOp.compressors.decompress_en(this.desc))
+                item.desc = Uint8Array.from(item.desc)
+                return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc))
             }
         });
     });
@@ -114,13 +112,13 @@ db.persist = function persist() {
 db.push = function push(item) {
     console.log("===== push ===== ")
     // small memory gain.
-    // item.desc = Uint8Array.from(item.desc)
+    item.desc = Uint8Array.from(item.desc)
     var ids = _.pluck(global.listings, 'id')
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
     Object.defineProperty(item, 'desc_', {
         get: function () { 
-            return item.ara ? (giveOp.compressors.decompress_ar(this.desc)) : (giveOp.compressors.decompress_en(this.desc))
+            return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc))
         }
     });
     global.listings.push(item)
@@ -146,7 +144,7 @@ db.clean = function clean() {
 // Get one
 db.get = function get(query, subListing = global.listings) {
     console.log("===== get ===== ")
-    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_', 'lat', 'lng', 'img')
+    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara')
 }
 
 // Deactivate one
@@ -236,7 +234,7 @@ let miniSearch = new MiniSearch({
 db.fuzzy = function fuzzy(str) {
     if (miniSearch.documentCount === 0)
         miniSearch.addAll(global.listings)
-    return miniSearch.search(str).map(entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'd') })
+    return miniSearch.search(str).map(entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'd', 'ara') })
 }
 
 // Sort
@@ -267,9 +265,9 @@ db.since = function since(then, subListing = global.listings) {
 // Default limit to 100
 db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
-        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') })
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'ara') })
     else
-        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_') }).slice(0, limit)
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'ara') }).slice(0, limit)
 }
 
 // const merge = require('deepmerge')
