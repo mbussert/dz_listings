@@ -25,7 +25,7 @@ router.get('/tags', function (req, res, next) {
 /* GET one listing; must not be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, d: 0, a: 1 })
+  var elem = db.get({ id: id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
   if (_.isEmpty(elem))
     res.render('listing', { title: 'Express', data: elem, user: req.session.user, error: "No listing found, it can be deactivated or not approved yet :(" });
   else
@@ -106,7 +106,7 @@ function isArabic(str) {
   var count = str.match(arabic)
   return count && ((count.length / str.length) > 0.5)
 }
-router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -175,11 +175,39 @@ router.post('/deactivate', function (req, res, next) {
       error: error
     })
   } else {
-    var elem = db.get({ pass: body.password })
+    var elem = db.get({ pass: body.password }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
     db.deactivate(elem.id)
     res.render('messages', { title: 'Express', message: 'Item deactivated', user: req.session.user, success: "Listing has been successfully deactivated. Users will not see it again :)" });
   }
 });
+
+/* Contact poster one listing. */
+router.post('/contact', global.passwordless.restricted({ failureRedirect: '/login' }), function (req, res, next) {
+  const { body } = req;
+  const listing = Joi.object().keys({
+    message: Joi.string().min(20).required(),
+    id: Joi.string().min(8).max(11).required(),
+  });
+  const result = listing.validate(body);
+  const { value, error } = result;
+  const valid = error == null;
+  if (!valid) {
+    res.status(422).json({
+      message: 'Invalid request',
+      data: body,
+      error: error
+    })
+  } else {
+    var elem = db.get({ id: body.id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr'])
+    var mail = _.extend(body, { sender: req.user, receiver: elem.usr })
+    
+    res.status(200).json({
+      message: 'good request',
+      data: body,
+    })
+  }
+});
+
 
 let pass = process.env.PASS
 let pass2 = process.env.PASS2
@@ -187,7 +215,7 @@ let pass2 = process.env.PASS2
 /* GET one listing; must not be unnapproved yet. */
 router.get(`/${pass2}/:id`, function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, d: 0, a: 0 })
+  var elem = db.get({ id: id, d: 0, a: 0 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
   if (_.isEmpty(elem))
     res.render('listing', { title: 'Express', data: elem, error: "No listing found, it can be deactivated or not approved yet :(" });
   else
@@ -198,7 +226,7 @@ router.get(`/${pass2}/:id`, function (req, res, next) {
 /* Approve one listing. */
 router.get(`/${pass}/:id`, function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, a: 0 })
+  var elem = db.get({ id: id, a: 0 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
 
   if (_.isEmpty(elem))
     res.render('messages', { title: 'Express', message: 'Item approval', error: "Listing not found or already approved" });

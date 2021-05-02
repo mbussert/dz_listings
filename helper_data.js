@@ -148,9 +148,9 @@ db.clean = function clean() {
 }
 
 // Get one
-db.get = function get(query, subListing = global.listings) {
+db.get = function get(query, pick, subListing = global.listings) {
     console.log("===== get ===== ")
-    return _.pick(_.findWhere(subListing, query), 'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara')
+    return _.pick(_.findWhere(subListing, query), pick) //'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'
 }
 
 // Deactivate one
