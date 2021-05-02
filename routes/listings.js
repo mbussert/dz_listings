@@ -101,7 +101,7 @@ const Joi = require('joi');
 
 var giveObj = require('../helper_ops').give
 var giveOp = require('../helper_ops').ops
-var arabic = /[\u0600-\u06FF]/;
+var arabic = /[\u0600-\u06FF]/g;
 function isArabic(str) {
   var count = str.match(arabic)
   return count && ((count.length / str.length) > 0.5)
@@ -175,7 +175,7 @@ router.post('/deactivate', function (req, res, next) {
       error: error
     })
   } else {
-    var elem = db.get({ pass: body.password }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
+    var elem = db.get({ pass: body.password }, ['id'])
     db.deactivate(elem.id)
     res.render('messages', { title: 'Express', message: 'Item deactivated', user: req.session.user, success: "Listing has been successfully deactivated. Users will not see it again :)" });
   }
@@ -198,9 +198,9 @@ router.post('/contact', global.passwordless.restricted({ failureRedirect: '/logi
       error: error
     })
   } else {
-    var elem = db.get({ id: body.id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr'])
+    var elem = db.get({ id: parseInt(body.id), d: 0, a: 1 }, ['usr'])
     var mail = _.extend(body, { sender: req.user, receiver: elem.usr })
-    
+    console.log(mail)
     res.status(200).json({
       message: 'good request',
       data: body,
@@ -226,7 +226,7 @@ router.get(`/${pass2}/:id`, function (req, res, next) {
 /* Approve one listing. */
 router.get(`/${pass}/:id`, function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, a: 0 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
+  var elem = db.get({ id: id, a: 0 }, ['id'])
 
   if (_.isEmpty(elem))
     res.render('messages', { title: 'Express', message: 'Item approval', error: "Listing not found or already approved" });

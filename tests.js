@@ -1,7 +1,7 @@
-// var db = require('./helper_data').db
+var db = require('./helper_data').db
 var giveOp = require('./helper_ops').ops
 
-// db.backup()
+db.backup()
 // // var vv = db.get({ pass: "ynfrwbv8w" })
 // // console.log(vv)
 // var array = global.listings
@@ -39,5 +39,6 @@ var giveOp = require('./helper_ops').ops
 //     if (err) return console.log(err);
 // });
 
-
-console.log(giveOp.compress_en("hello world"))
+elem = db.get({ id: 1619979872, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr'])
+console.log(JSON.stringify(elem))
+// console.log(giveOp.compress_en("hello world"))
