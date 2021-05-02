@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var flash = require('connect-flash');
 var _ = require('underscore');
 var db = require('./helper_data').db
 const dotenv = require('dotenv')
@@ -18,6 +19,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }))
+app.use(flash())
 var passwordless = require('passwordless');
 var NodeCacheStore = require('passwordless-nodecache');
 var nodeoutlook = require('nodejs-nodemailer-outlook')

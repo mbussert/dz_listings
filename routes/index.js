@@ -59,7 +59,13 @@ router.get('/policy', function (req, res, next) {
   });
 });
 
+var freemail = require('freemail');
 router.get('/login', function (req, res) {
+  var errors = req.flash('passwordless'), errHtml;
+  for (var i = errors.length - 1; i >= 0; i--) {
+    errHtml += '<p>' + errors[i] + '</p>';
+  }
+  console.log(errHtml)
   res.render('login');
 });
 
@@ -70,19 +76,22 @@ router.post(
     // Simply accept every user*
     function (user, delivery, callback) {
       console.log(user)
-      callback(null, user);
+      if (freemail.isFree(user))
+        callback(null, user);
+      else
+        callback(null, null)
     }
-  ),
+    , { failureRedirect: '/login', failureFlash: 'This user is unknown!' }),
   function (req, res) {
     console.log(req.user)
-		res.send('Check your email. You will be able to login from there.');
+    res.send('Check your email. You will be able to login from there.');
   }
 );
 
-router.get('/logged_in', global.passwordless.acceptToken(), 
-	function(req, res) {
+router.get('/logged_in', global.passwordless.acceptToken(),
+  function (req, res) {
     req.session.user = req.user;
-		res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
-});
+    res.render('messages', { title: 'Express', message: 'User login', success: "User has been successfully logged in :)" });
+  });
 
 module.exports = router;

@@ -5245,7 +5245,7 @@ const moveable = moveableMarker(map, circle);
 
 setTimeout(() => {
    map.invalidateSize();
-}, 2000);
+}, 5000);
 
 function addMarker(e) {
    // Add marker to map at click location; add popup window
