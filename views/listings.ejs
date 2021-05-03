@@ -83,16 +83,13 @@
         <% for (var i=0; listings.length> 0 && i < listings.length && i < 10 ; i++) { %>
             <tr>
               <th scope="row">
-                <%= listings[i].id %>
+                <%= listings[i].date %>
               </th>
-              <td>
-                <%= listings[i].title %>
-              </td>
+              <td><a href='/listings/<%= listings[i].id %>'>listing/<%=
+                listings[i].title %></a></td>
               <td>
                 <%- listings[i].desc_.slice(0,200) %> ...
               </td>
-              <td><a href='/listings/<%= listings[i].id %>' style="opacity:<%= 1/(i+0.01) %>;">listing/<%=
-                    listings[i].id %></a></td>
             </tr>
             <% } %>
       </tbody>

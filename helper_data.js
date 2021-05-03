@@ -93,7 +93,7 @@ db.backup = function backup() {
     }
     global.listings.forEach(item => {
         Object.defineProperty(item, 'desc_', {
-            get: function () { 
+            get: function () {
                 item.desc = Uint8Array.from(item.desc)
                 return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc))
             }
@@ -123,7 +123,7 @@ db.push = function push(item) {
     if (!item.id || ids.indexOf(item.id) >= 0)
         return ('item without id or id is already there.')
     Object.defineProperty(item, 'desc_', {
-        get: function () { 
+        get: function () {
             return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc))
         }
     });
@@ -268,12 +268,34 @@ db.since = function since(then, subListing = global.listings) {
     return _.filter(subListing, compare)
 }
 
+
+function formatDate(epoch, local) {
+    var d = new Date(0)
+    d.setUTCSeconds(epoch)
+    return d.toLocaleDateString(
+        local,
+        {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }
+    );
+}
+
 // Default limit to 100
 db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
-        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'ara') })
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => {
+            var local = entrie.ara === true ? 'ar-dz' : 'en-gb'
+            entrie.date = formatDate(entrie.id, local)
+            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
+        })
     else
-        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'ara') }).slice(0, limit)
+        return _.map(subListing.filter(elem => { return !elem.d && elem.a }), entrie => {
+            var local = entrie.ara === true ? 'ar-dz' : 'en-gb'
+            entrie.date = formatDate(entrie.id, local)
+            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
+        }).slice(0, limit)
 }
 
 // const merge = require('deepmerge')
