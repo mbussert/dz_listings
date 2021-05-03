@@ -15,10 +15,14 @@ footer {
 
 .card {
   transform: scale(0.8, 0.8);
-  -ms-transform: scale(0.8, 0.8); /* IE 9 */
-  -webkit-transform: scale(0.8, 0.8); /* Safari and Chrome */
-  -o-transform: scale(0.8, 0.8); /* Opera */
-  -moz-transform: scale(0.8, 0.8); /* Firefox */
+  -ms-transform: scale(0.8, 0.8);
+  /* IE 9 */
+  -webkit-transform: scale(0.8, 0.8);
+  /* Safari and Chrome */
+  -o-transform: scale(0.8, 0.8);
+  /* Opera */
+  -moz-transform: scale(0.8, 0.8);
+  /* Firefox */
   background-color: sienna;
   color: white;
 }
@@ -29,30 +33,44 @@ footer {
 }
 
 /* Style the Image Used to Trigger the Modal */
+
 #imgg {
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-#imgg:hover {opacity: 0.7;}
+#imgg:hover {
+  opacity: 0.7;
+}
 
 /* The Modal (background) */
+
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 100; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 100;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9);
+  /* Black w/ opacity */
 }
 
 /* Modal Content (Image) */
+
 .modal-content {
   margin: auto;
   display: block;
@@ -61,6 +79,7 @@ footer {
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
+
 #caption {
   margin: auto;
   display: block;
@@ -73,17 +92,23 @@ footer {
 }
 
 /* Add Animation - Zoom in the Modal */
+
 .modal-content, #caption {
   animation-name: zoom;
   animation-duration: 0.6s;
 }
 
 @keyframes zoom {
-  from {transform:scale(0)}
-  to {transform:scale(1)}
+  from {
+    transform: scale(0)
+  }
+  to {
+    transform: scale(1)
+  }
 }
 
 /* The Close Button */
+
 .close {
   position: absolute;
   top: 15px;
@@ -94,16 +119,65 @@ footer {
   transition: 0.3s;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
   color: #bbb;
   text-decoration: none;
   cursor: pointer;
 }
 
 /* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
+
+@media only screen and (max-width: 700px) {
   .modal-content {
     width: 100%;
   }
+}
+
+html {
+  font-family: News Cycle;
+}
+
+h1 {
+  font-family: News Cycle;
+  /* font-size: 24px; */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 700;
+  line-height: 26.4px;
+}
+
+h3 {
+  font-family: News Cycle;
+  /* font-size: 14px; */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 700;
+  line-height: 15.4px;
+}
+
+p {
+  font-family: News Cycle;
+  /* font-size: 14px; */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+blockquote {
+  font-family: News Cycle;
+  /* font-size: 21px; */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 30px;
+}
+
+pre {
+  font-family: News Cycle;
+  /* font-size: 13px; */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18.5667px;
 }
