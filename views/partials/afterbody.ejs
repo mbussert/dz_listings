@@ -4,7 +4,8 @@
 <script src="/javascripts/toasty.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-  crossorigin=""></script>
+  crossorigin=""
+  onload="initFingerprintJS()"></script>
 <script type="text/javascript" src="/javascripts/main.js"></script>
 
 <style>
@@ -30,3 +31,25 @@
         : ((el.innerHTML = "🌙"), bodyClass.add("dark"));
     }
   </script>
+  <script>
+    function initFingerprintJS() {
+      // Initialize an agent at application startup.
+      const fpPromise = FingerprintJS.load()
+  
+      // Get the visitor identifier when you need it.
+      fpPromise
+        .then(fp => fp.get())
+        .then(result => {
+          // This is the visitor identifier:
+          const visitorId = result.visitorId
+          console.log(visitorId)
+          document.getElementById('lat_2').value = result.latitude;
+          document.getElementById('lng_2').value = result.longitude;
+        })
+    }
+  </script>
+  <script
+    async
+    src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+    onload="initFingerprintJS()"
+  ></script>

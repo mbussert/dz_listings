@@ -5243,10 +5243,14 @@ const moveable = moveableMarker(map, circle);
 // map.on('mouseup', function (e) {
 //    map.removeEventListener('mousemove');
 // })
-
+function invalidateSize() {
+   setTimeout(() => {
+      map.invalidateSize();
+   }, 1000);
+}
 setTimeout(() => {
    map.invalidateSize();
-}, 5000);
+}, 3000);
 
 function addMarker(e) {
    // Add marker to map at click location; add popup window
