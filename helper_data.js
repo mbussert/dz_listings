@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var lo = require('lodash');
 const fs = require('fs')
 var db = {}
 var give = {}
@@ -138,6 +139,7 @@ db.cycle = function cycle() {
 }
 
 // Purge deactivated items
+// Should only be called from time to time (because of splice)
 db.clean = function clean() {
     console.log("===== clean ===== ")
     for (var i = 0; i < global.listings.length; i++) {
@@ -148,15 +150,16 @@ db.clean = function clean() {
 }
 
 // Get one
-db.get = function get(query, pick, subListing = global.listings) {
+db.get = function get(query, keys, subListing = global.listings) {
     console.log("===== get ===== ")
-    return _.pick(_.findWhere(subListing, query), pick) //'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'
+    return lo.pick(lo(subListing).find(query), keys) //'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'
+    // return _.pick(_.findWhere(subListing, query), keys).desc_
 }
 
 // Deactivate one
 db.deactivate = function deactivate(id, subListing = global.listings) {
     console.log("===== deactivate ===== ")
-    return _.some(subListing, elem => {
+    return lo.some(subListing, elem => {
         if (elem.id === id) {
             elem.d = 1;
             return true;
@@ -167,7 +170,7 @@ db.deactivate = function deactivate(id, subListing = global.listings) {
 // Approve one
 db.approve = function approve(id, subListing = global.listings) {
     console.log("===== approve ===== ")
-    return _.some(subListing, elem => {
+    return lo.some(subListing, elem => {
         if (elem.id === id) {
             elem.a = 1;
             return true;
@@ -183,7 +186,8 @@ db.fetch = function fetch(query, subListing = global.listings) {
 
     if (isEmpty)
         return subListing
-    return _.where(subListing, query)
+    return lo.filter(subListing, query)
+    // return _.where(subListing, query)
 }
 
 
@@ -200,7 +204,8 @@ db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
             allowedAttributes: {}
         }).toLowerCase().indexOf(value.toLowerCase()) > -1;
     }
-    return _.reject(subListing, query)
+    return lo.reject(subListing, query)
+    // return _.reject(subListing, query)
 }
 
 // query ~= function(item){ return item.title == 'blablab'; }
@@ -215,7 +220,8 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
             allowedAttributes: {}
         }).toLowerCase().indexOf(value.toLowerCase()) > -1;
     }
-    return _.filter(subListing, query)
+    return lo.filter(subListing, query)
+    // return _.filter(subListing, query)
 }
 
 // fuzzy search on all
@@ -224,7 +230,7 @@ const { ops } = require('./helper_ops');
 let miniSearch = new MiniSearch({
     fields: ['title', 'description'], // fields to index for full-text search
     idFields: 'id',
-    storeFields: ['id', 'title', 'd', 'desc_'], // fields to return with search results
+    storeFields: ['id', 'title', 'd', 'desc_', 'a', 'date'], // fields to return with search results
     extractField: (document, fieldName) => {
         if (fieldName === 'description') {
             const desc = document['desc_']
@@ -240,7 +246,7 @@ let miniSearch = new MiniSearch({
 db.fuzzy = function fuzzy(str) {
     if (miniSearch.documentCount === 0)
         miniSearch.addAll(global.listings)
-    return miniSearch.search(str).map(entrie => { return _.pick(entrie, 'id', 'title', 'desc_', 'd', 'ara') })
+    return miniSearch.search(str)
 }
 
 // Sort
@@ -259,13 +265,15 @@ db.sinceDelta = function sinceDelta(minutes, subListing = global.listings) {
     var now = Math.floor(new Date().getTime() / 1000)
     var then = now - minutes
     var compare = (item) => { return item.id > then; }
-    return _.filter(subListing, compare)
+    return lo.filter(subListing, compare)
+    // return _.filter(subListing, compare)
 }
 
 db.since = function since(then, subListing = global.listings) {
     console.log("===== since ===== ")
     var compare = (item) => { return item.id > then; }
-    return _.filter(subListing, compare)
+    return lo.filter(subListing, compare)
+    // return _.filter(subListing, compare)
 }
 
 

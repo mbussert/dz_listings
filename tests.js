@@ -10,11 +10,12 @@ var res = db.deactivate(1619916741)
 var vv = db.get({ "title":"titlevsvsvsvsvsvs" }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr', 'd'])
 // console.log(vv)
 
+console.log(db.fetch({ id: 1619916741 }))
 
 var array = global.listings
 // console.log(array)
 var array2 = db.toPublic(array)
-console.log(array2)
+// console.log(array2)
 // var err = db.push({ "id": 77, "d": 1, "title": 4, "desc": "tell tell" })
 // console.log(err)
 // console.log(array.length)

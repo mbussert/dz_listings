@@ -5243,11 +5243,7 @@ const moveable = moveableMarker(map, circle);
 // map.on('mouseup', function (e) {
 //    map.removeEventListener('mousemove');
 // })
-function invalidateSize() {
-   setTimeout(() => {
-      map.invalidateSize();
-   }, 1000);
-}
+
 setTimeout(() => {
    map.invalidateSize();
 }, 3000);

@@ -37,8 +37,7 @@ router.get('/:id', function (req, res, next) {
 /* Query listings not including deactivated. */
 router.post('/query', async (req, res, next) => {
   const { body } = req;
-  var activeListings = db.toPublic()
-
+  var listings = global.listings
   const querySchema = Joi.object().keys({
     title: Joi.string().optional().allow('').min(3).max(100).regex(/^\W*\w+(?:\W+\w+)*\W*$/),
     exactTitle: Joi.boolean().truthy('on').falsy('off').default(false),
@@ -59,17 +58,18 @@ router.post('/query', async (req, res, next) => {
   } else {
 
     if (body.exactTitle)
-      activeListings = db.fetch({ title: body.title }, activeListings)
+      listings = db.fetch({ title: body.title }, listings)
     else
-      activeListings = db.fetchDeep('title', body.title, activeListings)
+      listings = db.fetchDeep('title', body.title, listings)
     if (body.exactDesc)
-      activeListings = db.fetch({ desc_: body.desc }, activeListings)
+      listings = db.fetch({ desc_: body.desc }, listings)
     else
-      activeListings = db.fetchDeep('desc_', body.desc, activeListings)
+      listings = db.fetchDeep('desc_', body.desc, listings)
   }
   var then = Math.floor(new Date(body.since).getTime() / 1000)
-  activeListings = db.since(then, activeListings)
-  res.render('listings', { title: 'Express', listings: db.toPublic(100, activeListings), user: req.session.user, success: "Yep, we got some :)" });
+  listings = db.since(then, listings)
+  
+  res.render('listings', { title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: "Yep, we got some :)" });
 });
 
 /* Query listings not including deactivated. */
@@ -90,6 +90,7 @@ router.post('/queryV2', async (req, res, next) => {
   } else {
     listings = db.fuzzy(body.title_desc)
   }
+  console.log(listings)
   var then = Math.floor(new Date(body.since).getTime() / 1000)
   listings = db.since(then, listings)
   res.render('listings', { title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: "Yep, we got some :)" });
