@@ -25,7 +25,7 @@ router.get('/tags', function (req, res, next) {
 /* GET one listing; must not be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'])
+  var elem = db.get({ id: id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags'])
   if (_.isEmpty(elem))
     res.render('listing', { title: 'Express', data: elem, user: req.session.user, error: "No listing found, it can be deactivated or not approved yet :(" });
   else

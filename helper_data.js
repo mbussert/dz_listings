@@ -277,7 +277,8 @@ db.since = function since(then, subListing = global.listings) {
 }
 
 
-function formatDate(epoch, local) {
+function formatDate(epoch, entrie) {
+    var local = entrie.ara === true ? 'ar-dz' : 'en-gb'
     var d = new Date(0)
     d.setUTCSeconds(epoch)
     return d.toLocaleDateString(
@@ -294,14 +295,12 @@ function formatDate(epoch, local) {
 db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
         return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
-            var local = entrie.ara === true ? 'ar-dz' : 'en-gb'
-            entrie.date = formatDate(entrie.id, local)
+            entrie.date = formatDate(entrie.id, entrie)
             return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
         }).value()
     else
         return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
-            var local = entrie.ara === true ? 'ar-dz' : 'en-gb'
-            entrie.date = formatDate(entrie.id, local)
+            entrie.date = formatDate(entrie.id, entrie)
             return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
         }).take(limit).value()
 }
