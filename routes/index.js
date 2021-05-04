@@ -22,8 +22,8 @@ router.get('/cat', function (req, res, next) {
 router.get('/about', function (req, res, next) {
   res.render('blog', {
     title: 'What is listings', user: req.session.user, sections: [
-      { id: "what_is", html: "Listings is here to let anyone post on the internet, but seriously. Like newspapers and magazines, Listings has these two main sections: announcements and donnations." },
-      { id: "careful", html: "Listings does not want to replace any other paper or digital platform. It does not want 'any' business deals too. All listings 'must' be free. Please read the 'policy' page before posting." },
+      { id: "What is", html: "Listings is here to let anyone post on the internet, but <em>seriously</em> and for <em>free</em>. Like newspapers and magazines, Listings has these two main sections: <b>announcements and donnations.</b>" },
+      { id: "Careful", html: "Listings does not want to replace any other paper or digital platform. It does not want 'any' business deals using its platform. All listings 'must' be free. Please read the 'policy' page before posting." },
     ]
   });
 });
@@ -31,9 +31,9 @@ router.get('/about', function (req, res, next) {
 router.get('/howto', function (req, res, next) {
   res.render('blog', {
     title: 'How to post on Listings', user: req.session.user, sections: [
-      { id: "careful", html: "Before enjoying Listings, You must accept user policy before posting. You should behave in civic manners so no room for racism or hate. We have the right to ban a user permanently or an IP temporarly." },
-      { id: "listing", html: "Because we value privacy, Listings needs only your Email before posting or messaging another user. A listing has a title, text content, geolocation, tags and one single image." },
-      { id: "validation", html: "Before you can see your post, an Administrator needs to validate its content and then it becomes visible to other users. We have the right to delete a listings before or after it is publically visible."}
+      { id: "Careful", html: "Before enjoying Listings, You must accept user policy before posting. You should behave in civic manners so no room for racism or hate. We have the right to ban a user permanently or an IP temporarly." },
+      { id: "Listing", html: "Because we value privacy, Listings needs only your Email before posting or messaging another user. A listing has a title, text content, geolocation, tags and one single image." },
+      { id: "Validation", html: "Before you can see your post, an Administrator needs to validate its content and then it becomes visible to other users. We have the right to delete a listings before or after it is publically visible."}
     ]
   });
 });

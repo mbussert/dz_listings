@@ -1,8 +1,10 @@
 $(document).ready(function () {
   $.getJSON("/listings/get_tags", function (result) {
     // result.tags = result.tags.map(arr => { return {col1: arr[0], col2: arr[1], col3: arr[2]}})
-    $('#table_id').DataTable(
+    var events = $('#events');
+    var table = $('#table_id').DataTable(
       {
+        select: true,
         searchPanes: {
           cascadePanes: true
         },
@@ -22,11 +24,12 @@ $(document).ready(function () {
         }]
       }
     );
-    var table = $('#table_id').DataTable();
-    table.rows().every(function (rowIdx, tableLoop, rowLoop) {
-      var cell = table.cell({ row: rowIdx, column: 2 }).node();
-      $(cell).addClass('tags');
-    });
+    table
+      .on('select', function (e, dt, type, indexes) {
+        var rowData = table.rows(indexes).data().toArray();
+        events.val( rowData[0][2] );
+        // events.prepend( rowData[2] );
+      })
   });
 });
 
