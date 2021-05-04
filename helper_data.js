@@ -335,7 +335,7 @@ const load = lines =>
 
 
 give.googleTags = _.uniq(load(file_content).filter(arr => { return arr.length == 3 }), function (x) { return x.join(''); })
-
+give.googleTagsLite = give.googleTags.map(elem => elem[2])
 
 module.exports.db = db;
 module.exports.give = give;

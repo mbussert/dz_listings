@@ -70,34 +70,39 @@ try {
 // The DOM element you wish to replace with Tagify
 var inputTags = document.querySelector('input[name=tags]');
 
-// initialize Tagify on the above input node reference
-new Tagify(inputTags, {
-   pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-   delimiters: ",| ",        // add new tags when a comma or a space character is entered
-   keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
-   editTags: {
-      clicks: 1,              // single click to edit a tag
-      keepInvalid: true      // if after editing, tag is invalid, auto-revert
-   },
-   maxTags: 3,
-   whitelist: ["temple", "stun", "detective"],
-   transformTag: transformTag,
-   backspace: "edit",
-   placeholder: "Type something",
-   dropdown: {
-      enabled: 1,            // show suggestion after 1 typed character
-      fuzzySearch: true,    // match only suggestions that starts with the typed characters
-      position: 'text',      // position suggestions list next to typed text
-      caseSensitive: true,   // allow adding duplicate items if their case is different
-   },
-   templates: {
-      dropdownItemNoMatch: function (data) {
-         return `
-            No suggestion found for: ${data.value}
-        `
-      }
-   }
-})
+fetch('/listings/get_tags_lite')
+   .then(res => res.json())
+   .then((tags) => {
+      // initialize Tagify on the above input node reference
+      new Tagify(inputTags, {
+         pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+         delimiters: ",| ",        // add new tags when a comma or a space character is entered
+         keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
+         editTags: {
+            clicks: 1,              // single click to edit a tag
+            keepInvalid: true      // if after editing, tag is invalid, auto-revert
+         },
+         maxTags: 3,
+         whitelist: tags.tags,
+         transformTag: transformTag,
+         backspace: "edit",
+         placeholder: "Type something",
+         dropdown: {
+            enabled: 1,            // show suggestion after 1 typed character
+            fuzzySearch: true,    // match only suggestions that starts with the typed characters
+            position: 'text',      // position suggestions list next to typed text
+            caseSensitive: true,   // allow adding duplicate items if their case is different
+         },
+         templates: {
+            dropdownItemNoMatch: function (data) {
+               return `No suggestion found for: ${data.value}`
+            }
+         }
+      })
+   })
+   .catch(err => { throw err });
+
+
 
 function transformTag(tagData) {
    tagData.style = "--tag-bg:" + stringToColour(tagData.value);
