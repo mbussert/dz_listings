@@ -21,25 +21,18 @@
       <summary>Search</summary>
       <h2>Search</h2>
       <form action="/listings/query" method="POST">
-        <div>
-          <label for="title">What title do you want to search?</label>
+        <p class="grouped">
+          <label for="title">Title</label>
           <input name="title" class="query" id="title" value="title...">
-        </div>
-        <div>
-          <label for="exactTitle">exactTitle ?</label>
+          <label for="exactTitle">Exact ?</label>
           <input type="checkbox" class="query" name="exactTitle" id="exactTitle" checked>
-        </div>
-        <div>
-          <label for="description">What description do you want to search?</label>
+          <label for="description">Description</label>
           <input name="desc" class="query" id="description" value="description...">
-        </div>
-        <div>
-          <label for="exactDesc">exactDesc ?</label>
+          <label for="exactDesc">Exact ?</label>
           <input type="checkbox" class="query" name="exactDesc" id="exactDesc" checked>
-        </div>
-        <label for="since">Since date (defaults to all):</label>
-        <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
-
+          <label for="since">Since date</label>
+          <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
+        </p>
         <div>
           <button>Send my data</button>
         </div>
@@ -53,12 +46,12 @@
       <summary>Fuzzy search</summary>
       <h2>Fuzzy search</h2>
       <form action="/listings/queryV2" method="POST">
-        <div>
-          <label for="title_desc">What search for title and description?</label>
+        <p class="grouped">
+          <label for="title_desc">Title and description</label>
           <input name="title_desc" value="title_desc...">
-        </div>
-        <label for="since">Since date (defaults to all):</label>
-        <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+          <label for="since">Since date</label>
+          <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+        </p>
 
         <div>
           <button>Send my data</button>
