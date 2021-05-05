@@ -118,7 +118,7 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
     lat: Joi.number().max(90).min(-90).optional(),
     lng: Joi.number().max(180).min(-180).optional(),
-
+    sec: Joi.string().valid('listing').required()
     // avatar: Joi.string().required()
   });
   var tags;
@@ -162,6 +162,53 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
   }
 });
 
+router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ (req, res, next) => {
+  const { body } = req;
+  const listingSchema = Joi.object().keys({
+    title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
+    desc: Joi.string().min(10).max(5000).required(),
+    tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
+    sec: Joi.string().valid('announcement').required()
+    // avatar: Joi.string().required()
+  });
+  var tags;
+  var validJson = true
+  try {
+    tags = JSON.parse(body.tags)
+    body.tags = _.pluck(tags, 'value')
+  } catch (e) {
+    validJson = false
+  }
+  const result = listingSchema.validate(body);
+  const { value, error } = result;
+  valid = (error == null) && validJson;
+  if (!valid) {
+    res.status(422).json({
+      message: 'Invalid request',
+      data: body,
+      error: error
+    })
+  } else {
+    var password = (Math.random().toString(36).substr(4)).slice(0, 9)
+    var now = Math.floor(new Date().getTime() / 1000)
+    var htmlCleanDesc = giveOp.sanitize(body.desc)
+    var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
+    body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc)
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, usr: req.session.user, ara: isArabic(maskedDesc) })
+    var err = db.push(entry)
+    console.log('))))))))))))))')
+    console.log(err)
+    // TODO: not here, in a cron job
+    db.persist()
+    if (!err) {
+      giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
+      res.render('listing', { title: 'One listing', data: entry, user: req.session.user, success: "Success. Here is the password whenever you want to deactivate the listing :)",  error: "Image will be loaded shortly!" })
+    }
+    else
+      // if error
+      res.render('listing', { title: 'Express', data: err, error: "Oops, an error accured :(" });
+  }
+});
 
 /* Deactivate one listing. */
 router.post('/deactivate', function (req, res, next) {
