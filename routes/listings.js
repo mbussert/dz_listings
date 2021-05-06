@@ -251,15 +251,13 @@ router.post('/contact', global.passwordless.restricted({ failureRedirect: '/logi
   } else {
     var elem = db.get({ id: parseInt(body.id), d: 0, a: 1 }, ['usr'])
     if (_.isEmpty(elem))
-      res.render('listing', { title: 'Express', data: elem, user: req.session.user, error: "No listing found, it can be deactivated or not approved yet :(" });
+      res.render('listing', { title: 'messages', message: 'You cannot send an email to the item\'s publisher', user: req.session.user, error: 'You cannot send an email to the item\'s publisher' });
     
     // mail2(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
     var mail = { message: body.message, EMAIL_SENDER: req.user, EMAIL_RECIEVER: elem.usr, subjectId: body.id }
-    mail2(mail)
-    res.status(200).json({
-      message: 'good request',
-      data: body,
-    })
+    console.log(mail)
+    giveOp.mail2(mail)
+    res.render('listing', { title: 'messages', message: 'Email successfully sent to publisher, he may repond to you.', user: req.session.user, success: 'Email successfully sent to publisher' });
   }
 });
 
