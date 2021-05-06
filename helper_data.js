@@ -296,12 +296,12 @@ db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
     if (limit == 999998)
         return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
             entrie.date = formatDate(entrie.id, entrie)
-            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
+            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags')
         }).value()
     else
         return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
             entrie.date = formatDate(entrie.id, entrie)
-            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date')
+            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags')
         }).take(limit).value()
 }
 

@@ -252,7 +252,7 @@ router.post('/contact', global.passwordless.restricted({ failureRedirect: '/logi
     var elem = db.get({ id: parseInt(body.id), d: 0, a: 1 }, ['usr'])
     if (_.isEmpty(elem))
       res.render('listing', { title: 'messages', message: 'You cannot send an email to the item\'s publisher', user: req.session.user, error: 'You cannot send an email to the item\'s publisher' });
-    
+
     // mail2(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
     var mail = { message: body.message, EMAIL_SENDER: req.user, EMAIL_RECIEVER: elem.usr, subjectId: body.id }
     console.log(mail)

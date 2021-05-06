@@ -120,6 +120,8 @@ ops.cleanSensitive = function cleanSensitive(blob, maxlen) {
 
    return blob;
 }
+
+
 function formatMessage(msgContent) {
    return `<h1> Listings </h1> <br> <h2> A user sent you a message ! </h2> <p> ${msgContent} </p> <br><hr> <code> You can repond directly to this email. </code>`
 }
