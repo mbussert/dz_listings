@@ -126,8 +126,8 @@ var nodeoutlook = require('nodejs-nodemailer-outlook')
 let EMAIL_TO = process.env.EMAIL_TO
 let EMAIL_PASS = process.env.EMAIL_PASS
 let EMAIL_FROM = process.env.EMAIL_FROM
-
-ops.mail = function mail(mailMessage) {
+// Send an email by admin to admins
+ops.mail = function mail(message) {
    nodeoutlook.sendEmail({
       auth: {
          user: EMAIL_FROM,
@@ -136,9 +136,29 @@ ops.mail = function mail(mailMessage) {
       from: EMAIL_FROM,
       to: EMAIL_TO,
       subject: '@@LISTINGS@@',
-      html: mailMessage,
-      text: mailMessage,
+      html: message,
+      text: message,
       replyTo: EMAIL_FROM,
+      onError: (e) => console.log(e),
+      onSuccess: (i) => console.log(i)
+   });
+}
+
+// Send an email by admin on behalf of SENDER and RECIEVER, 
+ops.mail2 = function mail2(message, EMAIL_SENDER, EMAIL_RECIEVER, subjectId) {
+   nodeoutlook.sendEmail({
+      auth: {
+         user: EMAIL_FROM,
+         pass: EMAIL_PASS
+      },
+      from: EMAIL_FROM,
+      to: EMAIL_RECIEVER,
+      cc: [EMAIL_SENDER],
+      inReplyTo: subjectId,
+      subject: '@@LISTINGS@@',
+      html: message,
+      text: message,
+      replyTo: EMAIL_SENDER,
       onError: (e) => console.log(e),
       onSuccess: (i) => console.log(i)
    });

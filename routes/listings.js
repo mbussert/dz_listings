@@ -71,7 +71,7 @@ router.post('/query', async (req, res, next) => {
   }
   var then = Math.floor(new Date(body.since).getTime() / 1000)
   listings = db.since(then, listings)
-  
+
   res.render('listings', { title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: "Yep, we got some :)" });
 });
 
@@ -154,7 +154,7 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
     db.persist()
     if (!err) {
       giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
-      res.render('listing', { title: 'One listing', data: entry, user: req.session.user, success: "Success. Here is the password whenever you want to deactivate the listing :)",  error: "Image will be loaded shortly!" })
+      res.render('listing', { title: 'One listing', data: entry, user: req.session.user, success: "Success. Here is the password whenever you want to deactivate the listing :)", error: "Image will be loaded shortly!" })
     }
     else
       // if error
@@ -162,7 +162,7 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
   }
 });
 
-router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ (req, res, next) => {
+router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/(req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -202,7 +202,7 @@ router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login
     db.persist()
     if (!err) {
       giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `)
-      res.render('listing', { title: 'One listing', data: entry, user: req.session.user, success: "Success. Here is the password whenever you want to deactivate the listing :)",  error: "Image will be loaded shortly!" })
+      res.render('listing', { title: 'One listing', data: entry, user: req.session.user, success: "Success. Here is the password whenever you want to deactivate the listing :)", error: "Image will be loaded shortly!" })
     }
     else
       // if error
@@ -250,8 +250,12 @@ router.post('/contact', global.passwordless.restricted({ failureRedirect: '/logi
     })
   } else {
     var elem = db.get({ id: parseInt(body.id), d: 0, a: 1 }, ['usr'])
-    var mail = _.extend(body, { sender: req.user, receiver: elem.usr })
-    console.log(mail)
+    if (_.isEmpty(elem))
+      res.render('listing', { title: 'Express', data: elem, user: req.session.user, error: "No listing found, it can be deactivated or not approved yet :(" });
+    
+    // mail2(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
+    var mail = { message: body.message, EMAIL_SENDER: req.user, EMAIL_RECIEVER: elem.usr, subjectId: body.id }
+    mail2(mail)
     res.status(200).json({
       message: 'good request',
       data: body,
