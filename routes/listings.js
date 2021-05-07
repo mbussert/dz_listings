@@ -20,6 +20,7 @@ router.get('/donations', function (req, res, next) {
 
 router.get('/artworks', function (req, res, next) {
   var pubListings = db.toPublic(100, 'art')
+  console.log(pubListings)
   res.render('listings', { title: 'DZ Listings', intro: 'Share website or digital assets or any other artwork', listings: pubListings, user: req.session.user, success: "Hello there :)" });
 });
 
