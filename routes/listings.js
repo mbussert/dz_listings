@@ -10,7 +10,22 @@ dotenv.config()
 
 router.get('/', function (req, res, next) {
   var pubListings = db.toPublic(100)
-  res.render('listings', { title: 'Express', listings: pubListings, user: req.session.user, success: "Hello there :)" });
+  res.render('listings', { title: 'DZ Listings', intro: 'Like newspapers listings, this is a digital one open for all Algerians', listings: pubListings, user: req.session.user, success: "Hello there :)" });
+});
+
+router.get('/donations', function (req, res, next) {
+  var pubListings = db.toPublic(100, 'don')
+  res.render('listings', { title: 'DZ Listings', intro: 'Share or look for used items nextdoor, Based on solidarity and reciprocity rather than economic profit', listings: pubListings, user: req.session.user, success: "Hello there :)" });
+});
+
+router.get('/artworks', function (req, res, next) {
+  var pubListings = db.toPublic(100, 'art')
+  res.render('listings', { title: 'DZ Listings', intro: 'Share website or digital assets or any other artwork', listings: pubListings, user: req.session.user, success: "Hello there :)" });
+});
+
+router.get('/blogs', function (req, res, next) {
+  var pubListings = db.toPublic(100, 'blo')
+  res.render('listings', { title: 'DZ Listings', intro: 'Share your passions, hobbies and passtimes! Whether it is a creative or enriching', listings: pubListings, user: req.session.user, success: "Hello there :)" });
 });
 
 router.get('/get_tags', function (req, res, next) {

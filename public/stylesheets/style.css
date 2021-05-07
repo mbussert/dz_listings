@@ -1,3 +1,48 @@
+:root {
+  --newsprint: #15232d;
+  --dd-red: #aa3925;
+  --paper: #f4f2ea;
+}
+
+body {
+  border: 10px solid var(--newsprint);
+}
+
+header{
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 80px;
+  text-transform: uppercase;
+  display: inline-block;
+  line-height: 72px;
+  margin-bottom: 20px;
+}
+.head{
+  text-align: center;
+  position: relative;
+}
+.subhead{
+  text-transform: uppercase;
+  border-bottom: 2px solid #2f2f2f;
+  border-top: 2px solid #2f2f2f;
+  padding: 12px 0 12px 0;
+
+}
+.weatherforcastbox{
+  position: relative;
+  width: 12%;
+  left: 10px;
+  border: 3px double #2f2f2f;
+  padding: 10px 15px 10px 15px;
+  line-height: 20px;
+  display: inline-block;
+  margin: 0 50px 20px -360px;
+}
+
+/* .row {
+  bord
+} */
+
 #characters-left {
   font-family: Lucida Console;
   background-color: antiquewhite;

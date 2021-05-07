@@ -10,12 +10,13 @@
 
     <%- include('partials/navbar'); %>
 
-    <h1>
-      <%= title %>
-    </h1>
-    <p>
-      Welcome to <%= title %>
-    </p>
+    <div class="head">
+      <div class="headerobjectswrapper">
+          <div class="weatherforcastbox"><span style="font-style: italic;"><%= intro %></div>
+          <header><%= title %></header>
+      </div>
+      <div class="subhead">Algeria, somewhere - <%= new Intl.DateTimeFormat('ar-DZ', { year: 'numeric', month: 'long', day: '2-digit'}).format(new Date()) %></div>
+    </div>
 
     <details>
       <summary>Search</summary>

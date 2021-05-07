@@ -292,17 +292,11 @@ function formatDate(epoch, entrie) {
 }
 
 // Default limit to 100
-db.toPublic = function toPublic(limit = 999998, subListing = global.listings) {
-    if (limit == 999998)
-        return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
-            entrie.date = formatDate(entrie.id, entrie)
-            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags')
-        }).value()
-    else
-        return lo(subListing).filter(elem => { return !elem.d && elem.a }).map(entrie => {
-            entrie.date = formatDate(entrie.id, entrie)
-            return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags')
-        }).take(limit).value()
+db.toPublic = function toPublic(limit, sec = '', subListing = global.listings) {
+    return lo(subListing).filter(elem => { return !elem.d && elem.a && (!sec || elem.sec === sec ) }).map(entrie => {
+        entrie.date = formatDate(entrie.id, entrie)
+        return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags')
+    }).take(limit).value()
 }
 
 // const merge = require('deepmerge')
