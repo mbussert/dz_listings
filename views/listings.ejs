@@ -13,14 +13,14 @@
     <div class="head">
       <div class="headerobjectswrapper">
           <div class="weatherforcastbox"><span style="font-style: italic;"><%= intro %></div>
-          <header><%= title %></header>
+          <div class="header"><%= title %></div>
       </div>
       <div class="subhead">Algeria, somewhere - <%= new Intl.DateTimeFormat('ar-DZ', { year: 'numeric', month: 'long', day: '2-digit'}).format(new Date()) %></div>
     </div>
 
     <details>
       <summary>Search</summary>
-      <h2>Search</h2>
+      <h2>Exact search</h2>
       <form action="/listings/query" method="POST">
         <p class="grouped">
           <label for="title">Title</label>
@@ -35,16 +35,10 @@
           <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
         </p>
         <div>
-          <button>Send my data</button>
+          <button>Search</button>
         </div>
       </form>
-    </details>
 
-
-    <br>
-    <hr>
-    <details>
-      <summary>Fuzzy search</summary>
       <h2>Fuzzy search</h2>
       <form action="/listings/queryV2" method="POST">
         <p class="grouped">
@@ -55,10 +49,11 @@
         </p>
 
         <div>
-          <button>Send my data</button>
+          <button>Search</button>
         </div>
       </form>
     </details>
+
 
     <br>
     <hr>

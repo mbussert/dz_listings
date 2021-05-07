@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 });
 
 // Blog pages are pages with little server processing
-router.get('/cat', function (req, res, next) {
+router.get('/categories', function (req, res, next) {
   res.render('blog', {
     title: 'Categories', user: req.session.user, sections: [
       { id: "Donations", html: "<blockquote>A donation is a gift for charity, humanitarian aid, or to benefit a cause. A donation may take various forms, including money, alms, services, or goods such as clothing, toys, food, or vehicles. A donation may satisfy medical needs such as blood or organs for transplant. [Wikipedia] </blockquote>  <p>However in Listings, you can only donate <em>used</em> items. That means <b>you cannot sell</b> or ask for exchange. <b>Business deals are prohibited</b> in Listings. To be able to post in this category, please see <a href='/listings/tags'>tags page</a>. From there you must wisely select one tag from the third column or from the second column if you don't find a suitable tag.<p>" },
