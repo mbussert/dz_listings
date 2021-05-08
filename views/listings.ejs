@@ -8,7 +8,7 @@
 <body>
   <div id="upper_left"></div>
   <div id="upper_right"></div>
-  <div id="lower_left"></div>
+  <!-- <div id="lower_left"></div> -->
   <div id="lower_right"></div>
   <div class="container">
 
@@ -80,7 +80,7 @@
       <% } %>
     </div>
 
-    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'donations'){ %>
+    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'don'){ %>
     <br>
     <hr>
     <details>
@@ -108,11 +108,11 @@
           <input name="desc" class="add" id="description" value="description..." type="hidden">
         </div>
         <div>
-          <input type='file' value='image' name='avatar' />
+          <input type="file"  value='image' name='avatar' accept="image/*" >
         </div>
         <input type="hidden" type="number" id="lat" name="lat" > 
         <input type="hidden" type="number" id="lng" name="lng" > 
-        <input type="hidden" name="sec" value='donations'> 
+        <input type="hidden" name="sec" value='don'> 
         <div>
           <button>Send my data</button>
         </div>
@@ -120,7 +120,7 @@
     </details>
     <% } %>
 
-    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'artworks'){ %>
+    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'art'){ %>
     <br>
     <hr>
     <details>
@@ -146,7 +146,10 @@
           <!-- <label for="description">What description do you want to say?</label> -->
           <input name="desc" class="add" id="description2" value="description..." type="hidden">
         </div>
-        <input type="hidden" name="sec" value='artwork'> 
+        <div>
+          <input type="file"  value='image' name='avatar' accept="image/*" >
+        </div>
+        <input type="hidden" name="sec" value='art'> 
         <div>
           <button>Send my data</button>
         </div>

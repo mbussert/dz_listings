@@ -15,18 +15,18 @@ router.get('/', function (req, res, next) {
 
 router.get('/donations', function (req, res, next) {
   var pubListings = db.toPublic(100, 'don')
-  res.render('listings', { title: 'DZ Listings', intro: 'Share or look for used items nextdoor, Based on solidarity and reciprocity rather than economic profit', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "donations" });
+  res.render('listings', { title: 'DZ Listings', intro: 'Share or look for used items nextdoor, Based on solidarity and reciprocity rather than economic profit', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "don" });
 });
 
 router.get('/artworks', function (req, res, next) {
   var pubListings = db.toPublic(100, 'art')
   console.log(pubListings)
-  res.render('listings', { title: 'DZ Listings', intro: 'Share website or digital assets or any other artwork', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "artworks" });
+  res.render('listings', { title: 'DZ Listings', intro: 'Share website or digital assets or any other artwork', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "art" });
 });
 
 router.get('/blogs', function (req, res, next) {
   var pubListings = db.toPublic(100, 'blo')
-  res.render('listings', { title: 'DZ Listings', intro: 'Share your passions, hobbies and passtimes! Whether it is a creative or enriching', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "blogs" });
+  res.render('listings', { title: 'DZ Listings', intro: 'Share your passions, hobbies and passtimes! Whether it is a creative or enriching', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "blo" });
 });
 
 router.get('/get_tags', function (req, res, next) {
@@ -44,11 +44,11 @@ router.get('/tags', function (req, res, next) {
 /* GET one listing; must not be deactivated. */
 router.get('/:id', function (req, res, next) {
   var id = parseInt(req.params.id)
-  var elem = db.get({ id: id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags'])
+  var elem = db.get({ id: id, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags', 'sec'])
   if (_.isEmpty(elem))
     res.render('listing', { title: 'Express', data: elem, user: req.session.user, error: "No listing found, it can be deactivated or not approved yet :(" });
   else
-    res.render('listing', { title: 'Express', data: elem, user: req.session.user, success: "Yep :)" });
+    res.render('listing', { title: 'Express', data: elem, user: req.session.user, success: "Yep :)", sec: elem.sec });
 });
 
 // https://regex101.com/r/1Q2EcU/1
@@ -135,7 +135,7 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
     lat: Joi.number().max(90).min(-90).optional(),
     lng: Joi.number().max(180).min(-180).optional(),
-    sec: Joi.string().valid('donations').required()
+    sec: Joi.string().valid('don').required()
     // avatar: Joi.string().required()
   });
   var tags;
@@ -179,13 +179,13 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
   }
 });
 
-router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/(req, res, next) => {
+router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async(req, res, next) => {
   const { body } = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(5000).required(),
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
-    sec: Joi.string().valid('artworks').required()
+    sec: Joi.string().valid('art').required()
     // avatar: Joi.string().required()
   });
   var tags;
@@ -211,7 +211,7 @@ router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login
     var htmlCleanDesc = giveOp.sanitize(body.desc)
     var maskedDesc = giveOp.cleanSensitive(htmlCleanDesc)
     body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc)
-    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, usr: req.session.user, ara: isArabic(maskedDesc) })
+    var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
     console.log(err)
     // TODO: not here, in a cron job

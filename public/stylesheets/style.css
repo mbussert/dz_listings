@@ -313,20 +313,20 @@ pre {
   background-repeat: no-repeat;
   }
   
-  #lower_left {
+  /* #lower_left {
   width: 125px; 
   height: 125px;
-  position: absolute;
+  position: fixed;
   bottom: 5%; left: 5%;
   background-image: url("/images/1546457814.svg");
   background-repeat: no-repeat;
-  }
+  } */
   
   #lower_right {
   width: 125px; height: 125px;
   bottom: 5%;
   right: 5%;
-  position: absolute;
+  position: fixed;
   background-image: url("/images/1548790076.svg");
   background-repeat: no-repeat;
   }
