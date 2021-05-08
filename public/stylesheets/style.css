@@ -43,11 +43,12 @@ body {
   margin: 0 50px 20px -360px;
 }
 
-.row {
+.listing {
   border-style: dashed;
+  border-width: thin;
   /* border-left-style: dashed;
   border-right-style: dashed; */
-  border-color: #f5eabf;
+  border-color: #a19f9a;
   background-color: #f5eabf28;
 }
 
