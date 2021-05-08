@@ -135,7 +135,7 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
     lat: Joi.number().max(90).min(-90).optional(),
     lng: Joi.number().max(180).min(-180).optional(),
-    sec: Joi.string().valid('listing').required()
+    sec: Joi.string().valid('donations').required()
     // avatar: Joi.string().required()
   });
   var tags;
@@ -185,7 +185,7 @@ router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
     desc: Joi.string().min(10).max(5000).required(),
     tags: Joi.array().items(Joi.string().min(3).max(20)).required(),
-    sec: Joi.string().valid('announcement').required()
+    sec: Joi.string().valid('artworks').required()
     // avatar: Joi.string().required()
   });
   var tags;
@@ -213,7 +213,6 @@ router.post('/add2', /*global.passwordless.restricted({ failureRedirect: '/login
     body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc)
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
-    console.log('))))))))))))))')
     console.log(err)
     // TODO: not here, in a cron job
     db.persist()

@@ -80,12 +80,12 @@
       <% } %>
     </div>
 
+    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'donations'){ %>
     <br>
     <hr>
     <details>
-      <summary>Add a listing</summary>
-      <h2>Add a listing</h2>
-
+      <summary>Add a Donation</summary>
+      <h2>Add a Donation</h2>
       <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
       <div id="characters-left"></div>
       <div>
@@ -112,20 +112,20 @@
         </div>
         <input type="hidden" type="number" id="lat" name="lat" > 
         <input type="hidden" type="number" id="lng" name="lng" > 
-        <input type="hidden" name="sec" value='listing'> 
+        <input type="hidden" name="sec" value='donations'> 
         <div>
           <button>Send my data</button>
         </div>
       </form>
-
     </details>
+    <% } %>
 
+    <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'artworks'){ %>
     <br>
     <hr>
     <details>
-      <summary>Add an announcement</summary>
-      <h2>Add an announcement</h2>
-
+      <summary>Add an Artwork</summary>
+      <h2>Add an Artwork</h2>
       <div id="editor2" class="pell" data-target="#unique_target" data-max="500"></div>
       <div id="characters-left2"></div>
       <div>
@@ -146,13 +146,14 @@
           <!-- <label for="description">What description do you want to say?</label> -->
           <input name="desc" class="add" id="description2" value="description..." type="hidden">
         </div>
-        <input type="hidden" name="sec" value='announcement'> 
+        <input type="hidden" name="sec" value='artwork'> 
         <div>
           <button>Send my data</button>
         </div>
       </form>
-
     </details>
+    <% } %>
+
     <%- include('partials/prepare_toast'); %>
   </div>
   

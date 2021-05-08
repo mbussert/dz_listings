@@ -1,3 +1,9 @@
+// console.log(`Section: ${section}`)
+// console.log(`Successes: ${successes}`)
+// console.log(`Errors: ${errors}`)
+// console.log(`Latitude: ${lat_}`)
+// console.log(`Longitude: ${lng_}`)
+
 // Language selector.
 function langChange(el) {
    document.body.setAttribute('lang', el.value);
@@ -5233,6 +5239,7 @@ var dz = {
    ]
 }
 
+
 var lat = typeof lat_ !== "undefined" ? lat_ : 36.75;
 var lng = typeof lng_ !== "undefined" ? lng_ : 3.05;
 var latInput = document.getElementById('lat')
@@ -5241,6 +5248,11 @@ var lngInput = document.getElementById('lng')
 if (latInput != null) {
    latInput.value = lat;
    lngInput.value = lng;
+}
+var sectionInput = document.getElementById('section')
+if (sectionInput != null) {
+   sectionInput.value = lat;
+
 }
 
 var zoom = 8;
