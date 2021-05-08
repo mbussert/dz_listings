@@ -27,3 +27,8 @@
     var lng_ =  "<%= data.lng  %>"
   </script>
 <% } %>
+<% if(typeof data != 'undefined' && data.sec != 'undefined'){ %>
+  <script>
+    var section =  "<%= data.sec  %>"
+  </script>
+<% } %>

@@ -8,9 +8,10 @@ var _ = require('underscore');
 var db = require('./helper_data').db
 const dotenv = require('dotenv')
 var Filter = require('bad-words');
+var compression = require('compression')
 // var CensorifyIt = require('censorify-it')
 var app = express();
-
+app.use(compression())
 
 var session = require('express-session')
 app.use(session({
