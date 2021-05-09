@@ -14,6 +14,33 @@ var loadFile = function(event) {
 	image.src = URL.createObjectURL(event.target.files[0]);
 };
 
+var h = holmes({
+   input: '.search input',
+   find: '.row .col p, .row .col h3',
+   placeholder: '<h3>— No results, my dear Watson. —</h3>',
+   mark: false,
+   hiddenAttr: true,
+   class: {
+     visible: 'visible',
+     hidden: 'hidden'
+   },
+   onHidden(el) {
+     console.log('hidden', el);
+   },
+   onFound(el) {
+     console.log('found', el);
+   },
+   onInput(el) {
+     console.log('input', el);
+   },
+   onVisible(el) {
+     console.log('visible', el);
+   },
+   onEmpty(el) {
+     console.log('empty', el);
+   }
+ });
+
 var options = {
    classname: "toast",
    transition: "fade",
