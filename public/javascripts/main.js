@@ -5281,11 +5281,10 @@ if (latInput != null) {
    latInput.value = lat;
    lngInput.value = lng;
 }
-var sectionInput = document.getElementById('section')
-if (sectionInput != null) {
-   sectionInput.value = lat;
+// var sectionInput = document.getElementById('section')
+// if (sectionInput != null) {
 
-}
+// }
 
 var zoom = 8;
 
@@ -5308,7 +5307,7 @@ for (i = 0; i < coordinates.length; i++) {
 L.mask(latLngs).addTo(map);
 // map.on('click', addMarker);
 var circle = L.circle([lat, lng], 6000).addTo(map);
-
+var lastValid = [lat, lng]
 function moveableMarker(map, marker) {
    function trackCursor(evt) {
       marker.setLatLng(evt.latlng)
@@ -5323,13 +5322,14 @@ function moveableMarker(map, marker) {
       map.dragging.enable()
       map.off("mousemove", trackCursor)
       if (isMarkerInsidePolygon(circle, coordinates)) {
-         console.log("yep")
+         var center = circle.getBounds().getCenter()
+         document.getElementById('lat').value = center.lat;
+         document.getElementById('lng').value = center.lng;
+         lastValid = [center.lat, center.lng]
       } else {
-         console.log("naa")
+         marker.setLatLng(lastValid)
       }
-      var center = circle.getBounds().getCenter()
-      document.getElementById('lat').value = center.lat;
-      document.getElementById('lng').value = center.lng;
+
 
    })
 

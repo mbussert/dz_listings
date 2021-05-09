@@ -83,6 +83,7 @@ const loadData = (path) => {
 }
 
 db.sortDB = function sortDB() {
+    console.log("===== sortDB ===== ")
     global.listings = lo.sortBy(global.listings, function(o) { return o.id; });
 }
 
@@ -93,7 +94,8 @@ db.backup = function backup() {
         global.listings = loadData('listings.json')
     }
     if (!global.listings || global.listings.length == 0) {
-        global.listings = [{ title: 'title1', a: 0, d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', tags: ["tag1", "tag2"] }]
+        global.listings = [{ title: 'title1', a: 0, d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', sec:"don", ara: null, date: "May 5, 2021", tags: ["tag1", "tag2"] }]
+        // {"title":"sdggsgsdgsdgsdgsd","tags":["sculpture"],"desc":[106,10,28,114,60,141,9,110,110,110],"sec":"don","id":1620213455,"pass":"5seyfsvq1","d":0,"a":1,"ara":null,"date":"May 5, 2021"}
         db.persist()
     }
     global.listings.forEach(item => {
