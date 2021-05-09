@@ -27,34 +27,33 @@
       <h2>Exact search</h2>
       <form action="/listings/query" method="POST">
         <p class="grouped">
-          <label for="title">Title</label>
-          <input name="title" class="query" id="title" value="title...">
+          <!-- <label for="title">Title</label> -->
           <label for="exactTitle">Exact ?</label>
-          <input type="checkbox" class="query" name="exactTitle" id="exactTitle" checked>
-          <label for="description">Description</label>
-          <input name="desc" class="query" id="description" value="description...">
+          <input type="checkbox" class="query" name="exactTitle" id="exactTitle" >
+          <input name="title" class="query" id="title" value="title..." placeholder="Title">
+
+          <!-- <label for="description">Description</label> -->
           <label for="exactDesc">Exact ?</label>
-          <input type="checkbox" class="query" name="exactDesc" id="exactDesc" checked>
+          <input type="checkbox" class="query" name="exactDesc" id="exactDesc" >
+          <input name="desc" class="query" id="description" value="description..." placeholder="Description">
+
           <label for="since">Since date</label>
           <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
-        </p>
-        <div>
+
           <button>Search</button>
-        </div>
+        </p>
       </form>
 
       <h2>Fuzzy search</h2>
       <form action="/listings/queryV2" method="POST">
         <p class="grouped">
-          <label for="title_desc">Title and description</label>
-          <input name="title_desc" value="title_desc...">
+          <!-- <label for="title_desc">Title and description</label> -->
+          <input name="title_desc" value="title_desc..." placeholder="Any text">
           <label for="since">Since date</label>
           <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+          <button>Search</button>
         </p>
 
-        <div>
-          <button>Search</button>
-        </div>
       </form>
     </details>
 
@@ -83,7 +82,7 @@
     <% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'don'){ %>
     <br>
     <hr>
-    <details>
+    <details open="">
       <summary>Add a Donation</summary>
       <h2>Add a Donation</h2>
       <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
@@ -93,11 +92,13 @@
         <div id="html-output" style="white-space:pre-wrap;"></div>
       </div>
       <br>
-      <div id="map" ></div>
+      <div id="map"></div>
+      <br>
+      <br>
       <form action="/listings/add" enctype="multipart/form-data" method="POST">
         <div>
-          <label for="title">Choose a title</label>
-          <input name="title" class="add" id="title" value="title...">
+          <!-- <label for="title">Choose a title</label> -->
+          <input name="title" class="add" id="title" value="title..." placeholder="Title">
         </div>
         <div>
           <label>Choose tags</label>
@@ -113,8 +114,9 @@
         <input type="hidden" type="number" id="lat" name="lat" > 
         <input type="hidden" type="number" id="lng" name="lng" > 
         <input type="hidden" name="sec" value='don'> 
+        <br>
         <div>
-          <button>Send my data</button>
+          <button>Add listing</button>
         </div>
       </form>
     </details>
@@ -149,9 +151,10 @@
         <div>
           <input type="file"  value='image' name='avatar' accept="image/*" >
         </div>
-        <input type="hidden" name="sec" value='art'> 
+        <input type="hidden" name="sec" value='art'>
+        <br>
         <div>
-          <button>Send my data</button>
+          <button>Add listing</button>
         </div>
       </form>
     </details>
