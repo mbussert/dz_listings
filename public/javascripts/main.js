@@ -9,41 +9,42 @@ function langChange(el) {
    document.body.setAttribute('lang', el.value);
 }
 
-var loadFile = function(event) {
-	var image = document.getElementById('output');
-	image.src = URL.createObjectURL(event.target.files[0]);
+var loadFile = function (event) {
+   var image = document.getElementById('output');
+   image.src = URL.createObjectURL(event.target.files[0]);
 };
 
-try {
-   var h = holmes({
-      input: '.search input',
-      find: '.row .col p, .row .col h3',
-      placeholder: '<h3>— No results, my dear Watson. —</h3>',
-      mark: false,
-      hiddenAttr: true,
-      class: {
-        visible: 'visible',
-        hidden: 'hidden'
-      },
-      onHidden(el) {
-        console.log('hidden', el);
-      },
-      onFound(el) {
-        console.log('found', el);
-      },
-      onInput(el) {
-        console.log('input', el);
-      },
-      onVisible(el) {
-        console.log('visible', el);
-      },
-      onEmpty(el) {
-        console.log('empty', el);
-      }
-    });
-} catch (error) {
-   console.log("Probably running where there is no list in HTML | ERROR: ", error.message)
-}
+if (document.querySelector('.row .col p'))
+   try {
+      var h = holmes({
+         input: '.search input',
+         find: '.row .col p, .row .col h3',
+         placeholder: '<h3>— No results, my dear Watson. —</h3>',
+         mark: false,
+         hiddenAttr: true,
+         class: {
+            visible: 'visible',
+            hidden: 'hidden'
+         },
+         onHidden(el) {
+            console.log('hidden', el);
+         },
+         onFound(el) {
+            console.log('found', el);
+         },
+         onInput(el) {
+            console.log('input', el);
+         },
+         onVisible(el) {
+            console.log('visible', el);
+         },
+         onEmpty(el) {
+            console.log('empty', el);
+         }
+      });
+   } catch (error) {
+      console.log("Probably running where there is no list in HTML | ERROR: ", error.message)
+   }
 
 
 var options = {
@@ -111,66 +112,68 @@ try {
 
 // TODO: if not found
 // The DOM element you wish to replace with Tagify
-var inputTags = document.querySelector('#listings');
-var inputTags2 = document.querySelector('#announcements');
+var inputTags = document.querySelector('#donations');
+var inputTags2 = document.querySelector('#artworks');
 
-fetch('/listings/get_tags_lite')
-   .then(res => res.json())
-   .then((tags) => {
-      // initialize Tagify on the above input node reference
-      new Tagify(inputTags, {
-         pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-         delimiters: ",| ",        // add new tags when a comma or a space character is entered
-         keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
-         editTags: {
-            clicks: 1,              // single click to edit a tag
-            keepInvalid: true      // if after editing, tag is invalid, auto-revert
-         },
-         maxTags: 3,
-         whitelist: tags.tags,
-         transformTag: transformTag,
-         backspace: "edit",
-         placeholder: "Type something",
-         dropdown: {
-            enabled: 1,            // show suggestion after 1 typed character
-            fuzzySearch: true,    // match only suggestions that starts with the typed characters
-            position: 'text',      // position suggestions list next to typed text
-            caseSensitive: true,   // allow adding duplicate items if their case is different
-         },
-         templates: {
-            dropdownItemNoMatch: function (data) {
-               return `No suggestion found for: ${data.value}`
+if (inputTags)
+   fetch('/listings/get_tags_lite')
+      .then(res => res.json())
+      .then((tags) => {
+         // initialize Tagify on the above input node reference
+         new Tagify(inputTags, {
+            pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+            delimiters: ",| ",        // add new tags when a comma or a space character is entered
+            keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
+            editTags: {
+               clicks: 1,              // single click to edit a tag
+               keepInvalid: true      // if after editing, tag is invalid, auto-revert
+            },
+            maxTags: 3,
+            whitelist: tags.tags,
+            transformTag: transformTag,
+            backspace: "edit",
+            placeholder: "Type something",
+            dropdown: {
+               enabled: 1,            // show suggestion after 1 typed character
+               fuzzySearch: true,    // match only suggestions that starts with the typed characters
+               position: 'text',      // position suggestions list next to typed text
+               caseSensitive: true,   // allow adding duplicate items if their case is different
+            },
+            templates: {
+               dropdownItemNoMatch: function (data) {
+                  return `No suggestion found for: ${data.value}`
+               }
             }
-         }
+         })
       })
-   })
-   .catch(err => { throw err });
+      .catch(err => { throw err });
 
-new Tagify(inputTags2, {
-   pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-   delimiters: ",| ",        // add new tags when a comma or a space character is entered
-   keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
-   editTags: {
-      clicks: 1,              // single click to edit a tag
-      keepInvalid: true      // if after editing, tag is invalid, auto-revert
-   },
-   maxTags: 1,
-   whitelist: ['drawing', 'web design', 'interior design', 'sculpture', 'photography'],
-   transformTag: transformTag,
-   backspace: "edit",
-   placeholder: "Type something",
-   dropdown: {
-      enabled: 1,            // show suggestion after 1 typed character
-      fuzzySearch: true,    // match only suggestions that starts with the typed characters
-      position: 'text',      // position suggestions list next to typed text
-      caseSensitive: true,   // allow adding duplicate items if their case is different
-   },
-   templates: {
-      dropdownItemNoMatch: function (data) {
-         return `No suggestion found for: ${data.value}`
+if (inputTags2)
+   new Tagify(inputTags2, {
+      pattern: /^.{0,20}$/,  // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+      delimiters: ",| ",        // add new tags when a comma or a space character is entered
+      keepInvalidTags: false,         // do not remove invalid tags (but keep them marked as invalid)
+      editTags: {
+         clicks: 1,              // single click to edit a tag
+         keepInvalid: true      // if after editing, tag is invalid, auto-revert
+      },
+      maxTags: 1,
+      whitelist: ['drawing', 'web design', 'interior design', 'sculpture', 'photography'],
+      transformTag: transformTag,
+      backspace: "edit",
+      placeholder: "Type something",
+      dropdown: {
+         enabled: 1,            // show suggestion after 1 typed character
+         fuzzySearch: true,    // match only suggestions that starts with the typed characters
+         position: 'text',      // position suggestions list next to typed text
+         caseSensitive: true,   // allow adding duplicate items if their case is different
+      },
+      templates: {
+         dropdownItemNoMatch: function (data) {
+            return `No suggestion found for: ${data.value}`
+         }
       }
-   }
-})
+   })
 
 function transformTag(tagData) {
    tagData.style = "--tag-bg:" + stringToColour(tagData.value);
