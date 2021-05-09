@@ -14,32 +14,37 @@ var loadFile = function(event) {
 	image.src = URL.createObjectURL(event.target.files[0]);
 };
 
-var h = holmes({
-   input: '.search input',
-   find: '.row .col p, .row .col h3',
-   placeholder: '<h3>— No results, my dear Watson. —</h3>',
-   mark: false,
-   hiddenAttr: true,
-   class: {
-     visible: 'visible',
-     hidden: 'hidden'
-   },
-   onHidden(el) {
-     console.log('hidden', el);
-   },
-   onFound(el) {
-     console.log('found', el);
-   },
-   onInput(el) {
-     console.log('input', el);
-   },
-   onVisible(el) {
-     console.log('visible', el);
-   },
-   onEmpty(el) {
-     console.log('empty', el);
-   }
- });
+try {
+   var h = holmes({
+      input: '.search input',
+      find: '.row .col p, .row .col h3',
+      placeholder: '<h3>— No results, my dear Watson. —</h3>',
+      mark: false,
+      hiddenAttr: true,
+      class: {
+        visible: 'visible',
+        hidden: 'hidden'
+      },
+      onHidden(el) {
+        console.log('hidden', el);
+      },
+      onFound(el) {
+        console.log('found', el);
+      },
+      onInput(el) {
+        console.log('input', el);
+      },
+      onVisible(el) {
+        console.log('visible', el);
+      },
+      onEmpty(el) {
+        console.log('empty', el);
+      }
+    });
+} catch (error) {
+   console.log("Probably running where there is no list in HTML | ERROR: ", error.message)
+}
+
 
 var options = {
    classname: "toast",
@@ -104,32 +109,7 @@ try {
    console.log("Probably running where pen is not in HTML | ERROR: ", error.message)
 }
 
-try {
-   const editor = pell.init({
-      element: document.getElementById('editor2'),
-      onChange: html => {
-         document.getElementById('html-output2').textContent = html
-         var raw = stripHtml(html)
-         var charactersLeft = 200 - raw.length;
-         var count = document.getElementById('characters-left2');
-         count.innerHTML = "Characters left: " + charactersLeft;
-         document.querySelectorAll('.add#description2')[0].value = (html)
-
-      },
-      classes: {
-         actionbar: 'pell-actionbar',
-         button: 'pell-button',
-         content: 'pell-content',
-         selected: 'pell-button-selected'
-      }
-   })
-   // editor.content<HTMLElement>
-   // To change the editor's content:
-   editor.content.innerHTML = '<b><u><i>Initial content!</i></u></b>'
-} catch (error) {
-   console.log("Probably running where pen is not in HTML | ERROR: ", error.message)
-}
-
+// TODO: if not found
 // The DOM element you wish to replace with Tagify
 var inputTags = document.querySelector('#listings');
 var inputTags2 = document.querySelector('#announcements');

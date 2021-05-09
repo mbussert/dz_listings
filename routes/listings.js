@@ -170,7 +170,6 @@ router.post('/add', /*global.passwordless.restricted({ failureRedirect: '/login'
     body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc)
     var entry = _.extend(body, { id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc) })
     var err = db.push(entry)
-    console.log('))))))))))))))')
     console.log(err)
     // TODO: not here, in a cron job
     db.persist()
