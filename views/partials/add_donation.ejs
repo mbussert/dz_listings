@@ -1,0 +1,44 @@
+<% if(typeof sec != 'undefined' && sec != 'undefined' && sec == 'don'){ %>
+    <br>
+    <hr>
+    <details open="">
+      <summary>Add a Donation</summary>
+      <h2>Add a Donation</h2>
+      <div id="editor" class="pell" data-target="#unique_target" data-max="500"></div>
+      <div id="characters-left"></div>
+      <div>
+        HTML output:
+        <div id="html-output" style="white-space:pre-wrap;"></div>
+      </div>
+      <br>
+      <div id="map"></div>
+      <br>
+      <br>
+      <form action="/listings/add" enctype="multipart/form-data" method="POST">
+        <div>
+          <!-- <label for="title">Choose a title</label> -->
+          <input name="title" class="add" id="title" value="title..." placeholder="Title">
+        </div>
+        <div>
+          <label>Choose tags</label>
+          <input name='tags' id='listings' value='tag1, tag2 autofocus'>
+        </div>
+        <div>
+          <!-- <label for="description">What description do you want to say?</label> -->
+          <input name="desc" class="add" id="description" value="description..." type="hidden">
+        </div>
+        <div>
+          TODO: nudes.js
+          <input type="file"  value='image' name='avatar' accept="image/*" onchange="loadFile(event)">
+          <img id="output" width="200" />
+        </div>
+        <input type="hidden" type="number" id="lat" name="lat" > 
+        <input type="hidden" type="number" id="lng" name="lng" > 
+        <input type="hidden" name="sec" value='don'> 
+        <br>
+        <div>
+          <button>Add listing</button>
+        </div>
+      </form>
+    </details>
+<% } %>
