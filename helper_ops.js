@@ -5205,7 +5205,7 @@ ops.isPointInsidePolygon = function isPointInsidePolygon(point, vs = coordinates
 
 var fs = require('fs');
 var { compatto, DecompressError } = require('compatto');
-var text = fs.readFileSync("./arabic.txt").toString('utf-8');
+var text = fs.readFileSync("./data/arabic.txt").toString('utf-8');
 var arabic = text.split("\n").slice(0, 245);
 var english = require("./node_modules/compatto/cjs/dictionary.cjs").dictionary
 const { compress: compress_en, decompress: decompress_en } = compatto({ dictionary: english })

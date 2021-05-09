@@ -18,14 +18,15 @@ Also without authentication, (must re-enforce visibility of new added listings a
 
 Take a look as a starting point here:
 
-[helpers simple API](https://github.com/bacloud14/dz_listings/blob/main/helper.js)
+[helpers simple data API](https://github.com/bacloud14/dz_listings/blob/main/helper_data.js)
+[helpers simple functions API](https://github.com/bacloud14/dz_listings/blob/main/helper_data.js)
 
 #### Routes 
 Routes reflect what is possible. See https://github.com/bacloud14/dz_listings/blob/main/routes/listings.js 
 Otherwise, this is the list of routes (queries and views):
 
   - localhost:3000/listings -> listings.ejs : is for showing some of items. Also to initiate the following post queries
-  - localhost:3000/announcements -> listings.ejs : is for showing some of items. but for another section
+  - localhost:3000/listings/blablabla -> listings.ejs : is for showing some of items. but for another section (blablabla)
   - localhost:3000/listings/query -> listings.ejs : for exact search of items
   - localhost:3000/listings/queryV2 -> listings.ejs : for fuzzy search items
   - localhost:3000/listings/add -> listing.ejs : for adding an item
