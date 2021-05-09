@@ -82,6 +82,10 @@ const loadData = (path) => {
     }
 }
 
+db.sortDB = function sortDB() {
+    global.listings = lo.sortBy(global.listings, function(o) { return o.id; });
+}
+
 // Get from disk
 db.backup = function backup() {
     console.log("===== backup ===== ")
@@ -133,7 +137,9 @@ db.push = function push(item) {
 
 // After some conditions persist
 db.cycle = function cycle() {
+    // These are greedy operations !
     db.clean()
+    db.sortDB()
     db.persist()
     // db.backup()
 }

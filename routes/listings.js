@@ -8,9 +8,14 @@ dotenv.config()
 // { "id": 0, "d": 0, "title": 3, "desc": "dqs878dsq" }
 /* GET listings not including deactivated. */
 
+// Shows listings since 7 days.
 router.get('/', function (req, res, next) {
-  var pubListings = db.toPublic(100)
-  res.render('listings', { title: 'DZ Listings', intro: 'Like newspapers listings, this is a digital one open for all Algerians', listings: pubListings, user: req.session.user, success: "Hello there :)", sec: "index" });
+  var listings = db.toPublic(100)
+  var yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 7);
+  var since = Math.floor(yesterday.getTime() / 1000)
+  listings = db.since(since, listings)
+  res.render('listings', { title: 'DZ Listings', intro: 'Like newspapers listings, this is a digital one open for all Algerians', listings: listings, user: req.session.user, success: "Hello there :)", sec: "index" });
 });
 
 router.get('/donations', function (req, res, next) {
