@@ -55,7 +55,7 @@ router.get('/blogs', function(req, res, next) {
   const pubListings = db.toPublic(100, 'blo');
   res.render('listings', {
     title: 'DZ Listings',
-    intro: 'Share your passions, hobbies and passtimes! Whether it is a creative or enriching',
+    intro: 'Share your creative or enriching passions, hobbies and passtimes!',
     listings: pubListings,
     user: req.session.user,
     success: 'Hello there :)',
@@ -78,7 +78,10 @@ router.get('/tags', function(req, res, next) {
 /* GET one listing; must not be deactivated. */
 router.get('/:id', function(req, res, next) {
   const id = parseInt(req.params.id);
-  const elem = db.get({id: id, d: 0, a: 1}, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags', 'sec']);
+  const elem = db.get(
+      {id: id, d: 0, a: 1},
+      ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags', 'sec'],
+  );
   if (_.isEmpty(elem)) {
     res.render('listing', {title: 'Express', data: elem, user: req.session.user, error: 'No listing found, it can be deactivated or not approved yet :('});
   } else {
@@ -124,7 +127,15 @@ router.post('/query', async (req, res, next) => {
   const then = Math.floor(new Date(body.since).getTime() / 1000);
   listings = db.since(then, listings);
 
-  res.render('listings', {title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: 'Yep, we got some :)'});
+  res.render(
+      'listings',
+      {
+        title: 'Express',
+        intro: 'Like newspapers listings, this is a digital one open for all Algerians',
+        listings: db.toPublic(100, listings),
+        user: req.session.user,
+        success: 'Yep, we got some :)',
+      });
 });
 
 /* Query listings not including deactivated. */
@@ -149,7 +160,15 @@ router.post('/queryV2', async (req, res, next) => {
   const then = Math.floor(new Date(body.since).getTime() / 1000);
   listings = db.since(then, listings);
   // sec: "index"
-  res.render('listings', {title: 'Express', listings: db.toPublic(100, listings), user: req.session.user, success: 'Yep, we got some :)'});
+  res.render(
+      'listings',
+      {
+        title: 'Express',
+        intro: 'Like newspapers listings, this is a digital one open for all Algerians',
+        listings: db.toPublic(100, listings),
+        user: req.session.user,
+        success: 'Yep, we got some :)',
+      });
 });
 
 /* Add one listing. */

@@ -13,25 +13,29 @@ const giveOp = require('./helper_ops').ops;
 // tags: ["tag1", "tag2"] => tags
 
 
-const compress_images = require('compress-images');
+const compressImages = require('compress-images');
 const path = require('path');
 const chokidar = require('chokidar');
 
-const INPUT_path_images = 'uploads/*.{jpg,JPG,jpeg,JPEG,png,PNG,svg,gif}';
-const INPUT_path = 'uploads/';
-const OUTPUT_path = 'public/images/';
+const inputPathImages = 'uploads/*.{jpg,JPG,jpeg,JPEG,png,PNG,svg,gif}';
+const inputPath = 'uploads/';
+const outputPath = 'public/images/';
 
-const watcher = chokidar.watch(INPUT_path, { persistent: true });
+const watcher = chokidar.watch(inputPath, {persistent: true});
 
 watcher
-    .on('add', function (path) {
+    .on('add', function(path) {
       console.log('File', path, 'has been added');
-      compress_images(INPUT_path_images, OUTPUT_path, { compress_force: false, statistic: true, autoupdate: true }, false,
-          { jpg: { engine: 'mozjpeg', command: ['-quality', '60'] } },
-          { png: { engine: 'pngquant', command: ['--quality=20-50', '-o'] } },
-          { svg: { engine: 'svgo', command: '--multipass' } },
-          { gif: { engine: 'gifsicle', command: ['--colors', '64', '--use-col=web'] } },
-          function (error, completed, statistic) {
+      compressImages(
+          inputPathImages,
+          outputPath,
+          {compress_force: false, statistic: true, autoupdate: true},
+          false,
+          {jpg: {engine: 'mozjpeg', command: ['-quality', '60']}},
+          {png: {engine: 'pngquant', command: ['--quality=20-50', '-o']}},
+          {svg: {engine: 'svgo', command: '--multipass'}},
+          {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}},
+          function(error, completed, statistic) {
             console.log('-------------');
             console.log(error);
             console.log(completed);
@@ -47,16 +51,20 @@ watcher
           },
       );
     })
-    .on('change', function (path) {
+    .on('change', function(path) {
       console.log('File', path, 'has been changed');
     })
-    .on('unlink', function (path) { console.log('File', path, 'has been removed'); })
-    .on('error', function (error) { console.error('Error happened', error); });
+    .on('unlink', function(path) {
+      console.log('File', path, 'has been removed');
+    })
+    .on('error', function(error) {
+      console.error('Error happened', error);
+    });
 
 
 // Clean and persist every 3 hours
 const CronJob = require('cron').CronJob;
-const job = new CronJob('0 0 */3 * * *', function () {
+const job = new CronJob('0 0 */3 * * *', function() {
   console.log('===== cycle ===== ');
   db.cycle();
 }, null, true, 'America/Los_Angeles');
@@ -65,7 +73,7 @@ job.start();
 
 const storeData = (data, path) => {
   try {
-    fs.writeFileSync(path, JSON.stringify({ data: data }));
+    fs.writeFileSync(path, JSON.stringify({data: data}));
   } catch (err) {
     console.error(err);
     return (err.message);
@@ -93,15 +101,30 @@ db.backup = function backup() {
     global.listings = loadData('listings.json');
   }
   if (!global.listings || global.listings.length == 0) {
-    global.listings = [{ title: 'title1', a: 0, d: 0, desc: 'oipfjezojifze', pass: 'qub7s1ya', sec:'don', ara: null, date: 'May 5, 2021', tags: ['tag1', 'tag2'] }];
-    // {"title":"sdggsgsdgsdgsdgsd","tags":["sculpture"],"desc":[106,10,28,114,60,141,9,110,110,110],"sec":"don","id":1620213455,"pass":"5seyfsvq1","d":0,"a":1,"ara":null,"date":"May 5, 2021"}
+    global.listings = [
+      {
+        'title': 'title1',
+        'a': 0,
+        'd': 0,
+        'desc': 'oipfjezojifze',
+        'pass': 'qub7s1ya',
+        'sec': 'don',
+        'ara': null,
+        'date': 'May 5, 2021',
+        'tags': [
+          'tag1',
+          'tag2',
+        ],
+      },
+    ];
     db.persist();
   }
   global.listings.forEach((item) => {
     Object.defineProperty(item, 'desc_', {
-      get: function () {
+      get: function() {
         item.desc = Uint8Array.from(item.desc);
-        return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc));
+        const tmp = item.desc;
+        return item.ara ? giveOp.decompress_ar(tmp) : giveOp.decompress_en(tmp);
       },
     });
   });
@@ -126,11 +149,13 @@ db.push = function push(item) {
   // small memory gain.
   item.desc = Uint8Array.from(item.desc);
   const ids = _.pluck(global.listings, 'id');
-  if (!item.id || ids.indexOf(item.id) >= 0)
+  if (!item.id || ids.indexOf(item.id) >= 0) {
     return ('item without id or id is already there.');
+  }
   Object.defineProperty(item, 'desc_', {
-    get: function () {
-      return item.ara ? (giveOp.decompress_ar(item.desc)) : (giveOp.decompress_en(item.desc));
+    get: function() {
+      const tmp = item.desc;
+      return item.ara ? giveOp.decompress_ar(tmp) : giveOp.decompress_en(tmp);
     },
   });
   global.listings.push(item);
@@ -159,7 +184,8 @@ db.clean = function clean() {
 // Get one
 db.get = function get(query, keys, subListing = global.listings) {
   console.log('===== get ===== ');
-  return lo.pick(lo(subListing).find(query), keys); //'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'
+  // 'id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara'
+  return lo.pick(lo(subListing).find(query), keys);
   // return _.pick(_.findWhere(subListing, query), keys).desc_
 };
 
@@ -189,10 +215,6 @@ db.approve = function approve(id, subListing = global.listings) {
 // sanitize for desc key before fetch
 db.fetch = function fetch(query, subListing = global.listings) {
   console.log('===== fetch ===== ');
-  const isEmpty = _.isEmpty(_.filter(_.values(query), (elem) => { return elem; }));
-
-  if (isEmpty)
-    return subListing;
   return lo.filter(subListing, query);
   // return _.where(subListing, query)
 };
@@ -203,8 +225,6 @@ db.fetch = function fetch(query, subListing = global.listings) {
 // sanitize for desc key before reject
 db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
   console.log('===== rejectDeep ===== ');
-  if (!value)
-    return subListing;
   const query = (item) => {
     return giveOp.sanitize(item[key], {
       allowedTags: [],
@@ -219,8 +239,6 @@ db.rejectDeep = function rejectDeep(key, value, subListing = global.listings) {
 // sanitize for desc key before filter
 db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
   console.log('===== fetchDeep ===== ');
-  if (!value)
-    return subListing;
   const query = (item) => {
     return giveOp.sanitize(item[key], {
       allowedTags: [],
@@ -233,11 +251,12 @@ db.fetchDeep = function fetchDeep(key, value, subListing = global.listings) {
 
 // fuzzy search on all
 const MiniSearch = require('minisearch');
-const { ops } = require('./helper_ops');
 const miniSearch = new MiniSearch({
-  fields: ['title', 'description'], // fields to index for full-text search
+  // fields to index for full-text search
+  fields: ['title', 'description'],
   idFields: 'id',
-  storeFields: ['id', 'title', 'd', 'desc_', 'a', 'date'], // fields to return with search results
+  // fields to return with search results
+  storeFields: ['id', 'title', 'd', 'desc_', 'a', 'date'],
   extractField: (document, fieldName) => {
     if (fieldName === 'description') {
       const desc = document['desc_'];
@@ -271,19 +290,24 @@ db.sinceDelta = function sinceDelta(minutes, subListing = global.listings) {
   console.log('===== since ===== ');
   const now = Math.floor(new Date().getTime() / 1000);
   const then = now - minutes;
-  const compare = (item) => { return item.id > then; };
+  const compare = (item) => item.id > then;
   return lo.filter(subListing, compare);
   // return _.filter(subListing, compare)
 };
 
 db.since = function since(then, subListing = global.listings) {
   console.log('===== since ===== ');
-  const compare = (item) => { return item.id > then; };
+  const compare = (item) => item.id > then;
   return lo.filter(subListing, compare);
   // return _.filter(subListing, compare)
 };
 
-
+/**
+ * Adds two numbers together.
+ * @param {int} epoch valide epoch number
+ * @param {object} entrie object with object.ara true or false.
+ * @return {string} formatted date
+ */
 function formatDate(epoch, entrie) {
   const local = entrie.ara === true ? 'ar-dz' : 'en-gb';
   const d = new Date(0);
@@ -300,15 +324,18 @@ function formatDate(epoch, entrie) {
 
 // Default limit to 100
 db.toPublic = function toPublic(limit, sec = '', subListing = global.listings) {
-  return lo(subListing).filter((elem) => { return !elem.d && elem.a && (!sec || elem.sec === sec ); }).map((entrie) => {
+  return lo(subListing).filter((elem) => {
+    return !elem.d && elem.a && (!sec || elem.sec === sec );
+  }).map((entrie) => {
     entrie.date = formatDate(entrie.id, entrie);
     return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags');
   }).take(limit).value();
 };
 
 // const merge = require('deepmerge')
-const file_content = fs.readFileSync(path.join(__dirname, '/taxonomy/taxonomy-with-ids.ar-SA.txt')).toString().replace(',', '_').split('\n').filter((elem) => { return elem; });
-
+const taxonomyPath = '/taxonomy/taxonomy-with-ids.ar-SA.txt';
+const fileSync = fs.readFileSync(path.join(__dirname, taxonomyPath)).toString();
+const fileContent = fileSync.replace(',', '_').split('\n').filter(Boolean);
 const splitBy = (sep) => (str) =>
   str.split(sep).map((x) => x.trim());
 
@@ -328,7 +355,7 @@ const load = (lines) =>
       .pop();
 
 
-give.googleTags = _.uniq(load(file_content).filter((arr) => { return arr.length == 3; }), function (x) { return x.join(''); });
+give.googleTags = _.uniq(load(fileContent).filter((arr) => arr.length == 3), x =>  x.join(''));
 give.googleTagsLite = give.googleTags.map((elem) => elem[2]);
 
 module.exports.db = db;
