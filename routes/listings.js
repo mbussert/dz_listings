@@ -72,7 +72,11 @@ router.get('/get_tags_lite', function(req, res, next) {
 });
 
 router.get('/tags', function(req, res, next) {
-  res.render('tags', {title: 'Express', user: req.session.user, success: 'Hello there :)'});
+  res.render('tags', {
+    title: 'Express',
+    user: req.session.user,
+    success: 'Hello there :)',
+  });
 });
 
 /* GET one listing; must not be deactivated. */
@@ -83,9 +87,20 @@ router.get('/:id', function(req, res, next) {
       ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'tags', 'sec'],
   );
   if (_.isEmpty(elem)) {
-    res.render('listing', {title: 'Express', data: elem, user: req.session.user, error: 'No listing found, it can be deactivated or not approved yet :('});
+    res.render('listing', {
+      title: 'Express',
+      data: elem,
+      user: req.session.user,
+      error: 'No listing found, it can be deactivated or not approved yet :(',
+    });
   } else {
-    res.render('listing', {title: 'Express', data: elem, user: req.session.user, success: 'Yep :)', sec: elem.sec});
+    res.render('listing', {
+      title: 'Express',
+      data: elem,
+      user: req.session.user,
+      success: 'Yep :)',
+      sec: elem.sec,
+    });
   }
 });
 
@@ -177,7 +192,15 @@ const Joi = require('joi');
 
 const giveObj = require('../helper_ops').give;
 const giveOp = require('../helper_ops').ops;
+
+
 const arabic = /[\u0600-\u06FF]/g;
+
+/**
+ * Detects if String is Arabic, if ration of arabic characters count is at least 0.5
+ * @param {string} str The first number.
+ * @returns {boolean} isArabic or null.
+ */
 function isArabic(str) {
   const count = str.match(arabic);
   return count && ((count.length / str.length) > 0.5);
@@ -217,19 +240,40 @@ router.post('/add', /* global.passwordless.restricted({ failureRedirect: '/login
     const now = Math.floor(new Date().getTime() / 1000);
     const htmlCleanDesc = giveOp.sanitize(body.desc);
     const maskedDesc = giveOp.cleanSensitive(htmlCleanDesc);
-    body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc);
-    const entry = _.extend(body, {id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc)});
+    body.desc = isArabic(maskedDesc) ?
+    giveOp.compress_ar(maskedDesc) :
+    giveOp.compress_en(maskedDesc);
+
+    const entry = _.extend(body, {
+      id: now,
+      pass: password,
+      d: 0,
+      a: 1,
+      img: req.file.filename,
+      usr: req.session.user,
+      ara: isArabic(maskedDesc),
+    });
     const err = db.push(entry);
     console.log(err);
     // TODO: not here, in a cron job
     db.persist();
     if (!err) {
       giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `);
-      res.render('listing', {title: 'One listing', data: entry, user: req.session.user, success: 'Success. Here is the password whenever you want to deactivate the listing :)', error: 'Image will be loaded shortly!'});
+      res.render('listing', {
+        title: 'One listing',
+        data: entry,
+        user: req.session.user,
+        success: 'Success. Here is the password whenever you want to deactivate the listing :)',
+        error: 'Image will be loaded shortly!',
+      });
     } else
     // if error
     {
-      res.render('listing', {title: 'Express', data: err, error: 'Oops, an error accured :('});
+      res.render('listing', {
+        title: 'Express',
+        data: err,
+        error: 'Oops, an error accured :(',
+      });
     }
   }
 });
@@ -265,19 +309,39 @@ router.post('/add2', /* global.passwordless.restricted({ failureRedirect: '/logi
     const now = Math.floor(new Date().getTime() / 1000);
     const htmlCleanDesc = giveOp.sanitize(body.desc);
     const maskedDesc = giveOp.cleanSensitive(htmlCleanDesc);
-    body.desc = isArabic(maskedDesc) ? giveOp.compress_ar(maskedDesc) : giveOp.compress_en(maskedDesc);
-    const entry = _.extend(body, {id: now, pass: password, d: 0, a: 1, img: req.file.filename, usr: req.session.user, ara: isArabic(maskedDesc)});
+    body.desc = isArabic(maskedDesc) ?
+    giveOp.compress_ar(maskedDesc) :
+    giveOp.compress_en(maskedDesc);
+    const entry = _.extend(body, {
+      id: now,
+      pass: password,
+      d: 0,
+      a: 1,
+      img: req.file.filename,
+      usr: req.session.user,
+      ara: isArabic(maskedDesc),
+    });
     const err = db.push(entry);
     console.log(err);
     // TODO: not here, in a cron job
     db.persist();
     if (!err) {
       giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `);
-      res.render('listing', {title: 'One listing', data: entry, user: req.session.user, success: 'Success. Here is the password whenever you want to deactivate the listing :)', error: 'Image will be loaded shortly!'});
+      res.render('listing', {
+        title: 'One listing',
+        data: entry,
+        user: req.session.user,
+        success: 'Success. Here is the password whenever you want to deactivate the listing :)',
+        error: 'Image will be loaded shortly!',
+      });
     } else
     // if error
     {
-      res.render('listing', {title: 'Express', data: err, error: 'Oops, an error accured :('});
+      res.render('listing', {
+        title: 'Express',
+        data: err,
+        error: 'Oops, an error accured :(',
+      });
     }
   }
 });
@@ -300,7 +364,12 @@ router.post('/deactivate', function(req, res, next) {
   } else {
     const elem = db.get({pass: body.password}, ['id']);
     db.deactivate(elem.id);
-    res.render('messages', {title: 'Express', message: 'Item deactivated', user: req.session.user, success: 'Listing has been successfully deactivated. Users will not see it again :)'});
+    res.render('messages', {
+      title: 'Express',
+      message: 'Item deactivated',
+      user: req.session.user,
+      success: 'Listing has been successfully deactivated. Users will not see it again :)',
+    });
   }
 });
 
@@ -323,14 +392,29 @@ router.post('/contact', global.passwordless.restricted({failureRedirect: '/login
   } else {
     const elem = db.get({id: parseInt(body.id), d: 0, a: 1}, ['usr']);
     if (_.isEmpty(elem)) {
-      res.render('listing', {title: 'messages', message: 'You cannot send an email to the item\'s publisher', user: req.session.user, error: 'You cannot send an email to the item\'s publisher'});
+      res.render('listing', {
+        title: 'messages',
+        message: 'You cannot send an email to the item\'s publisher',
+        user: req.session.user,
+        error: 'You cannot send an email to the item\'s publisher',
+      });
     }
 
     // mail2(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
-    const mail = {message: body.message, EMAIL_SENDER: req.user, EMAIL_RECIEVER: elem.usr, subjectId: body.id};
+    const mail = {
+      message: body.message,
+      EMAIL_SENDER: req.user,
+      EMAIL_RECIEVER: elem.usr,
+      subjectId: body.id,
+    };
     console.log(mail);
     giveOp.mail2(mail);
-    res.render('listing', {title: 'messages', message: 'Email successfully sent to publisher, he may repond to you.', user: req.session.user, success: 'Email successfully sent to publisher'});
+    res.render('listing', {
+      title: 'messages',
+      message: 'Email successfully sent to publisher, he may repond to you.',
+      user: req.session.user,
+      success: 'Email successfully sent to publisher',
+    });
   }
 });
 
@@ -343,9 +427,16 @@ router.get(`/${pass2}/:id`, function(req, res, next) {
   const id = parseInt(req.params.id);
   const elem = db.get({id: id, d: 0, a: 0}, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara']);
   if (_.isEmpty(elem)) {
-    res.render('listing', {title: 'Express', data: elem, error: 'No listing found, it can be deactivated or not approved yet :('});
+    res.render('listing', {
+      title: 'Express',
+      data: elem,
+      error: 'No listing found, it can be deactivated or not approved yet :(',
+    });
   } else {
-    res.render('listing', {title: 'Express', data: elem, success: 'Yep :)'});
+    res.render('listing', {
+      title: 'Express',
+      data: elem, success: 'Yep :)',
+    });
   }
 });
 
@@ -356,11 +447,19 @@ router.get(`/${pass}/:id`, function(req, res, next) {
   const elem = db.get({id: id, a: 0}, ['id']);
 
   if (_.isEmpty(elem)) {
-    res.render('messages', {title: 'Express', message: 'Item approval', error: 'Listing not found or already approved'});
+    res.render('messages', {
+      title: 'Express',
+      message: 'Item approval',
+      error: 'Listing not found or already approved',
+    });
   }
   const success = db.approve(elem.id);
   if (success) {
-    res.render('messages', {title: 'Express', message: 'Item approval', success: 'Listing has been successfully approved :)'});
+    res.render('messages', {
+      title: 'Express',
+      message: 'Item approval',
+      success: 'Listing has been successfully approved :)',
+    });
   }
 });
 

@@ -124,7 +124,9 @@ db.backup = function backup() {
       get: function() {
         item.desc = Uint8Array.from(item.desc);
         const tmp = item.desc;
-        return item.ara ? giveOp.decompress_ar(tmp) : giveOp.decompress_en(tmp);
+        return item.ara ?
+        giveOp.decompress_ar(tmp) :
+        giveOp.decompress_en(tmp);
       },
     });
   });
@@ -155,7 +157,9 @@ db.push = function push(item) {
   Object.defineProperty(item, 'desc_', {
     get: function() {
       const tmp = item.desc;
-      return item.ara ? giveOp.decompress_ar(tmp) : giveOp.decompress_en(tmp);
+      return item.ara ?
+      giveOp.decompress_ar(tmp) :
+      giveOp.decompress_en(tmp);
     },
   });
   global.listings.push(item);
@@ -278,7 +282,9 @@ db.fuzzy = function fuzzy(str) {
 // Sort
 db.sortBy = function sortBy(key, asc, subListing = global.listings) {
   console.log('===== sortBy ===== ');
-  return asc ? _.sortBy(subListing, key) : _.sortBy(subListing, key).reverse();
+  return asc ?
+  _.sortBy(subListing, key) :
+  _.sortBy(subListing, key).reverse();
 };
 
 db.paginate = function paginate(length, subListing = global.listings) {
