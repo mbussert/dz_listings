@@ -36,5 +36,9 @@
     "pngquant-bin": "^6.0.0",
     "sanitize-html": "^2.3.3",
     "underscore": "^1.12.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
