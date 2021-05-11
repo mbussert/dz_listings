@@ -331,7 +331,7 @@ function formatDate(epoch, entrie) {
 // Default limit to 100
 db.toPublic = function toPublic(limit, sec = '', subListing = global.listings) {
   return lo(subListing).filter((elem) => {
-    return !elem.d && elem.a && (!sec || elem.sec === sec );
+    return !elem.d && elem.a && (!sec.length || elem.sec === sec );
   }).map((entrie) => {
     entrie.date = formatDate(entrie.id, entrie);
     return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags');

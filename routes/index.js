@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   res.render('index', {
     title: 'Express',
     user: req.session.user,
-    listings: db.toPublic(100, global.listings),
+    listings: db.toPublic(100, '', global.listings),
   });
 });
 

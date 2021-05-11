@@ -139,15 +139,15 @@ router.post('/query', async (req, res, next) => {
       listings = db.fetchDeep('desc_', body.desc, listings);
     }
   }
+
   const then = Math.floor(new Date(body.since).getTime() / 1000);
   listings = db.since(then, listings);
-
   res.render(
       'listings',
       {
         title: 'Express',
         intro: 'Like newspapers listings, this is a digital one open for all Algerians',
-        listings: db.toPublic(100, listings),
+        listings: db.toPublic(100, '', listings),
         user: req.session.user,
         success: 'Yep, we got some :)',
       });
@@ -180,7 +180,7 @@ router.post('/queryV2', async (req, res, next) => {
       {
         title: 'Express',
         intro: 'Like newspapers listings, this is a digital one open for all Algerians',
-        listings: db.toPublic(100, listings),
+        listings: db.toPublic(100, '', listings),
         user: req.session.user,
         success: 'Yep, we got some :)',
       });
