@@ -5,10 +5,26 @@ const db = require('../helper_data').db;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  let listings = db.toPublic();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 10);
+  const since = Math.floor(yesterday.getTime() / 1000);
+  listings = db.since(since, listings);
   res.render('index', {
     title: 'Express',
     user: req.session.user,
-    listings: db.toPublic(100, '', global.listings),
+    listings: listings,
+  });
+});
+
+router.get('/:tag', function(req, res, next) {
+  const tag = req.params.tag;
+  let listings = db.toPublic();
+  listings = db.fetchByTag(tag, listings);
+  res.render('index', {
+    title: tag,
+    user: req.session.user,
+    listings: listings,
   });
 });
 

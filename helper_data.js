@@ -223,6 +223,15 @@ db.fetch = function fetch(query, subListing = global.listings) {
   // return _.where(subListing, query)
 };
 
+// Fetch based on tags
+// sanitize for desc key before fetch
+db.fetchByTag = function fetchByTag(tag, subListing = global.listings) {
+  console.log('===== fetchByTag ===== ');
+  const compare = (item) => item.tags.indexOf(tag) > -1;
+  return lo.filter(subListing, compare);
+  // return _.where(subListing, query)
+};
+
 
 // Reject some
 // query ~= function(item){ return item.title != 'blablab'; }
@@ -274,8 +283,9 @@ const miniSearch = new MiniSearch({
 });
 
 db.fuzzy = function fuzzy(str) {
-  if (miniSearch.documentCount === 0)
+  if (miniSearch.documentCount === 0) {
     miniSearch.addAll(global.listings);
+  }
   return miniSearch.search(str);
 };
 
@@ -329,7 +339,7 @@ function formatDate(epoch, entrie) {
 }
 
 // Default limit to 100
-db.toPublic = function toPublic(limit, sec = '', subListing = global.listings) {
+db.toPublic = function toPublic(limit = 9999999, sec = '', subListing = global.listings) {
   return lo(subListing).filter((elem) => {
     return !elem.d && elem.a && (!sec.length || elem.sec === sec );
   }).map((entrie) => {

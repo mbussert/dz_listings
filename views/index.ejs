@@ -56,7 +56,7 @@
     <p>Welcome to <%= title %>
     </p>
 
-    <div class="grid grid-1">
+    <!-- <div class="grid grid-1">
       <div class="item">
         <div class="item-content">1</div>
       </div>
@@ -75,8 +75,24 @@
       <div class="item">
         <div class="item-content">6</div>
       </div>
-    </div>
+    </div> -->
     
+    <div class="row">
+      <% for (var i=0; listings.length> 0 && i < listings.length && i < 10 ; i++) { %>
+      <div class="col listing"> 
+        TODO: limit title length 
+        <h3 dir="auto"><a href='/listings/<%= listings[i].id %>'><%= listings[i].title %></a></h3> 
+        <p dir="auto"><%- listings[i].desc_.slice(0,300) %> ...</p>
+        <code><%= listings[i].date %></code>
+        <ul class="tags">
+          <% for (var j=0; listings[i].tags && listings[i].tags.length > 0 && j < listings[i].tags.length ; j++) { %>
+            <li><a href="/<%- listings[i].tags[j] %>" class="tagg"><%- listings[i].tags[j] %></a></li>
+          <% } %>
+        </ul>
+
+      </div>
+      <% } %>
+    </div>
     
 
   </div>

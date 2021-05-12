@@ -11,7 +11,7 @@ dotenv.config();
 
 // Shows listings since 7 days.
 router.get('/', function(req, res, next) {
-  let listings = db.toPublic(100);
+  let listings = db.toPublic();
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 7);
   const since = Math.floor(yesterday.getTime() / 1000);
