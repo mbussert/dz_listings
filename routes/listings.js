@@ -30,7 +30,7 @@ router.get('/donations', function(req, res, next) {
   const pubListings = db.toPublic(100, 'don');
   res.render('listings', {
     title: 'DZ Listings',
-    intro: 'Share or look for used items nextdoor, Based on solidarity and reciprocity rather than economic profit',
+    intro: 'Share or look for used items nextdoor',
     listings: pubListings,
     user: req.session.user,
     success: 'Hello there :)',
@@ -43,7 +43,7 @@ router.get('/artworks', function(req, res, next) {
   console.log(pubListings);
   res.render('listings', {
     title: 'DZ Listings',
-    intro: 'Share website or digital assets or any other artwork',
+    intro: 'Share websites or digital assets or any other artwork',
     listings: pubListings,
     user: req.session.user,
     success: 'Hello there :)',
@@ -55,7 +55,7 @@ router.get('/blogs', function(req, res, next) {
   const pubListings = db.toPublic(100, 'blo');
   res.render('listings', {
     title: 'DZ Listings',
-    intro: 'Share your creative or enriching passions, hobbies and passtimes!',
+    intro: 'Share creative or enriching passions, hobbies and passtimes!',
     listings: pubListings,
     user: req.session.user,
     success: 'Hello there :)',
