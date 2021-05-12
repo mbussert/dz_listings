@@ -19,11 +19,10 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
-    <!-- <a href="#" class="tagg">Front-end development</a> -->
 
     <ul class="tags">
       <% for (var i=0; data.tags && data.tags.length > 0 && i < data.tags.length ; i++) { %>
-        <li><a href="/<%- data.tags[i] %>" class="tagg"><%- data.tags[i] %></a></li>
+        <li><a href="/tag/<%- data.tags[i] %>" class="tagg"><%- data.tags[i] %></a></li>
       <% } %>
     </ul>
     <% if (data.title && data.desc_) { %>
