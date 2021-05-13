@@ -15,7 +15,13 @@ body {
 input[type="date"] {
   width: auto !important;
 }
-
+input {
+  background-color: #309ae641;
+}
+button {
+  color: #eee;
+  background-color: #233a4b;
+}
 label {
   padding-top: 1% !important;
 }
@@ -125,7 +131,7 @@ footer {
 }
 
 .pell-content {
-  background-color: slateblue;
+  background-color: #309ae641;
 }
 
 .card {
