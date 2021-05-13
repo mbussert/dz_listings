@@ -13,7 +13,7 @@ dotenv.config();
 router.get('/', function(req, res, next) {
   let listings = db.toPublic();
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 7);
+  yesterday.setDate(yesterday.getDate() - 10);
   const since = Math.floor(yesterday.getTime() / 1000);
   listings = db.since(since, listings);
   res.render('listings', {

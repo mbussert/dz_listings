@@ -18,7 +18,7 @@ if (document.querySelector('.row .col p'))
    try {
       var h = holmes({
          input: '.search input',
-         find: '.row .col p, .row .col h3',
+         find: '.col.listing',
          placeholder: '<h3>— No results, my dear Watson. —</h3>',
          mark: false,
          hiddenAttr: true,

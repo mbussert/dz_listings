@@ -13,7 +13,12 @@
     </h1>
     <p>Welcome to <%= title %>
     </p>
-    
+    <br>
+    <div class="search">
+      <label for="qsearch">Quick search today's listings</label>
+      <input type="qsearch" name="qsearch" placeholder="Today listings" required>
+    </div>
+    <br>
     <div class="row">
       <% for (var i=0; listings.length> 0 && i < listings.length && i < 10 ; i++) { %>
       <div class="col listing"> 
