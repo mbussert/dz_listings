@@ -91,7 +91,9 @@ const loadData = (path) => {
 
 db.sortDB = function sortDB() {
   console.log('===== sortDB ===== ');
-  global.listings = lo.sortBy(global.listings, function(o) { return o.id; });
+  global.listings = lo.sortBy(global.listings, function(o) {
+    return o.id;
+  });
 };
 
 // Get from disk
@@ -130,7 +132,16 @@ db.backup = function backup() {
       },
     });
   });
+};
 
+// create or refresh pubView
+db.setView = function setView() {
+  console.log('===== set view ===== ');
+  const listings = db.toPublic();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 10);
+  const since = Math.floor(yesterday.getTime() / 1000);
+  global.pubView = db.since(since, listings);
 };
 
 // Set from disk
@@ -170,6 +181,7 @@ db.cycle = function cycle() {
   // These are greedy operations !
   db.clean();
   db.sortDB();
+  db.setView();
   db.persist();
   // db.backup()
 };
@@ -344,7 +356,7 @@ db.toPublic = function toPublic(limit = 9999999, sec = '', subListing = global.l
     return !elem.d && elem.a && (!sec.length || elem.sec === sec );
   }).map((entrie) => {
     entrie.date = formatDate(entrie.id, entrie);
-    return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags');
+    return _.pick(entrie, 'id', 'title', 'desc_', 'ara', 'date', 'tags', 'sec');
   }).take(limit).value();
 };
 
@@ -371,7 +383,7 @@ const load = (lines) =>
       .pop();
 
 
-give.googleTags = _.uniq(load(fileContent).filter((arr) => arr.length == 3), x =>  x.join(''));
+give.googleTags = _.uniq(load(fileContent).filter((arr) => arr.length == 3), (x) => x.join(''));
 give.googleTagsLite = give.googleTags.map((elem) => elem[2]);
 
 module.exports.db = db;

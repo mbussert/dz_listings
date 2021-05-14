@@ -5,15 +5,13 @@ const db = require('../helper_data').db;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  let listings = db.toPublic();
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 10);
-  const since = Math.floor(yesterday.getTime() / 1000);
-  listings = db.since(since, listings);
+  if (!global.pubView || !global.pubView.length) {
+    db.setView();
+  }
   res.render('index', {
     title: 'Express',
     user: req.session.user,
-    listings: listings,
+    listings: global.pubView,
   });
 });
 

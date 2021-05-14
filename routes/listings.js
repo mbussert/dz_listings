@@ -10,6 +10,7 @@ dotenv.config();
 /* GET listings not including deactivated. */
 
 // Shows listings since 7 days.
+// TODO: rather redirect back to index
 router.get('/', function(req, res, next) {
   let listings = db.toPublic();
   const yesterday = new Date();
