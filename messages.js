@@ -1,3 +1,9 @@
+/* eslint max-len: ["error", { "code": 1000 }]*/
+// Click on Alt-Z or View/Toggle.. to toggle word wrap
+// Until 1000 seems fine,
+// Do not exceed 1000 length for each message as a rule for the whole project!
+// Should not serialize or persist as JSON.
+
 const messages = {
   'Donations':
     {
@@ -15,12 +21,6 @@ const messages = {
     {
       'ar': '',
       'en': 'In this section, you can share posts <em>you</em> published online. You can also share your passions, hobbies and passtimes with other people.',
-      'fr': '',
-    },
-  'policy':
-    {
-      'ar': '',
-      'en': '',
       'fr': '',
     },
   'policy':
@@ -58,6 +58,12 @@ const messages = {
     {
       'ar': '',
       'en': 'Listings does not want to replace any other paper or digital platform. It does not want \'any\' business deals on its platform. All listings \'must\' be free. Please read the \'policy\' page before posting.',
+      'fr': '',
+    },
+  'Mail':
+    {
+      'ar': '',
+      'en': (pass, pass2, id) => `<a href="https://dzlistings.com/listings/${pass2}/${id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${id}">approve</a> `,
       'fr': '',
     },
 };

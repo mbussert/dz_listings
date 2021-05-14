@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../helper_data').db;
 const giveData = require('../helper_data').give;
+const messages = require('../messages').messages;
 const _ = require('underscore');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -204,7 +205,7 @@ function isArabic(str) {
   const count = str.match(arabic);
   return count && ((count.length / str.length) > 0.5);
 }
-router.post('/add', /* global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const {body} = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -257,7 +258,7 @@ router.post('/add', /* global.passwordless.restricted({ failureRedirect: '/login
     // TODO: not here, in a cron job
     db.persist();
     if (!err) {
-      giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `);
+      giveOp.mail(messages.Mail.en(pass, pass2, entry.id));
       res.render('listing', {
         title: 'One listing',
         data: entry,
@@ -277,7 +278,7 @@ router.post('/add', /* global.passwordless.restricted({ failureRedirect: '/login
   }
 });
 
-router.post('/add2', /* global.passwordless.restricted({ failureRedirect: '/login' }),*/ giveObj.upload.single('avatar'), async (req, res, next) => {
+router.post('/add2', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
   const {body} = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -325,7 +326,7 @@ router.post('/add2', /* global.passwordless.restricted({ failureRedirect: '/logi
     // TODO: not here, in a cron job
     db.persist();
     if (!err) {
-      giveOp.mail(`<a href="https://dzlistings.com/listings/${pass2}/${entry.id}">check</a><br><br><hr><a href="https://dzlistings.com/listings/${pass}/${entry.id}">approve</a> `);
+      giveOp.mail(messages.Mail.en(pass, pass2, entry.id));
       res.render('listing', {
         title: 'One listing',
         data: entry,

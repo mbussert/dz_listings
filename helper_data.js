@@ -383,7 +383,9 @@ const load = (lines) =>
       .pop();
 
 
-give.googleTags = _.uniq(load(fileContent).filter((arr) => arr.length == 3), (x) => x.join(''));
+give.googleTags = _.uniq(
+    load(fileContent).filter((arr) => arr.length == 3), (x) => x.join(''),
+);
 give.googleTagsLite = give.googleTags.map((elem) => elem[2]);
 
 module.exports.db = db;
