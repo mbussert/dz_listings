@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../helper_data').db;
-// const messages = require('../messages').messages;
-
+const messages = require('../messages').messages;
+// messages.Artworks.en
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if (!global.pubView || !global.pubView.length) {
