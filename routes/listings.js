@@ -12,18 +12,16 @@ dotenv.config();
 // Shows listings since 7 days.
 // TODO: rather redirect back to index
 router.get('/', function(req, res, next) {
-  let listings = db.toPublic();
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 10);
-  const since = Math.floor(yesterday.getTime() / 1000);
-  listings = db.since(since, listings);
+  if (!global.pubView || !global.pubView.length) {
+    db.setView();
+  }
   res.render('listings', {
     title: 'DZ Listings',
     intro: 'Like newspapers listings, this is a digital one open for all Algerians',
-    listings: listings,
     user: req.session.user,
     success: 'Hello there :)',
     sec: 'index',
+    listings: global.pubView,
   });
 });
 
@@ -56,7 +54,7 @@ router.get('/blogs', function(req, res, next) {
   const pubListings = db.toPublic(100, 'blo');
   res.render('listings', {
     title: 'DZ Listings',
-    intro: 'Share creative or enriching passions, hobbies and passtimes!',
+    intro: 'Creative passions, hobbies and passtimes!',
     listings: pubListings,
     user: req.session.user,
     success: 'Hello there :)',

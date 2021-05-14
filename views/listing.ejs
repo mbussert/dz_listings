@@ -26,7 +26,7 @@
       <% } %>
     </ul>
     <% if (data.title && data.desc_) { %>
-      <h2><%= data.title %></h2>
+      <h2><%= data.title.charAt(0).toUpperCase() + data.title.slice(1) %></h2>
       <p><%- data.desc_ %></p>
       <div id="map" ></div>
       <br>

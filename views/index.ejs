@@ -22,8 +22,7 @@
     <div class="row">
       <% for (var i=0; listings.length> 0 && i < listings.length && i < 10 ; i++) { %>
       <div class="col listing <%= listings[i].sec %>" > 
-        TODO: limit title length 
-        <h3 dir="auto"><a href='/listings/<%= listings[i].id %>'><%= listings[i].title %></a></h3> 
+        <h3 dir="auto"><a href='/listings/<%= listings[i].id %>'><%= listings[i].title.charAt(0).toUpperCase() + listings[i].title.slice(1) %></a></h3> 
         <p dir="auto"><%- listings[i].desc_.slice(0,300) %> ...</p>
         <code><%= listings[i].date %></code>
         <ul class="tags">

@@ -31,9 +31,15 @@
 
     function switchMode(el) {
       const bodyClass = document.body.classList;
-      bodyClass.contains("dark")
-        ? ((el.innerHTML = "☀️"), bodyClass.remove("dark"))
-        : ((el.innerHTML = "🌙"), bodyClass.add("dark"));
+      if(bodyClass.contains("dark")) {
+        el.innerHTML = "☀️";
+        bodyClass.remove("dark");
+        document.querySelectorAll('body > .svg').forEach(svgEl => { svgEl.style.filter = "invert(0%)" });
+      } else {
+        el.innerHTML = "🌙";
+        bodyClass.add("dark");
+        document.querySelectorAll('body.dark > .svg').forEach(svgEl => { svgEl.style.filter = "invert(100%)" });
+      }
     }
   </script>
   <script>
