@@ -45,12 +45,12 @@ Otherwise, this is the list of routes (queries and views):
   - localhost:3000/listings/queryV2 -> listings.ejs : for fuzzy search items
   - localhost:3000/listings/add -> listing.ejs : for adding an item
   - localhost:3000/listings/deactivate -> messages.ejs : to deactivate an item
-  - localhost:3000/listings/{some_id} -> listing.ejs : to show an item --> 
+  - localhost:3000/listings/{some_id} -> listing.ejs : to show an item of some id
+  - localhost:3000/{some_tag} -> listings.ejs : to show all listings including some tag
   - localhost:3000/listings/tags -> tags.ejs : for exposing contant list of possible tags
   - localhost:3000/ exposts all other routes (contact, tags, listings, ...)
   - localhost:3000/contact -> messages.ejs : for user messaging 
 
-  you can tell everything necessary is under /listings/ route so why not attach all to index (/) ? Yes, probably, for now I think it's OK but if fewer than expected routes are added, we move listings routes to index. 
 
 ## Deployment
 
@@ -59,6 +59,24 @@ Otherwise, this is the list of routes (queries and views):
 - Create a file called `listings.json` on root. Filled with `{"data":[]}`
 - `npm install` then `npm start`
 - It cannot be easier.
+
+## Captures
+
+- Index page shows fresh listings
+
+![Index page](Capture_index.PNG)
+
+- Section page shows listings of type donations, artworks or blogs
+
+![Section page](Capture_section.PNG)
+
+- Add a listing, depending on secrtion type, show or hide map
+
+![Add a listing](Capture_add.PNG)
+
+- Get a listing
+
+![Get a listing](Capture_get.PNG)
 
 
 ## Contribution

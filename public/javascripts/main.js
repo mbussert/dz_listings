@@ -7,7 +7,7 @@
 
 if (!window.DZ) {
   DZ = {
-    _id: function(id) {
+    id: function(id) {
       return document.getElementById(id);
     },
   };
