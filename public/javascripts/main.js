@@ -3,14 +3,32 @@
 // console.log(`Errors: ${errors}`)
 // console.log(`Latitude: ${lat_}`)
 // console.log(`Longitude: ${lng_}`)
+// Helpers
 
-// Language selector.
-function langChange(el) {
-  document.body.setAttribute('lang', el.value);
+if (!window.DZ) {
+  DZ = {
+    _id: function(id) {
+      return document.getElementById(id);
+    },
+  };
 }
 
+
+// Language selector.
+/**
+ * Sets an attribute 'lang' with node value
+ * @param {dom} el dom element
+ */
+// function langChange(el) {
+//   document.body.setAttribute('lang', el.value);
+// }
+
+/**
+ * Loads an image to be uploaded on browser
+ * @param {event} event
+ */
 const loadFile = function(event) {
-  const image = document.getElementById('output');
+  const image = DZ.id('output');
   image.src = URL.createObjectURL(event.target.files[0]);
 };
 
@@ -43,7 +61,7 @@ if (document.querySelector('.row .col p')) {
       },
     });
   } catch (error) {
-    console.log('Probably running where there is no list in HTML | ERROR: ', error.message);
+    console.log('Maybe running where there is no list in HTML | ERROR: ', error.message);
   }
 }
 
@@ -62,15 +80,10 @@ const options = {
     warning: '/sounds/warning/1.mp3',
     error: '/sounds/error/1.mp3',
   },
-
   onShow: function(type) { },
-
   onHide: function(type) { },
-
   prependTo: document.body.childNodes[0],
 };
-
-
 const toast = new Toasty(options);
 errors.forEach((error) => {
   toast.error(error);
@@ -78,6 +91,12 @@ errors.forEach((error) => {
 successes.forEach((success) => {
   toast.success(success);
 });
+
+/**
+ * Easy strip Html using browser capability.
+ * @param {string} html any html code.
+ * @returns {string} stripped string from html tags.
+ */
 function stripHtml(html) {
   const tmp = document.createElement('DIV');
   tmp.innerHTML = html;
@@ -87,12 +106,12 @@ function stripHtml(html) {
 // on succeeds on pages with `editor` and `html-output` and other inputs
 try {
   const editor = pell.init({
-    element: document.getElementById('editor'),
+    element: DZ.id('editor'),
     onChange: (html) => {
-      document.getElementById('html-output').textContent = html;
+      DZ.id('html-output').textContent = html;
       const raw = stripHtml(html);
       const charactersLeft = 200 - raw.length;
-      const count = document.getElementById('characters-left');
+      const count = DZ.id('characters-left');
       count.innerHTML = 'Characters left: ' + charactersLeft;
       document.querySelectorAll('.add#description')[0].value = (html);
     },
@@ -105,9 +124,9 @@ try {
   });
   // editor.content<HTMLElement>
   // To change the editor's content:
-  editor.content.innerHTML = '<b><u><i>Initial content!</i></u></b>';
+  editor.content.innerHTML = '';
 } catch (error) {
-  console.log('Probably running where pen is not in HTML | ERROR: ', error.message);
+  console.log('Maybe running where pen is not in HTML | ERROR: ', error.message);
 }
 
 // TODO: if not found
@@ -121,9 +140,12 @@ if (inputTags) {
       .then((tags) => {
         // initialize Tagify on the above input node reference
         new Tagify(inputTags, {
-          pattern: /^.{0,20}$/, // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-          delimiters: ',| ', // add new tags when a comma or a space character is entered
-          keepInvalidTags: false, // do not remove invalid tags (but keep them marked as invalid)
+          // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+          pattern: /^.{0,20}$/,
+          // add new tags when a comma or a space character is entered
+          delimiters: ',| ',
+          // do not remove invalid tags (but keep them marked as invalid)
+          keepInvalidTags: false,
           editTags: {
             clicks: 1, // single click to edit a tag
             keepInvalid: true, // if after editing, tag is invalid, auto-revert
@@ -134,10 +156,14 @@ if (inputTags) {
           backspace: 'edit',
           placeholder: 'Type something',
           dropdown: {
-            enabled: 1, // show suggestion after 1 typed character
-            fuzzySearch: true, // match only suggestions that starts with the typed characters
-            position: 'text', // position suggestions list next to typed text
-            caseSensitive: true, // allow adding duplicate items if their case is different
+            // show suggestion after 1 typed character
+            enabled: 1,
+            // match only suggestions that starts with the typed characters
+            fuzzySearch: true,
+            // position suggestions list next to typed text
+            position: 'text',
+            // allow adding duplicate items if their case is different
+            caseSensitive: true,
           },
           templates: {
             dropdownItemNoMatch: function(data) {
@@ -153,9 +179,12 @@ if (inputTags) {
 
 if (inputTags2) {
   new Tagify(inputTags2, {
-    pattern: /^.{0,20}$/, // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-    delimiters: ',| ', // add new tags when a comma or a space character is entered
-    keepInvalidTags: false, // do not remove invalid tags (but keep them marked as invalid)
+    // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+    pattern: /^.{0,20}$/,
+    // add new tags when a comma or a space character is entered
+    delimiters: ',| ',
+    // do not remove invalid tags (but keep them marked as invalid)
+    keepInvalidTags: false,
     editTags: {
       clicks: 1, // single click to edit a tag
       keepInvalid: true, // if after editing, tag is invalid, auto-revert
@@ -179,26 +208,32 @@ if (inputTags2) {
   });
 }
 
+/**
+ * blablabla (0_o)
+ * @param {@@} tagData
+ */
 function transformTag(tagData) {
   tagData.style = '--tag-bg:' + stringToColour(tagData.value);
 }
 
+/**
+ * A bijective String to color function
+ * @param {string} str, ex: "hello"
+ * @return {string} colour color code, ex: #00000
+ */
 function stringToColour(str) {
   let hash = 0;
-  for (var i = 0; i < str.length; i++) {
+  for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   let colour = '#';
-  for (var i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xFF;
+  for (let j = 0; j < 3; j++) {
+    const value = (hash >> (j * 8)) & 0xFF;
     colour += ('00' + value.toString(16)).substr(-2);
   }
   return colour;
 }
 
-// credits: https://github.com/turban/Leaflet.Mask
-// credits: https://github.com/turban/Leaflet.Mask
-// credits: https://github.com/turban/Leaflet.Mask
 // credits: https://github.com/turban/Leaflet.Mask
 L.Mask = L.Polygon.extend({
   options: {
@@ -225,6 +260,12 @@ L.mask = function(latLngs, options) {
   return new L.Mask(latLngs, options);
 };
 
+/**
+ * Is marker (lat, lng) inside a polygon
+ * @param {latlng} marker
+ * @param {coordinates} vs
+ * @return {boolean}
+ */
 function isMarkerInsidePolygon(marker, vs) {
   const x = marker.getLatLng().lat; const y = marker.getLatLng().lng;
 
@@ -243,17 +284,13 @@ function isMarkerInsidePolygon(marker, vs) {
 
 const lat = typeof lat_ !== 'undefined' ? lat_ : 36.75;
 const lng = typeof lng_ !== 'undefined' ? lng_ : 3.05;
-const latInput = document.getElementById('lat');
-const lngInput = document.getElementById('lng');
+const latInput = DZ.id('lat');
+const lngInput = DZ.id('lng');
 
 if (latInput != null) {
   latInput.value = lat;
   lngInput.value = lng;
 }
-// var sectionInput = document.getElementById('section')
-// if (sectionInput != null) {
-
-// }
 
 const zoom = 8;
 
@@ -276,10 +313,21 @@ L.mask(latLngs).addTo(map);
 
 const polygon = dz.features.map((a)=> a.geometry.coordinates[0]);
 const names = dz.features.map((a)=> a.properties.name);
-// map.on('click', addMarker);
 const circle = L.circle([lat, lng], 6000).addTo(map);
 let lastValid = [lat, lng];
+
+/**
+ * Attach one marker to map with constraints (marker is draggble but cannot go out of )
+ * Based on dz0 and dz (country borders and Wilayas delimitations)
+ * @param {map} map
+ * @param {marker} marker
+ * @return {marker} Just a reference
+ */
 function moveableMarker(map, marker) {
+  /**
+ * blablabla (0_o)
+ * @param {@@} evt
+ */
   function trackCursor(evt) {
     marker.setLatLng(evt.latlng);
   }
@@ -296,8 +344,8 @@ function moveableMarker(map, marker) {
     console.log(names[where]);
     if (isMarkerInsidePolygon(circle, coordinates)) {
       const center = circle.getBounds().getCenter();
-      document.getElementById('lat').value = center.lat;
-      document.getElementById('lng').value = center.lng;
+      DZ.id('lat').value = center.lat;
+      DZ.id('lng').value = center.lng;
       lastValid = [center.lat, center.lng];
     } else {
       marker.setLatLng(lastValid);
@@ -309,27 +357,20 @@ function moveableMarker(map, marker) {
 
 const moveable = moveableMarker(map, circle);
 
-
-// map.on('mouseup', function (e) {
-//    map.removeEventListener('mousemove');
-// })
-
+// Refrech tiles after some time
+// because it doesn't load properly at first
 setTimeout(() => {
   map.invalidateSize();
 }, 3000);
 
-function addMarker(e) {
-  // Add marker to map at click location; add popup window
-  const newMarker = new L.marker(e.latlng).addTo(map);
-}
 
-// Get the modal
-const modal = document.getElementById('myModal');
+// Define the modal (for the image onclick) behaviour
+const modal = DZ.id('myModal');
 // Get the image and insert it inside the modal - use its "alt" text as a caption
-const img = document.getElementById('imgg');
+const img = DZ.id('imgg');
 if (img) {
-  const modalImg = document.getElementById('img01');
-  const captionText = document.getElementById('caption');
+  const modalImg = DZ.id('img01');
+  const captionText = DZ.id('caption');
   img.onclick = function() {
     modal.style.display = 'block';
     modalImg.src = this.src;
