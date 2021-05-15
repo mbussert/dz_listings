@@ -81,6 +81,9 @@ Otherwise, this is the list of routes (queries and views):
 
 ## Contribution
 
+For styling and rapid prototyping, and to get a feel of the webapp check: dzlistings.herokuapp.com/
+It's a dev env so no login and no posts are possible.
+
 As always, all my repositories are firstcomers friendly ! 
 
 As I am always learning, please do not hesitate to open any new issue (like better code, readability, modularity and best practice, performance, better UI or even functionality enhancements...).

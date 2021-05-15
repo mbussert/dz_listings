@@ -69,7 +69,10 @@ const job = new CronJob('0 0 */3 * * *', function() {
   db.cycle();
 }, null, true, 'America/Los_Angeles');
 
-job.start();
+if (process.env.NODE_ENV === 'prod') {
+  job.start();
+}
+
 
 const storeData = (data, path) => {
   try {
@@ -139,7 +142,8 @@ db.setView = function setView() {
   console.log('===== set view ===== ');
   const listings = db.toPublic();
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 10);
+  const days = process.env.NODE_ENV === 'prod' ? 10 : 1000;
+  yesterday.setDate(yesterday.getDate() - days);
   const since = Math.floor(yesterday.getTime() / 1000);
   global.pubView = db.since(since, listings);
 };

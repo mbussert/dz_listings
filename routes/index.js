@@ -66,8 +66,15 @@ router.get('/policy', function(req, res, next) {
   });
 });
 
+
 const freemail = require('freemail');
 router.get('/login', function(req, res) {
+  if (process.env.NODE_ENV === 'dev') {
+    res.render('error', {
+      message: 'only accessible in prod',
+      error: 'only accessible in prod',
+    });
+  }
   const errors = req.flash('passwordless');
   let errHtml = '';
   for (let i = errors.length - 1; i >= 0; i--) {

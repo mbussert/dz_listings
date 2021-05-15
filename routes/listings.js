@@ -206,6 +206,12 @@ function isArabic(str) {
   return count && ((count.length / str.length) > 0.5);
 }
 router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
+  if (process.env.NODE_ENV === 'dev') {
+    res.render('error', {
+      message: 'only accessible in prod',
+      error: 'only accessible in prod',
+    });
+  }
   const {body} = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -279,6 +285,12 @@ router.post('/add', global.passwordless.restricted({ failureRedirect: '/login' }
 });
 
 router.post('/add2', global.passwordless.restricted({ failureRedirect: '/login' }), giveObj.upload.single('avatar'), async (req, res, next) => {
+  if (process.env.NODE_ENV === 'dev') {
+    res.render('error', {
+      message: 'only accessible in prod',
+      error: 'only accessible in prod',
+    });
+  }
   const {body} = req;
   const listingSchema = Joi.object().keys({
     title: Joi.string().regex(/^\W*\w+(?:\W+\w+)*\W*$/).min(10).max(100).required(),
@@ -348,6 +360,12 @@ router.post('/add2', global.passwordless.restricted({ failureRedirect: '/login' 
 
 /* Deactivate one listing. */
 router.post('/deactivate', function(req, res, next) {
+  if (process.env.NODE_ENV === 'dev') {
+    res.render('error', {
+      message: 'only accessible in prod',
+      error: 'only accessible in prod',
+    });
+  }
   const {body} = req;
   const listing = Joi.object().keys({
     password: Joi.string().min(6).max(9).required(),
@@ -375,6 +393,12 @@ router.post('/deactivate', function(req, res, next) {
 
 /* Contact poster one listing. */
 router.post('/contact', global.passwordless.restricted({failureRedirect: '/login'}), function(req, res, next) {
+  if (process.env.NODE_ENV === 'dev') {
+    res.render('error', {
+      message: 'only accessible in prod',
+      error: 'only accessible in prod',
+    });
+  }
   const {body} = req;
   const listing = Joi.object().keys({
     message: Joi.string().min(20).required(),
