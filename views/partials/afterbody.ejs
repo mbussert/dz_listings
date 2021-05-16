@@ -14,10 +14,11 @@
 <script>
   var socket = io();
   socket.on('broadcast', function (data) {
-    document.body.innerHTML = '';
-    document.write(data);
-    console.log("data");
-    console.log(data);
+    try {
+      remove(data)
+    } catch (error) {
+
+    }
   });
 </script>
 <style>

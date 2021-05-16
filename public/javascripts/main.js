@@ -13,7 +13,13 @@ if (!window.DZ) {
   };
 }
 
-
+/**
+ * remove element by Id
+ * @param {number} id
+ */
+function remove(id) {
+  document.getElementById(id).parentNode.removeChild(document.getElementById(id));
+}
 // Language selector.
 /**
  * Sets an attribute 'lang' with node value
