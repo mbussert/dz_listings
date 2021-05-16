@@ -13,6 +13,8 @@ dotenv.config();
 // Shows listings since 7 days.
 // TODO: rather redirect back to index
 router.get('/', function(req, res, next) {
+  const io = req.app.get('socketio');
+  io.emit('broadcast', ' clients connected!');
   if (!global.pubView || !global.pubView.length) {
     db.setView();
   }

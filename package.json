@@ -35,6 +35,7 @@
     "passwordless-nodecache": "^1.0.4",
     "pngquant-bin": "^6.0.0",
     "sanitize-html": "^2.3.3",
+    "socket.io": "^4.1.1",
     "underscore": "^1.12.1"
   },
   "devDependencies": {
