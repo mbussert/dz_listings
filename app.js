@@ -23,27 +23,51 @@ app.use(session({
 app.use(flash());
 const passwordless = require('passwordless');
 const NodeCacheStore = require('passwordless-nodecache');
-const nodeoutlook = require('nodejs-nodemailer-outlook');
+const nodemailer = require('nodemailer');
 const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 
+
+const transportOptions = {
+  host: 'smtp.office365.com', // Office 365 server
+  port: 587, // secure SMTP
+  secure: false,
+  auth: {
+    user: EMAIL_FROM,
+    pass: EMAIL_PASS,
+  },
+  tls: {ciphers: 'SSLv3'},
+};
+const transporter = nodemailer.createTransport(transportOptions);
+transporter.verify(function(error, success) {
+  if (error) {
+    // TODO: hand server completely
+    console.log(error);
+  } else {
+    console.log('Server is ready to take our messages');
+  }
+});
+
+/**
+ * Send an email using Outlook options
+ * @param {string} mailMessage HTML content
+ * @param {string} recipient address of recipient
+ */
 function mail(mailMessage, recipient) {
-  nodeoutlook.sendEmail({
-    auth: {
-      user: EMAIL_FROM,
-      pass: EMAIL_PASS,
-    },
+  transporter.sendMail({
     from: EMAIL_FROM,
     to: recipient,
     subject: '@@LISTINGS@@',
     html: mailMessage,
     text: mailMessage,
     replyTo: EMAIL_FROM,
-    onError: (e) => console.log(e),
-    onSuccess: (i) => console.log(i),
+  }, (err, info) => {
+    console.log(info.envelope);
+    console.log(info.messageId);
   });
 }
+
 passwordless.init(new NodeCacheStore());
 // Set up a delivery service
 passwordless.addDelivery(
@@ -78,10 +102,11 @@ const customFilter = new Filter({placeHolder: 'x'});
 
 const trimmer = function(req, res, next) {
   req.body = _.object(_.map(req.body, function(value, key) {
-    if (value && value.length)
+    if (value && value.length) {
       return [key, value.trim()];
-    else
+    } else {
       return [key, value];
+    }
   }));
   next();
 };
@@ -89,7 +114,6 @@ const trimmer = function(req, res, next) {
 app.use(trimmer);
 // get bigVar from disk
 db.backup();
-
 app.use('/', indexRouter);
 app.use('/listings', listingsRouter);
 
@@ -121,7 +145,7 @@ app.use(function(req, res, next) {
     return next();
   }
   const reversedIp = ip.split('.').reverse().join('.');
-  dns.resolve4([process.env.HONEYPOT_KEY, reversedIp, 'dnsbl.httpbl.org'].join('.'), 
+  dns.resolve4([process.env.HONEYPOT_KEY, reversedIp, 'dnsbl.httpbl.org'].join('.'),
       function(err, addresses) {
         if (!addresses) {
           return next();
@@ -141,7 +165,6 @@ app.use(function(req, res, next) {
 //   res.locals.user = req.session.user;
 //   next();
 // });
-
 
 
 module.exports = app;

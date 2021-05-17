@@ -36,7 +36,8 @@
     "pngquant-bin": "^6.0.0",
     "sanitize-html": "^2.3.3",
     "socket.io": "^4.1.1",
-    "underscore": "^1.12.1"
+    "underscore": "^1.12.1",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "eslint": "^7.26.0",

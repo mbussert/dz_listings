@@ -22,7 +22,12 @@ const inputPath = 'uploads/';
 const outputPath = 'public/images/';
 
 const watcher = chokidar.watch(inputPath, {persistent: true});
-
+/**
+ * This watcher compressImages on add of a file in uploads/
+ * compressImages when finished without errors cleans the initial file
+ * This way, an uploaded image file will not appear instantly if the page
+ * of the related item is requested.
+ */
 watcher
     .on('add', function(path) {
       console.log('File', path, 'has been added');
@@ -73,16 +78,43 @@ if (process.env.NODE_ENV === 'prod') {
   job.start();
 }
 
-
+/**
+ * Store data
+ * @param {object} data JS object to store
+ * @param {string} path to store into in system
+ */
 const storeData = (data, path) => {
   try {
     fs.writeFileSync(path, JSON.stringify({data: data}));
   } catch (err) {
     console.error(err);
-    return (err.message);
+    // return (err.message);
   }
 };
 
+/**
+ * Gziped storeData
+ * @param {object} data JS object to store
+ * @param {string} path to store into in system
+ */
+// TODO: there is a problem in gziped version (in store or in load)
+// const zlib = require('zlib');
+// const storeData = (data, path) => {
+//   try {
+//     zlib.gzip(JSON.stringify({data: data}), function(err, binary) {
+//       fs.writeFileSync(path, binary);
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     return (err.message);
+//   }
+// };
+
+/**
+ * Load data
+ * @param {string} path to store into in system
+ * @return {json}
+ */
 const loadData = (path) => {
   try {
     return JSON.parse(fs.readFileSync(path, 'utf8')).data;
@@ -92,6 +124,29 @@ const loadData = (path) => {
   }
 };
 
+/**
+ * Load Gziped data
+ * @param {string} path to store into in system
+ * @return {json}
+ */
+// TODO: there is a problem in gziped version (in store or in load)
+// const loadData = (path) => {
+//   try {
+//     const gzipContent = fs.readFileSync(path);
+//     zlib.gunzip(gzipContent, function(err, binary) {
+//       console.log(binary.toString('utf-8'));
+//       return JSON.parse(binary.toString('utf-8')).data;
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     return (err.message);
+//   }
+// };
+
+/**
+ * Sort listings based on ID
+ * This is called once in while with CRON
+ */
 db.sortDB = function sortDB() {
   console.log('===== sortDB ===== ');
   global.listings = lo.sortBy(global.listings, function(o) {
@@ -159,6 +214,7 @@ db.persist = function persist() {
     item.desc = Uint8Array.from(item.desc);
   });
 };
+
 
 // Push item
 db.push = function push(item) {
