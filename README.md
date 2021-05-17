@@ -1,12 +1,12 @@
 # Listings
 
-When you don't care too much about normalization, also when you are tired of databases and different driver implementations with their tedious considerations.
+When you don't care too much about normalization. Also when you are tired of databases and different driver implementations with their tedious considerations.
 
-You did not ask for all of these, you just wanted to store some megabytes in a file and at the same time query plain JavaScript objects in realtime.
+You did not ask for all of these. You just wanted to store some megabytes in a file and at the same time query plain JavaScript objects in realtime.
 
 You did not ask for clustering or paralelization neither.
 
-Then, only then, you can always use a data-structures and a JSON file.
+Only then, you can always use a data-structures and a JSON file.
 
 ## Considerations
 
@@ -15,16 +15,18 @@ Then, only then, you can always use a data-structures and a JSON file.
 
 That's it. See how I want to build an listing (announcements, item re-sell...) web app.
 
-Also without authentication, (must re-enforce visibility of new added listings after validation by an admin though.).
+Also without authentication: passwordless at least.
+Added listings are validated by an admin though.
 
 Take a look as a starting point here:
 
 [helpers simple data API](https://github.com/bacloud14/dz_listings/blob/main/helper_data.js)
+
 [helpers simple functions API](https://github.com/bacloud14/dz_listings/blob/main/helper_data.js)
 
 ## DZ Listings use case
 
-I want to build an open listings/annoucements platform in Algeria (Lack of an online serious listings platform, I feel Facebook and others alone are not that organised and a separate specialized platform can be good).
+I want to build an open listings/annoucements platform in Algeria (Lack of an online serious listings platform. I feel Facebook and others alone are not that organised and a separate specialized platform can be a good case).
 
 Listings are devided in three main sections:
 
@@ -81,8 +83,8 @@ Otherwise, this is the list of routes (queries and views):
 
 ## Contribution
 
-For styling and rapid prototyping, and to get a feel of the webapp check: dzlistings.herokuapp.com/
-It's a dev env so no login and no posts are possible.
+For styling and rapid prototyping and to get a feel of the webapp check: https://dzlistings.herokuapp.com/
+It's a dev env so no login and no posting is possible.
 
 As always, all my repositories are firstcomers friendly ! 
 
@@ -92,7 +94,7 @@ As I am always learning, please do not hesitate to open any new issue (like bett
 
 Dz listings is released under a [CC BY-NC-SA License](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 
-[Licenses from third parties](https://github.com/bacloud14/dz_listings/blob/main/THIRD%20PARTY%20LICENCES.html)
+[Licenses from third parties](https://github.com/bacloud14/dz_listings/blob/main/THIRD%20PARTY%20LICENCES.pdf)
 
 
 
