@@ -127,35 +127,58 @@ function formatMessage(msgContent) {
   return `<h1> Listings </h1> <br> <h2> A user sent you a message ! </h2> <p> ${msgContent} </p> <br><hr> <code> You can repond directly to this email. </code>`;
 }
 
-const nodeoutlook = require('nodejs-nodemailer-outlook');
+const nodemailer = require('nodemailer');
 const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
-// Send an email by admin to admins
-ops.mail = function mail(message) {
-  nodeoutlook.sendEmail({
-    auth: {
-      user: EMAIL_FROM,
-      pass: EMAIL_PASS,
-    },
+const transportOptions = {
+  host: 'smtp.office365.com', // Office 365 server
+  port: 587, // secure SMTP
+  secure: false,
+  auth: {
+    user: EMAIL_FROM,
+    pass: EMAIL_PASS,
+  },
+  tls: {ciphers: 'SSLv3'},
+};
+const transporter = nodemailer.createTransport(transportOptions);
+transporter.verify(function(error, success) {
+  if (error) {
+    // TODO: hand server completely
+    console.log(error);
+  } else {
+    console.log('Server is ready to take our messages');
+  }
+});
+
+/**
+ * Send an email using Outlook options
+ * From Admin to admins for post validation
+ * @param {string} message HTML content
+ */
+ops.approveMail = function approveMail(message) {
+  transporter.sendEmail({
     from: EMAIL_FROM,
     to: EMAIL_TO,
     subject: '@@LISTINGS@@',
     html: message,
     text: message,
     replyTo: EMAIL_FROM,
-    onError: (e) => console.log(e),
-    onSuccess: (i) => console.log(i),
+  }, (err, info) => {
+    console.log(info.envelope);
+    console.log(info.messageId);
   });
 };
 
-// Send an email by admin on behalf of SENDER and RECIEVER,
-ops.mail2 = function mail2({message, EMAIL_SENDER, EMAIL_RECIEVER, subjectId}) {
-  nodeoutlook.sendEmail({
-    auth: {
-      user: EMAIL_FROM,
-      pass: EMAIL_PASS,
-    },
+
+/**
+ * Send an email using Outlook options
+ * MIMMail: Man In The Middle where Man is the Admin
+ * on behalf of SENDER and RECIEVER,
+ * @param {string} message HTML content
+ */
+ops.MIMMail = function MIMMail({message, EMAIL_SENDER, EMAIL_RECIEVER, subjectId}) {
+  transporter.sendEmail({
     from: EMAIL_FROM,
     to: EMAIL_RECIEVER,
     cc: [EMAIL_SENDER],
@@ -164,8 +187,9 @@ ops.mail2 = function mail2({message, EMAIL_SENDER, EMAIL_RECIEVER, subjectId}) {
     html: formatMessage(message),
     text: formatMessage(message),
     replyTo: EMAIL_SENDER,
-    onError: (e) => console.log(e),
-    onSuccess: (i) => console.log(i),
+  }, (err, info) => {
+    console.log(info.envelope);
+    console.log(info.messageId);
   });
 };
 

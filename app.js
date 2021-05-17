@@ -51,10 +51,11 @@ transporter.verify(function(error, success) {
 
 /**
  * Send an email using Outlook options
+ * From Admin to loggin users
  * @param {string} mailMessage HTML content
  * @param {string} recipient address of recipient
  */
-function mail(mailMessage, recipient) {
+function logginMail(mailMessage, recipient) {
   transporter.sendMail({
     from: EMAIL_FROM,
     to: recipient,
@@ -74,7 +75,7 @@ passwordless.addDelivery(
     function(tokenToSend, uidToSend, recipient, callback, req) {
       const host = 'localhost:3000/logged_in';
       const text = 'Hello!\nAccess your account here: http://' + host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
-      mail(text, recipient);
+      logginMail(text, recipient);
     });
 app.use(passwordless.sessionSupport());
 app.use(passwordless.acceptToken());

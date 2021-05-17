@@ -279,7 +279,7 @@ router.post('/add',
         // TODO: not here, in a cron job
         db.persist();
         if (!err) {
-          giveOp.mail(messages.Mail.en(pass, pass2, entry.id));
+          giveOp.approveMail(messages.Mail.en(pass, pass2, entry.id));
           res.render('listing', {
             title: 'One listing',
             data: entry,
@@ -356,7 +356,7 @@ router.post('/add2',
         // TODO: not here, in a cron job
         db.persist();
         if (!err) {
-          giveOp.mail(messages.Mail.en(pass, pass2, entry.id));
+          giveOp.approveMail(messages.Mail.en(pass, pass2, entry.id));
           res.render('listing', {
             title: 'One listing',
             data: entry,
@@ -446,15 +446,14 @@ router.post('/contact',
           });
         }
 
-        // mail2(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
+        // MIMMail(message, EMAIL_RECIEVER, EMAIL_SENDER, subjectId)
         const mail = {
           message: body.message,
           EMAIL_SENDER: req.user,
           EMAIL_RECIEVER: elem.usr,
           subjectId: body.id,
         };
-        console.log(mail);
-        giveOp.mail2(mail);
+        giveOp.MIMMail(mail);
         res.render('listing', {
           title: 'messages',
           message: 'Email successfully sent to publisher, he may repond to you.',
