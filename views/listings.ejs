@@ -30,12 +30,12 @@
           <!-- <label for="title">Title</label> -->
           <label for="exactTitle">Exact ?</label>
           <input type="checkbox" class="query" name="exactTitle" id="exactTitle" >
-          <input name="title" class="query" id="title" value="title..." placeholder="Title">
+          <input name="title" class="query" id="title" value="" placeholder="Title">
 
           <!-- <label for="description">Description</label> -->
           <label for="exactDesc">Exact ?</label>
           <input type="checkbox" class="query" name="exactDesc" id="exactDesc" >
-          <input name="desc" class="query" id="description" value="description..." placeholder="Description">
+          <input name="desc" class="query" id="description" value="" placeholder="Description">
 
           <label for="since">Since date</label>
           <input type="date" class="query" id="since" name="since" value="2021-04-01" min="2021-04-01">
@@ -48,7 +48,7 @@
       <form action="/listings/queryV2" method="POST">
         <p class="grouped">
           <!-- <label for="title_desc">Title and description</label> -->
-          <input name="title_desc" value="title_desc..." placeholder="Any text">
+          <input name="title_desc" value="" placeholder="title or description">
           <label for="since">Since date</label>
           <input type="date" name="since" value="2021-04-01" min="2021-04-01">
           <button>Search</button>

@@ -32,18 +32,21 @@
 </style>
 <script>
   if (window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    window.matchMedia('(prefers-color-scheme: dark)').matches || (localStorage.getItem('dark') === 'true')) {
     document.body.classList.add('dark');
     document.querySelector('#theme-switch').innerHTML = "🌙"
+    document.querySelectorAll('body.dark > .svg').forEach(svgEl => { svgEl.style.filter = "invert(100%)" });
   }
-
+  
   function switchMode(el) {
     const bodyClass = document.body.classList;
     if (bodyClass.contains("dark")) {
+      localStorage.setItem('dark', 'false')
       el.innerHTML = "☀️";
       bodyClass.remove("dark");
       document.querySelectorAll('body > .svg').forEach(svgEl => { svgEl.style.filter = "invert(0%)" });
     } else {
+      localStorage.setItem('dark', 'true')
       el.innerHTML = "🌙";
       bodyClass.add("dark");
       document.querySelectorAll('body.dark > .svg').forEach(svgEl => { svgEl.style.filter = "invert(100%)" });

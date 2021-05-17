@@ -87,7 +87,7 @@ pre {
 footer {
   padding-top: 10rem;
   padding-left: 10rem;
-  position: fixed;
+  position: inherit;
   bottom: 5%;
 }
 
