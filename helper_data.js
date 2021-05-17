@@ -204,12 +204,12 @@ db.setView = function setView() {
 };
 
 // Set from disk
-db.persist = function persist() {
+db.persist = function persist(snapshot = 'listings.json') {
   console.log('===== persist ===== ');
   global.listings.forEach((item) => {
     item.desc = Array.from(item.desc);
   });
-  storeData(global.listings, 'listings.json');
+  storeData(global.listings, snapshot);
   global.listings.forEach((item) => {
     item.desc = Uint8Array.from(item.desc);
   });
