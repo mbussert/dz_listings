@@ -1,3 +1,7 @@
+/**
+ * Self contained test file, dependes only on helper_data.js and helper_ops.js
+ */
+
 const jsf = require('json-schema-faker');
 jsf.extend('faker', () => require('faker'));
 

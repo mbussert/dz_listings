@@ -1,3 +1,7 @@
+/**
+ * Self contained test file, dependes only on helper_data.js and helper_ops.js
+ */
+
 var db = require('./helper_data').db
 var giveOp = require('./helper_ops').ops
 

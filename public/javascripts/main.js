@@ -5,8 +5,8 @@
 // console.log(`Longitude: ${lng_}`)
 // Helpers
 
-if (!window.DZ) {
-  DZ = {
+if (!window.LIS) {
+  LIS = {
     id: function(id) {
       return document.getElementById(id);
     },
@@ -34,7 +34,7 @@ function remove(id) {
  * @param {event} event
  */
 const loadFile = function(event) {
-  const image = DZ.id('output');
+  const image = LIS.id('output');
   image.src = URL.createObjectURL(event.target.files[0]);
 };
 
@@ -112,12 +112,12 @@ function stripHtml(html) {
 // on succeeds on pages with `editor` and `html-output` and other inputs
 try {
   const editor = pell.init({
-    element: DZ.id('editor'),
+    element: LIS.id('editor'),
     onChange: (html) => {
-      DZ.id('html-output').textContent = html;
+      LIS.id('html-output').textContent = html;
       const raw = stripHtml(html);
       const charactersLeft = 200 - raw.length;
-      const count = DZ.id('characters-left');
+      const count = LIS.id('characters-left');
       count.innerHTML = 'Characters left: ' + charactersLeft;
       document.querySelectorAll('.add#description')[0].value = (html);
     },
@@ -290,8 +290,8 @@ function isMarkerInsidePolygon(marker, vs) {
 
 const lat = typeof lat_ !== 'undefined' ? lat_ : 36.75;
 const lng = typeof lng_ !== 'undefined' ? lng_ : 3.05;
-const latInput = DZ.id('lat');
-const lngInput = DZ.id('lng');
+const latInput = LIS.id('lat');
+const lngInput = LIS.id('lng');
 
 if (latInput != null) {
   latInput.value = lat;
@@ -310,21 +310,21 @@ map.addLayer(osm);
 map.setView(new L.LatLng(lat, lng), zoom);
 
 // transform geojson coordinates into an array of L.LatLng
-const coordinates = dz0.features[0].geometry.coordinates[0];
+const coordinates = dzBorders.features[0].geometry.coordinates[0];
 const latLngs = [];
 for (i = 0; i < coordinates.length; i++) {
   latLngs.push(new L.LatLng(coordinates[i][1], coordinates[i][0]));
 }
 L.mask(latLngs).addTo(map);
 
-const polygon = dz.features.map((a)=> a.geometry.coordinates[0]);
-const names = dz.features.map((a)=> a.properties.name);
+const polygon = dzStates.features.map((a)=> a.geometry.coordinates[0]);
+const names = dzStates.features.map((a)=> a.properties.name);
 const circle = L.circle([lat, lng], 6000).addTo(map);
 let lastValid = [lat, lng];
 
 /**
  * Attach one marker to map with constraints (marker is draggble but cannot go out of )
- * Based on dz0 and dz (country borders and Wilayas delimitations)
+ * Based on dzBorders and dzStates (country borders and Wilayas delimitations)
  * @param {map} map
  * @param {marker} marker
  * @return {marker} Just a reference
@@ -350,8 +350,8 @@ function moveableMarker(map, marker) {
     console.log(names[where]);
     if (isMarkerInsidePolygon(circle, coordinates)) {
       const center = circle.getBounds().getCenter();
-      DZ.id('lat').value = center.lat;
-      DZ.id('lng').value = center.lng;
+      LIS.id('lat').value = center.lat;
+      LIS.id('lng').value = center.lng;
       lastValid = [center.lat, center.lng];
     } else {
       marker.setLatLng(lastValid);
@@ -371,12 +371,12 @@ setTimeout(() => {
 
 
 // Define the modal (for the image onclick) behaviour
-const modal = DZ.id('myModal');
+const modal = LIS.id('myModal');
 // Get the image and insert it inside the modal - use its "alt" text as a caption
-const img = DZ.id('imgg');
+const img = LIS.id('imgg');
 if (img) {
-  const modalImg = DZ.id('img01');
-  const captionText = DZ.id('caption');
+  const modalImg = LIS.id('img01');
+  const captionText = LIS.id('caption');
   img.onclick = function() {
     modal.style.display = 'block';
     modalImg.src = this.src;
