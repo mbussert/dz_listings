@@ -63,13 +63,22 @@ router.get('/blogs', function(req, res, next) {
   });
 });
 
-router.get('/get_tags', function(req, res, next) {
-  res.status(200).json({tags: giveData.googleTags});
+router.get('/get_tags_en', function(req, res, next) {
+  res.status(200).json({tags: giveData.googleTagsEn});
 });
 
-router.get('/get_tags_lite', function(req, res, next) {
-  res.status(200).json({tags: giveData.googleTagsLite});
+router.get('/get_tags_lite_en', function(req, res, next) {
+  res.status(200).json({tags: giveData.googleTagsEnLite});
 });
+
+router.get('/get_tags_ar', function(req, res, next) {
+  res.status(200).json({tags: giveData.googleTagsAr});
+});
+
+router.get('/get_tags_lite_ar', function(req, res, next) {
+  res.status(200).json({tags: giveData.googleTagsArLite});
+});
+
 
 router.get('/tags', function(req, res, next) {
   res.render('tags', {

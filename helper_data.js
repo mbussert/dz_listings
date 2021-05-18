@@ -421,12 +421,16 @@ db.toPublic = function toPublic(limit = 9999999, sec = '', subListing = global.l
 };
 
 // const merge = require('deepmerge')
-const taxonomyPath = '/taxonomy/taxonomy-with-ids.ar-SA.txt';
-const fileSync = fs.readFileSync(path.join(__dirname, taxonomyPath)).toString();
-const fileContent = fileSync.replace(',', '_').split('\n').filter(Boolean);
+const taxonomyPathEn = '/taxonomy/taxonomy-with-ids.en-US.txt';
+const fileSyncEn = fs.readFileSync(path.join(__dirname, taxonomyPathEn)).toString();
+const fileContentEn = fileSyncEn.replace(',', '_').split('\n').filter(Boolean);
+
+const taxonomyPathAr = '/taxonomy/taxonomy-with-ids.ar-SA.txt';
+const fileSyncAr = fs.readFileSync(path.join(__dirname, taxonomyPathAr)).toString();
+const fileContentAr = fileSyncAr.replace(',', '_').split('\n').filter(Boolean);
+
 const splitBy = (sep) => (str) =>
   str.split(sep).map((x) => x.trim());
-
 const splitLine = splitBy('-');
 const splitCategories = splitBy('>');
 
@@ -443,10 +447,15 @@ const load = (lines) =>
       .pop();
 
 
-give.googleTags = _.uniq(
-    load(fileContent).filter((arr) => arr.length == 3), (x) => x.join(''),
+give.googleTagsEn = _.uniq(
+    load(fileContentEn).filter((arr) => arr.length == 3), (x) => x.join(''),
 );
-give.googleTagsLite = give.googleTags.map((elem) => elem[2]);
+give.googleTagsEnLite = give.googleTagsEn.map((elem) => elem[2]);
+
+give.googleTagsAr = _.uniq(
+    load(fileContentAr).filter((arr) => arr.length == 3), (x) => x.join(''),
+);
+give.googleTagsArLite = give.googleTagsAr.map((elem) => elem[2]);
 
 module.exports.db = db;
 module.exports.give = give;

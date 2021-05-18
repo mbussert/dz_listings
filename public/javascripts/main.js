@@ -141,7 +141,7 @@ const inputTags = document.querySelector('#donations');
 const inputTags2 = document.querySelector('#artworks');
 
 if (inputTags) {
-  fetch('/listings/get_tags_lite')
+  fetch('/listings/get_tags_lite_ar')
       .then((res) => res.json())
       .then((tags) => {
         // initialize Tagify on the above input node reference
