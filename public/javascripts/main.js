@@ -101,7 +101,7 @@ successes.forEach((success) => {
 /**
  * Easy strip Html using browser capability.
  * @param {string} html any html code.
- * @returns {string} stripped string from html tags.
+ * @return {string} stripped string from html tags.
  */
 function stripHtml(html) {
   const tmp = document.createElement('DIV');
@@ -139,44 +139,79 @@ try {
 // The DOM element you wish to replace with Tagify
 const inputTags = document.querySelector('#donations');
 const inputTags2 = document.querySelector('#artworks');
+let tagified;
+/**
+ * @param {array} tags of some language
+ */
+function newTagify(input, tags) {
+  // initialize Tagify on the above input node reference
+  if (tagified) {
+    tagified.destroy();
+  }
+  tagified = new Tagify(input, {
+    // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
+    pattern: /^.{0,20}$/,
+    // add new tags when a comma or a space character is entered
+    delimiters: ',| ',
+    // do not remove invalid tags (but keep them marked as invalid)
+    keepInvalidTags: false,
+    editTags: {
+      clicks: 1, // single click to edit a tag
+      keepInvalid: true, // if after editing, tag is invalid, auto-revert
+    },
+    maxTags: 3,
+    whitelist: tags,
+    transformTag: transformTag,
+    backspace: 'edit',
+    placeholder: 'Type something',
+    dropdown: {
+      // show suggestion after 1 typed character
+      enabled: 1,
+      // match only suggestions that starts with the typed characters
+      fuzzySearch: true,
+      // position suggestions list next to typed text
+      position: 'text',
+      // allow adding duplicate items if their case is different
+      caseSensitive: true,
+    },
+    templates: {
+      dropdownItemNoMatch: function(data) {
+        return `No suggestion found for: ${data.value}`;
+      },
+    },
+  });
+}
+
+let englishTags;
+let arabicTags;
+
+const choices = document.getElementsByClassName('tagsLang');
+const englishChoice = choices[0];
+const arabicChoice = choices[1];
+englishChoice.onclick = function() {
+  if (englishTags && inputTags) {
+    newTagify(inputTags, englishTags);
+  }
+};
+arabicChoice.onclick = function() {
+  if (arabicTags && inputTags) {
+    newTagify(inputTags, arabicTags);
+  }
+};
 
 if (inputTags) {
   fetch('/listings/get_tags_lite_ar')
       .then((res) => res.json())
       .then((tags) => {
-        // initialize Tagify on the above input node reference
-        new Tagify(inputTags, {
-          // Validate typed tag(s) by Regex. Here maximum chars length is defined as "10"
-          pattern: /^.{0,20}$/,
-          // add new tags when a comma or a space character is entered
-          delimiters: ',| ',
-          // do not remove invalid tags (but keep them marked as invalid)
-          keepInvalidTags: false,
-          editTags: {
-            clicks: 1, // single click to edit a tag
-            keepInvalid: true, // if after editing, tag is invalid, auto-revert
-          },
-          maxTags: 3,
-          whitelist: tags.tags,
-          transformTag: transformTag,
-          backspace: 'edit',
-          placeholder: 'Type something',
-          dropdown: {
-            // show suggestion after 1 typed character
-            enabled: 1,
-            // match only suggestions that starts with the typed characters
-            fuzzySearch: true,
-            // position suggestions list next to typed text
-            position: 'text',
-            // allow adding duplicate items if their case is different
-            caseSensitive: true,
-          },
-          templates: {
-            dropdownItemNoMatch: function(data) {
-              return `No suggestion found for: ${data.value}`;
-            },
-          },
-        });
+        arabicTags = tags.tags;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  fetch('/listings/get_tags_lite_en')
+      .then((res) => res.json())
+      .then((tags) => {
+        englishTags = tags.tags;
       })
       .catch((err) => {
         throw err;
