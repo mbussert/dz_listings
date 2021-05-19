@@ -113,6 +113,7 @@ const trimmer = function(req, res, next) {
 };
 
 app.use(trimmer);
+
 // get bigVar from disk
 db.backup();
 app.use('/', indexRouter);
