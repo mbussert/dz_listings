@@ -36,6 +36,8 @@ Listings are devided in three main sections:
 
 It can succeed or fail based on the above technical considerations (lightweight package --without DB, passwordless ... ).
 
+**This data model is intended to build on in future with a real NoSQL database. It should not be used in production environments as is today.**
+
 ### Routes 
 
 Routes reflect what is possible. See https://github.com/bacloud14/dz_listings/blob/main/routes/listings.js 
