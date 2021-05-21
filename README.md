@@ -24,6 +24,8 @@ Take a look as a starting point here:
 
 [helpers simple functions API](https://github.com/bacloud14/dz_listings/blob/main/helper_data.js)
 
+**With these considerations, this data model is intended to build on in future with a real NoSQL database. It should not be used in production environments as is today.**
+
 ## DZ Listings use case
 
 I want to build an open listings/annoucements platform in Algeria (Lack of an online serious listings platform. I feel Facebook and others alone are not that organised and a separate specialized platform can be a good case).
@@ -35,6 +37,8 @@ Listings are devided in three main sections:
 - Digital arts listings
 
 It can succeed or fail based on the above technical considerations (lightweight package --without DB, passwordless ... ).
+
+**This data model is intended to build on in future with a real NoSQL database. It should not be used in production environments as is today.**
 
 ### Routes 
 
