@@ -23,6 +23,7 @@ i18next
       },
       fallbackLng: 'en',
       preload: ['en', 'ar', 'fr'],
+      cookiename: 'locale',
     });
 
 
@@ -36,7 +37,6 @@ app.get('/greeting', (req, res) => {
   res.send(response);
 });
 
-
 app.use(compression());
 
 const session = require('express-session');
@@ -46,7 +46,17 @@ app.use(session({
   saveUninitialized: true,
   cookie: {secure: false},
 }));
+
+app.get('/i18n/:locale', (req, res) => {
+  res.cookie('locale', req.params.locale);
+  if (req.headers.referer) res.redirect(req.headers.referer);
+  else res.redirect('/');
+});
+
+
 app.use(flash());
+
+
 const passwordless = require('passwordless');
 const NodeCacheStore = require('passwordless-nodecache');
 const nodemailer = require('nodemailer');
@@ -187,11 +197,5 @@ app.use(function(req, res, next) {
       });
 });
 
-// Session wise: add current login user to all requests
-// app.use(function(req, res, next){
-//   res.locals.user = req.session.user;
-//   next();
-// });
-
-
 module.exports = app;
+

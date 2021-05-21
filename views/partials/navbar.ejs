@@ -15,5 +15,20 @@
     <% } else { %>
         <a href="#">Welcome <%= user %></a>
     <% }%>
+    <select class="selectpicker" data-width="fit" onchange="javascript:langSelect(this)">
+        <option value="en" data-content='English'>English</option>
+        <option value="ar" data-content='عربية'>عربية</option>
+        <option value="fr" data-content='Français'>Français</option>
+    </select>
+    
 </nav>
+
 <br>
+
+<!-- <div class="block">
+    <ul>
+		<li><span class="flag-icon flag-icon-fra"></span><span class="code">fra</span> - France</li>
+		<li><span class="flag-icon flag-icon-usa"></span><span class="code">usa</span> - United States of America (USA)</li>
+		<li><span class="flag-icon flag-icon-dza"></span><span class="code">dza</span> - Algeria</li>
+    </ul>
+</div> -->

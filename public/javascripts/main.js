@@ -30,6 +30,14 @@ function remove(id) {
 // }
 
 /**
+ * Adds 'lang' value and redicrects to 'setlocale'
+ * @param {string} lgu
+ */
+function langSelect(lgu) {
+  window.location = '/setlocale/'+lgu.value;
+}
+
+/**
  * Loads an image to be uploaded on browser
  * @param {event} event
  */
