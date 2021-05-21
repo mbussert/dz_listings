@@ -3,17 +3,28 @@ const give = {};
 const dotenv = require('dotenv');
 dotenv.config();
 const Multer = require('multer');
-const path = require('path');
 
+// MUST go for and only for diskStorage
+// const path = require('path');
+// filename: function(req, file, cb) {
+//   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//   cb(null, uniqueSuffix + path.extname(file.originalname));
+// },
 
 give.upload = Multer({
   storage: Multer.memoryStorage(),
   limits: {
     fileSize: 3 * 1024 * 1024, // no larger than 3mb.
   },
-  filename: function(req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+  // Makes req.file undefined in request if not a valid image file.
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      req.error = 'Only .png, .jpg and .jpeg allowed';
+      return cb(null, false, new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
   },
 });
 
@@ -217,13 +228,13 @@ const arabic = text.split('\n').slice(0, 245);
 const english = require('./node_modules/compatto/cjs/dictionary.cjs').dictionary;
 const {
   compress: compress_en,
-  decompress: decompress_en
+  decompress: decompress_en,
 } = compatto({
   dictionary: english,
 });
 const {
   compress: compress_ar,
-  decompress: decompress_ar
+  decompress: decompress_ar,
 } = compatto({
   dictionary: arabic,
 });

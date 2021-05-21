@@ -226,14 +226,14 @@ function isArabic(str) {
   const count = str.match(arabic);
   return count && ((count.length / str.length) > 0.5);
 }
-
+const path = require('path');
 const {Storage} = require('@google-cloud/storage');
 const {format} = require('util');
 const storage = new Storage({keyFilename: process.env.CREDS_PATH});
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 router.post('/add',
-    /*global.passwordless.restricted({failureRedirect: '/login'}),*/
+    /* global.passwordless.restricted({failureRedirect: '/login'}),*/
     giveObj.upload.single('avatar'),
     async (req, res, next) => {
       if (process.env.NODE_ENV === 'dev') {
@@ -283,7 +283,17 @@ router.post('/add',
 
         // Upload that damn picture
         // Create a new blob in the bucket and upload the file data.
-        const blob = bucket.file(req.file.originalname);
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        // Files other than images are undefined
+        if (!req.file) {
+          res.status(422).json({
+            message: 'Invalid request',
+            data: body,
+            error: 'file not found',
+          });
+        }
+        const filename = uniqueSuffix + path.extname(req.file.originalname);
+        const blob = bucket.file(filename);
         const blobStream = blob.createWriteStream();
         blobStream.on('error', (err) => {
           next(err);
