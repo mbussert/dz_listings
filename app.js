@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 const _ = require('underscore');
 const db = require('./helper_data').db;
 const dotenv = require('dotenv');
-const Filter = require('bad-words');
+// const Filter = require('bad-words');
 const compression = require('compression');
 // var CensorifyIt = require('censorify-it')
 const i18next = require('i18next');
@@ -24,6 +24,11 @@ i18next
       fallbackLng: 'en',
       preload: ['en', 'ar', 'fr'],
       cookiename: 'locale',
+      detection: {
+        order: ['cookie'],
+        lookupCookie: 'locale',
+        caches: ['cookie'],
+      },
     });
 
 
@@ -60,7 +65,7 @@ app.use(flash());
 const passwordless = require('passwordless');
 const NodeCacheStore = require('passwordless-nodecache');
 const nodemailer = require('nodemailer');
-const EMAIL_TO = process.env.EMAIL_TO;
+// const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 
@@ -109,7 +114,8 @@ passwordless.init(new NodeCacheStore());
 passwordless.addDelivery(
     function(tokenToSend, uidToSend, recipient, callback, req) {
       const host = 'localhost:3000/logged_in';
-      const text = 'Hello!\nAccess your account here: http://' + host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
+      const text = 'Hello!\nAccess your account here: http://' +
+      host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
       logginMail(text, recipient);
     });
 app.use(passwordless.sessionSupport());
@@ -134,7 +140,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-const customFilter = new Filter({placeHolder: 'x'});
+// const customFilter = new Filter({placeHolder: 'x'});
 
 const trimmer = function(req, res, next) {
   req.body = _.object(_.map(req.body, function(value, key) {
