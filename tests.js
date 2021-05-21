@@ -3,14 +3,14 @@
  */
 
 var db = require('./helper_data').db
-var giveOp = require('./helper_ops').ops
+// var giveOp = require('./helper_ops').ops
 
-db.backup()
-var vv = db.get({ "title":"titlevsvsvsvsvsvs" }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr', 'd'])
-console.log(global.listings)
+// db.backup()
+// var vv = db.get({ "title":"titlevsvsvsvsvsvs" }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr', 'd'])
+// console.log(global.listings)
 
-db.sortDB()
-console.log(global.listings)
+// db.sortDB()
+// console.log(global.listings)
 
 // var res = db.deactivate(1619916741)
 // console.log(res)
@@ -57,6 +57,41 @@ console.log(global.listings)
 //     if (err) return console.log(err);
 // });
 
-// elem = db.get({ id: 1619979872, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr'])
-// console.log(JSON.stringify(elem))
+elem = db.get({ id: 1621591288, d: 0, a: 1 }, ['id', 'title', 'desc_', 'lat', 'lng', 'img', 'ara', 'usr'])
+console.log(JSON.stringify(elem))
 // console.log(giveOp.compress_en("hello world"))
+
+const glob = require('glob');
+
+// options is optional
+glob('**/data/db/*.json', function(er, files) {
+  console.log(files[0]);
+  // files is an array of filenames.
+  // If the `nonull` option is set, and nothing
+  // was found, then files is ["**/*.js"]
+  // er is an error object or null.
+});
+
+const fs = require('fs');
+const path = require('path');
+
+const getMostRecentFile = (dir) => {
+  const files = orderReccentFiles(dir);
+  return files.length ? files[0] : undefined;
+};
+
+const orderReccentFiles = (dir) => {
+  return fs.readdirSync(dir)
+      .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
+      .map((file) => ({file, mtime: fs.lstatSync(path.join(dir, file)).mtime}))
+      .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+};
+
+console.log(getMostRecentFile('./data/db/'));
+
+const now = new Date();
+const logfile_name = './data/db/listings_'+
+now.getFullYear() +
+'-'+ now.getMonth() +
+'-' + now.getDate() +
+'.json';

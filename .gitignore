@@ -64,3 +64,5 @@ uploads/
 compressed/
 log/
 listings.json
+
+creds/

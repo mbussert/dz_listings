@@ -9,7 +9,7 @@
   <div id="upper_left" class="svg"></div>
   <div id="upper_right" class="svg"></div>
   <!-- <div id="lower_left"></div> -->
-  <div id="lower_right"></div>
+  <div id="lower_right" class="svg"></div>
   <div class="container">
     <%- include('partials/navbar'); %>
     <h1>
@@ -42,15 +42,6 @@
 
   </div>
   <%- include('partials/footer'); %>
-  <script>
-    var grid1 = new Muuri('.grid-1', {
-      dragEnabled: true,
-      dragContainer: document.body,
-      dragSort: function () {
-        return [grid1]
-      }
-    });
-  </script>
 </body>
 <%- include('partials/afterbody'); %>
 

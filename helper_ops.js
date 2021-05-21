@@ -2,22 +2,19 @@ const ops = {};
 const give = {};
 const dotenv = require('dotenv');
 dotenv.config();
-
-const multer = require('multer');
+const Multer = require('multer');
 const path = require('path');
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, path.resolve(__dirname, './uploads'));
+
+
+give.upload = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 3 * 1024 * 1024, // no larger than 3mb.
   },
   filename: function(req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
   },
-});
-
-give.upload = multer({
-  storage: storage,
-  limits: {fileSize: 2 * 1024 * 1024},
 });
 
 const sanitizeHtml = require('sanitize-html');
@@ -157,7 +154,7 @@ transporter.verify(function(error, success) {
  * @param {string} message HTML content
  */
 ops.approveMail = function approveMail(message) {
-  transporter.sendEmail({
+  transporter.sendMail({
     from: EMAIL_FROM,
     to: EMAIL_TO,
     subject: '@@LISTINGS@@',
@@ -178,7 +175,7 @@ ops.approveMail = function approveMail(message) {
  * @param {string} message HTML content
  */
 ops.MIMMail = function MIMMail({message, EMAIL_SENDER, EMAIL_RECIEVER, subjectId}) {
-  transporter.sendEmail({
+  transporter.sendMail({
     from: EMAIL_FROM,
     to: EMAIL_RECIEVER,
     cc: [EMAIL_SENDER],

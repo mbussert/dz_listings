@@ -155,10 +155,10 @@ db.sortDB = function sortDB() {
 };
 
 // Get from disk
-db.backup = function backup() {
+db.backup = function backup(snapshot = './data/db/listings.json') {
   console.log('===== backup ===== ');
   if (!global.listings || global.listings.length == 0) {
-    global.listings = loadData('listings.json');
+    global.listings = loadData(snapshot);
   }
   if (!global.listings || global.listings.length == 0) {
     global.listings = [
@@ -204,7 +204,7 @@ db.setView = function setView() {
 };
 
 // Set from disk
-db.persist = function persist(snapshot = 'listings.json') {
+db.persist = function persist(snapshot = './data/db/listings.json') {
   console.log('===== persist ===== ');
   global.listings.forEach((item) => {
     item.desc = Array.from(item.desc);

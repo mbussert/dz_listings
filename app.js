@@ -28,7 +28,6 @@ const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 
-
 const transportOptions = {
   host: 'smtp.office365.com', // Office 365 server
   port: 587, // secure SMTP

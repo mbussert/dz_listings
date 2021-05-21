@@ -226,8 +226,14 @@ function isArabic(str) {
   const count = str.match(arabic);
   return count && ((count.length / str.length) > 0.5);
 }
+
+const {Storage} = require('@google-cloud/storage');
+const {format} = require('util');
+const storage = new Storage({keyFilename: process.env.CREDS_PATH});
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+
 router.post('/add',
-    global.passwordless.restricted({failureRedirect: '/login'}),
+    /*global.passwordless.restricted({failureRedirect: '/login'}),*/
     giveObj.upload.single('avatar'),
     async (req, res, next) => {
       if (process.env.NODE_ENV === 'dev') {
@@ -265,29 +271,47 @@ router.post('/add',
           data: body,
           error: error,
         });
+        // At least request object is correct
       } else {
         const password = (Math.random().toString(36).substr(4)).slice(0, 9);
         const now = Math.floor(new Date().getTime() / 1000);
         const htmlCleanDesc = giveOp.sanitize(body.desc);
         const maskedDesc = giveOp.cleanSensitive(htmlCleanDesc);
         body.desc = isArabic(maskedDesc) ?
-    giveOp.compress_ar(maskedDesc) :
-    giveOp.compress_en(maskedDesc);
+        giveOp.compress_ar(maskedDesc) :
+        giveOp.compress_en(maskedDesc);
 
-        const entry = _.extend(body, {
-          id: now,
-          pass: password,
-          d: 0,
-          a: 1,
-          img: req.file.filename,
-          usr: req.session.user,
-          ara: isArabic(maskedDesc),
+        // Upload that damn picture
+        // Create a new blob in the bucket and upload the file data.
+        const blob = bucket.file(req.file.originalname);
+        const blobStream = blob.createWriteStream();
+        blobStream.on('error', (err) => {
+          next(err);
         });
-        const err = db.push(entry);
-        console.log(err);
-        // TODO: not here, in a cron job
-        db.persist();
-        if (!err) {
+        blobStream.on('finish', () => {
+          // The public URL can be used to directly access the file via HTTP.
+          const publicUrl = format(
+              `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
+          );
+          const entry = _.extend(body, {
+            id: now,
+            pass: password,
+            d: 0,
+            a: 1,
+            img: publicUrl,
+            usr: req.session.user,
+            ara: isArabic(maskedDesc),
+          });
+          const err = db.push(entry);
+          // TODO: not here, in a cron job
+          db.persist();
+          if (err) {
+            res.render('listing', {
+              title: 'Express',
+              data: err,
+              error: 'Oops, an error accured :(',
+            });
+          }
           giveOp.approveMail(messages.Mail.en(pass, pass2, entry.id));
           res.render('listing', {
             title: 'One listing',
@@ -296,15 +320,8 @@ router.post('/add',
             success: 'Success. Here is the password whenever you want to deactivate the listing :)',
             error: 'Image will be loaded shortly!',
           });
-        } else
-        // if error
-        {
-          res.render('listing', {
-            title: 'Express',
-            data: err,
-            error: 'Oops, an error accured :(',
-          });
-        }
+        });
+        blobStream.end(req.file.buffer);
       }
     });
 

@@ -186,18 +186,20 @@ let englishTags;
 let arabicTags;
 
 const choices = document.getElementsByClassName('tagsLang');
-const englishChoice = choices[0];
-const arabicChoice = choices[1];
-englishChoice.onclick = function() {
-  if (englishTags && inputTags) {
-    newTagify(inputTags, englishTags);
-  }
-};
-arabicChoice.onclick = function() {
-  if (arabicTags && inputTags) {
-    newTagify(inputTags, arabicTags);
-  }
-};
+if (choices.length ===2) {
+  const englishChoice = choices[0];
+  const arabicChoice = choices[1];
+  englishChoice.onclick = function() {
+    if (englishTags && inputTags) {
+      newTagify(inputTags, englishTags);
+    }
+  };
+  arabicChoice.onclick = function() {
+    if (arabicTags && inputTags) {
+      newTagify(inputTags, arabicTags);
+    }
+  };
+}
 
 if (inputTags) {
   fetch('/listings/get_tags_lite_ar')
