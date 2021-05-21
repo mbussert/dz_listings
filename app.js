@@ -10,7 +10,33 @@ const dotenv = require('dotenv');
 const Filter = require('bad-words');
 const compression = require('compression');
 // var CensorifyIt = require('censorify-it')
+const i18next = require('i18next');
+const Backend = require('i18next-node-fs-backend');
+const i18nextMiddleware = require('i18next-express-middleware');
+
+i18next
+    .use(Backend)
+    .use(i18nextMiddleware.LanguageDetector)
+    .init({
+      backend: {
+        loadPath: __dirname + '/data/locales/{{lng}}/{{ns}}.json',
+      },
+      fallbackLng: 'en',
+      preload: ['en', 'ar', 'fr'],
+    });
+
+
 const app = express();
+
+app.use(i18nextMiddleware.handle(i18next));
+
+app.get('/greeting', (req, res) => {
+  const response = req.t('greeting');
+  res.status(200);
+  res.send(response);
+});
+
+
 app.use(compression());
 
 const session = require('express-session');
