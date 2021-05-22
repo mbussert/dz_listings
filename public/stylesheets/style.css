@@ -4,6 +4,18 @@
   --paper: #f4f2ea;
 }
 
+body[lang="en"] [lang="fr"], body[lang="fr"] [lang="en"] {
+  display: none;
+}
+
+body[lang="en"] [lang="ar"], body[lang="ar"] [lang="en"] {
+  display: none;
+}
+
+body[lang="fr"] [lang="ar"], body[lang="ar"] [lang="fr"] {
+  display: none;
+}
+
 html {
   height: 100%;
   font-family: News Cycle;

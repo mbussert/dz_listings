@@ -4,6 +4,23 @@
 // console.log(`Latitude: ${lat_}`)
 // console.log(`Longitude: ${lng_}`)
 // Helpers
+// parse String Cookie into Object
+// https://gist.github.com/rendro/525bbbf85e84fa9042c2
+const cookizz = document.cookie
+    .split(';')
+    .reduce((res, c) => {
+      const [key, val] = c.trim().split('=').map(decodeURIComponent);
+      try {
+        return Object.assign(res, {[key]: JSON.parse(val)});
+      } catch (e) {
+        return Object.assign(res, {[key]: val});
+      }
+    }, {});
+
+if (cookizz.locale) {
+  document.body.setAttribute('lang', cookizz.locale);
+  console.log('SET LANGUAGE TO: '+cookizz.locale);
+}
 
 if (!window.LIS) {
   LIS = {
