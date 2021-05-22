@@ -345,34 +345,34 @@ footer {
   border-left-color: crimson;
 }
 
-#upper_left {
-  width: 125px;
-  height: 125px;
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  background-image: url("/images/1546457182.svg");
-  background-repeat: no-repeat;
-}
-
-#upper_right {
-  width: 125px;
-  height: 125px;
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  background-image: url("/images/1546457622.svg");
-  background-repeat: no-repeat;
-}
-
-#lower_right {
-  width: 125px;
-  height: 125px;
-  bottom: 5%;
-  right: 5%;
-  position: fixed;
-  background-image: url("/images/1548790076.svg");
-  background-repeat: no-repeat;
+@media screen and (min-width: 1400px) {
+  #upper_left {
+    width: 125px;
+    height: 125px;
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    background-image: url("/images/1546457182.svg");
+    background-repeat: no-repeat;
+  }
+  #upper_right {
+    width: 125px;
+    height: 125px;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    background-image: url("/images/1546457622.svg");
+    background-repeat: no-repeat;
+  }
+  #lower_right {
+    width: 125px;
+    height: 125px;
+    bottom: 5%;
+    right: 5%;
+    position: fixed;
+    background-image: url("/images/1548790076.svg");
+    background-repeat: no-repeat;
+  }
 }
 
 .hidden {
