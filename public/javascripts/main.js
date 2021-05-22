@@ -16,10 +16,12 @@ const cookizz = document.cookie
         return Object.assign(res, {[key]: val});
       }
     }, {});
-
 if (cookizz.locale) {
   document.body.setAttribute('lang', cookizz.locale);
-  console.log('SET LANGUAGE TO: '+cookizz.locale);
+  const langOptions = document.getElementsByTagName('option')
+  const opt = [...langOptions].filter((opt) => opt.value===cookizz.locale)[0];
+  opt.selected = 'selected';
+  console.log('SET LANGUAGE TO: ' + cookizz.locale);
 }
 
 if (!window.LIS) {
@@ -37,21 +39,14 @@ if (!window.LIS) {
 function remove(id) {
   document.getElementById(id).parentNode.removeChild(document.getElementById(id));
 }
-// Language selector.
-/**
- * Sets an attribute 'lang' with node value
- * @param {dom} el dom element
- */
-// function langChange(el) {
-//   document.body.setAttribute('lang', el.value);
-// }
+
 
 /**
- * Adds 'lang' value and redicrects to 'setlocale'
+ * Server hit on /i18n/:locale
  * @param {string} lgu
  */
 function langSelect(lgu) {
-  window.location = '/setlocale/'+lgu.value;
+  fetch(`/i18n/${lgu.value}`);
 }
 
 /**
