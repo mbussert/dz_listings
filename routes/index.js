@@ -30,9 +30,9 @@ router.get('/tag/:tag', function(req, res, next) {
 router.get('/categories', function(req, res, next) {
   res.render('blogs', {
     title: 'Categories', user: req.session.user, sections: [
-      {id: 'Donations', html: messages.Donations.en},
-      {id: 'Artworks', html: messages.Artworks.en},
-      {id: 'Blogs', html: messages.Blogs.en},
+      {id: 'Donations', html: req.t('Donations')},
+      {id: 'Artworks', html: req.t('Artworks')},
+      {id: 'Blogs', html: req.t('Blogs')},
     ],
   });
 });
@@ -40,8 +40,8 @@ router.get('/categories', function(req, res, next) {
 router.get('/about', function(req, res, next) {
   res.render('blogs', {
     title: 'What is DZ Listings', user: req.session.user, sections: [
-      {id: 'What is', html: messages['What is'].en},
-      {id: 'Careful', html: messages['What is, careful'].en},
+      {id: 'What is', html: req.t('What is')},
+      {id: 'Careful', html: req.t('What is, careful')},
     ],
   });
 });
@@ -49,9 +49,9 @@ router.get('/about', function(req, res, next) {
 router.get('/howto', function(req, res, next) {
   res.render('blogs', {
     title: 'How to post on Listings', user: req.session.user, sections: [
-      {id: 'Careful', html: messages.Careful.en},
-      {id: 'Login', html: messages.Login.en},
-      {id: 'Validation', html: messages.Validation.en},
+      {id: 'Careful', html: req.t('Careful')},
+      {id: 'Login', html: req.t('Login')},
+      {id: 'Validation', html: req.t('Validation')},
     ],
   });
 });
