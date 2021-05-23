@@ -6,6 +6,24 @@
 // Helpers
 // parse String Cookie into Object
 // https://gist.github.com/rendro/525bbbf85e84fa9042c2
+/**
+ * Setup adds funcs to nodes
+ * to chain operations safely (if nodes don't exist in any HTML page)
+ * @param {*} nodes
+ * @param {*} funcs
+ */
+function setup(nodes, funcs) {
+  nodes = nodes.filter(Boolean);
+  funcs = funcs.filter(Boolean);
+  funcs.forEach((func) => {
+    nodes.forEach((node) => {
+      node[func.name] = (_) => func(node);
+    });
+  });
+}
+
+// COOKIES ARE DEFINED IN SERVER WITH LOCAL=?
+// TURL COOKIES TO OBJECTS
 const cookizz = document.cookie
     .split(';')
     .reduce((res, c) => {
@@ -16,14 +34,15 @@ const cookizz = document.cookie
         return Object.assign(res, {[key]: val});
       }
     }, {});
+// BASED ON LOCALE SET THE DEFAULT SELECT INPUT OPTION
 if (cookizz.locale) {
   document.body.setAttribute('lang', cookizz.locale);
-  const langOptions = document.getElementsByTagName('option')
+  const langOptions = document.getElementsByTagName('option');
   const opt = [...langOptions].filter((opt) => opt.value===cookizz.locale)[0];
   opt.selected = 'selected';
   console.log('SET LANGUAGE TO: ' + cookizz.locale);
 }
-
+// DEFINED ALIASES FOR SOME COMMON LONG NAMED FUNCTIONS 
 if (!window.LIS) {
   LIS = {
     id: function(id) {
@@ -58,7 +77,13 @@ const loadFile = function(event) {
   image.src = URL.createObjectURL(event.target.files[0]);
 };
 
-if (document.querySelector('.row .col p')) {
+/**
+ * ADD 'github.com/Haroenv/holmes' INSTANT SEARCH
+ * MUST EXIST:
+ *    .search input
+ *    .col.listing
+ */
+function addHolmes() {
   try {
     const h = holmes({
       input: '.search input',
@@ -89,6 +114,10 @@ if (document.querySelector('.row .col p')) {
   } catch (error) {
     console.log('Maybe running where there is no list in HTML | ERROR: ', error.message);
   }
+}
+
+if (document.querySelector('.row .col p')) {
+  addHolmes();
 }
 
 
@@ -129,31 +158,43 @@ function stripHtml(html) {
   return tmp.textContent || tmp.innerText || '';
 }
 
-// on succeeds on pages with `editor` and `html-output` and other inputs
-try {
-  const editor = pell.init({
-    element: LIS.id('editor'),
-    onChange: (html) => {
-      LIS.id('html-output').textContent = html;
-      const raw = stripHtml(html);
-      const charactersLeft = 200 - raw.length;
-      const count = LIS.id('characters-left');
-      count.innerHTML = 'Characters left: ' + charactersLeft;
-      document.querySelectorAll('.add#description')[0].value = (html);
-    },
-    classes: {
-      actionbar: 'pell-actionbar',
-      button: 'pell-button',
-      content: 'pell-content',
-      selected: 'pell-button-selected',
-    },
-  });
-  // editor.content<HTMLElement>
-  // To change the editor's content:
-  editor.content.innerHTML = '';
-} catch (error) {
-  console.log('Maybe running where pen is not in HTML | ERROR: ', error.message);
+/**
+ * ADD 'github.com/jaredreich/pell' RICH EDITOR
+ * MUST EXIST:
+ *    #editor
+ *    #html-output
+ *    #characters-left
+ *    .add#description
+ */
+function addPell() {
+  // on succeeds on pages with `editor` and `html-output` and other inputs
+  try {
+    const editor = pell.init({
+      element: LIS.id('editor'),
+      onChange: (html) => {
+        LIS.id('html-output').textContent = html;
+        const raw = stripHtml(html);
+        const charactersLeft = 200 - raw.length;
+        const count = LIS.id('characters-left');
+        count.innerHTML = 'Characters left: ' + charactersLeft;
+        document.querySelectorAll('.add#description')[0].value = (html);
+      },
+      classes: {
+        actionbar: 'pell-actionbar',
+        button: 'pell-button',
+        content: 'pell-content',
+        selected: 'pell-button-selected',
+      },
+    });
+    // editor.content<HTMLElement>
+    // To change the editor's content:
+    editor.content.innerHTML = '';
+  } catch (error) {
+    console.log('Maybe running where pen is not in HTML | ERROR: ', error.message);
+  }
 }
+
+addPell();
 
 // TODO: if not found
 // The DOM element you wish to replace with Tagify

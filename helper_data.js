@@ -4,7 +4,8 @@ const fs = require('fs');
 const db = {};
 const give = {};
 const giveOp = require('./helper_ops').ops;
-
+const dbDir = './data/db/';
+const dbPath = (num) => `${dbDir}listings-${num}.json`;
 // title: 'title1' => is a title
 // a: 0 => approved by admin
 // d: 0 => deactivated by user
@@ -66,6 +67,17 @@ watcher
       console.error('Error happened', error);
     });
 
+const getMostRecentFile = (dir) => {
+  const files = orderReccentFiles(dir);
+  return files.length ? files : undefined;
+};
+
+const orderReccentFiles = (dir) => {
+  return fs.readdirSync(dir)
+      .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
+      .map((file) => ({file, mtime: fs.lstatSync(path.join(dir, file)).mtime}))
+      .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+};
 
 // Clean and persist every 3 hours
 const CronJob = require('cron').CronJob;
@@ -155,7 +167,13 @@ db.sortDB = function sortDB() {
 };
 
 // Get from disk
-db.backup = function backup(snapshot = './data/db/listings.json') {
+// Restores the previous database if it is a restart from a graceful shutdown
+db.backup = function backup(crashedDB = false) {
+  const dbList = getMostRecentFile(dbDir);
+  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
+  // Assume DB was not crashed if only one DB is present
+  crashedDB = lastDB == 0 ? false : crashedDB;
+  const snapshot = crashedDB ? dbPath(--lastDB) : dbPath(lastDB);
   console.log('===== backup ===== ');
   if (!global.listings || global.listings.length == 0) {
     global.listings = loadData(snapshot);
@@ -204,7 +222,10 @@ db.setView = function setView() {
 };
 
 // Set from disk
-db.persist = function persist(snapshot = './data/db/listings.json') {
+db.persist = function persist() {
+  const dbList = getMostRecentFile(dbDir);
+  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
+  const snapshot = dbPath(++lastDB);
   console.log('===== persist ===== ');
   global.listings.forEach((item) => {
     item.desc = Array.from(item.desc);

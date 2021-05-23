@@ -65,7 +65,7 @@ const glob = require('glob');
 
 // options is optional
 glob('**/data/db/*.json', function(er, files) {
-  console.log(files[0]);
+  // console.log(files[0]);
   // files is an array of filenames.
   // If the `nonull` option is set, and nothing
   // was found, then files is ["**/*.js"]
@@ -77,7 +77,7 @@ const path = require('path');
 
 const getMostRecentFile = (dir) => {
   const files = orderReccentFiles(dir);
-  return files.length ? files[0] : undefined;
+  return files.length ? files : undefined;
 };
 
 const orderReccentFiles = (dir) => {
@@ -86,12 +86,12 @@ const orderReccentFiles = (dir) => {
       .map((file) => ({file, mtime: fs.lstatSync(path.join(dir, file)).mtime}))
       .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
-
-console.log(getMostRecentFile('./data/db/'));
-
-const now = new Date();
-const logfile_name = './data/db/listings_'+
-now.getFullYear() +
-'-'+ now.getMonth() +
-'-' + now.getDate() +
-'.json';
+const dbList = getMostRecentFile('./data/db/');
+const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
+console.log(lastDB);
+// const now = new Date();
+// const logfile_name = './data/db/listings_'+
+// now.getFullYear() +
+// '-'+ now.getMonth() +
+// '-' + now.getDate() +
+// '.json';
