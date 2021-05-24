@@ -114,9 +114,46 @@ if (process.env.NODE_ENV !== 'prod') {
   }));
 }
 
+// ERROR HANDLING IN EXTREME CASES!!!
+// ASSUME ANY MAJOR ERROR IS CAUSED BY DATA INCONSISTENCY IN LAST DB
+// ON ANY MAJOR ERROR: SIGINT, SIGTERM OR UNCAUGHTEXCEPTION: FLAG DB
+// DB IS CONSIDERED ERRONOUS AND RENAMED BY (+1) TO BECOME AN ODD NUMBER
+// LAST DB WILL BE DOWN-GRADED
+// AND THE PREVIOUS VALID DB IS TAKEN FOR THE NEXT STARTUP UNTIL MANUAL ADMIN DEBUG
 
+const fs = require('fs');
+const path = require('path');
+const dbDir = './data/db/';
+const dbPath = (num) => `${dbDir}listings-${num}.json`;
 const gracefulShutdown = require('http-graceful-shutdown');
+const getMostRecentFile = (dir) => {
+  const files = orderReccentFiles(dir);
+  return files.length ? files : undefined;
+};
 
+const orderReccentFiles = (dir) => {
+  return fs.readdirSync(dir)
+      .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
+      .map((file) => ({file, mtime: fs.lstatSync(path.join(dir, file)).mtime}))
+      .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+};
+
+let flaggedInRun = false;
+/**
+ * flagDb renames last db name listings-${num}.json to odd number
+ */
+function flagDB() {
+  if (flaggedInRun) {
+    return;
+  }
+  flaggedInRun = true;
+  const dbList = getMostRecentFile(dbDir);
+  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(
+      /\d+/)[0]))).filter((a) => !(a % 2)));
+  fs.rename(dbPath(lastDB), dbPath(lastDB+1), function(err) {
+    if ( err ) console.log('ERROR: ' + err);
+  });
+}
 /**
  * shutdownFunction
  * @param {Number} signal
@@ -138,6 +175,7 @@ function shutdownFunction(signal) {
  */
 function finalFunction() {
   console.log('Server gracefulls shutted down.....');
+  flagDB();
 }
 
 gracefulShutdown(server,
@@ -153,22 +191,22 @@ gracefulShutdown(server,
     },
 );
 
-const fs = require('fs');
-const path = require('path');
-const filePath = path.join(__dirname, '../restartLevel.txt');
-let restartLevel = -1;
-fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data) {
-  if (!err) {
-    restartLevel = parseInt(data);
-    console.log(restartLevel);
-  } else {
-    console.log(err);
-  }
-});
+
+// const filePath = path.join(__dirname, '../restartLevel.txt');
+// let restartLevel = -1;
+// fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data) {
+//   if (!err) {
+//     restartLevel = parseInt(data);
+//     console.log(restartLevel);
+//   } else {
+//     console.log(err);
+//   }
+// });
 
 process.on('uncaughtException', function(err) {
   // handle the error safely
   console.log(err);
+  flagDB();
   process.exit(1);
 });
 

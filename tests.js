@@ -87,7 +87,10 @@ const orderReccentFiles = (dir) => {
       .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
 const dbList = getMostRecentFile('./data/db/');
-const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
+console.log((dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))))
+const evens = (dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))).filter((a) => !(a%2));
+console.log(evens);
+const lastDB = Math.max(...evens);
 console.log(lastDB);
 // const now = new Date();
 // const logfile_name = './data/db/listings_'+

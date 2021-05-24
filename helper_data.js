@@ -128,6 +128,7 @@ const storeData = (data, path) => {
  * @return {json}
  */
 const loadData = (path) => {
+  console.log('LOADING PATH: '+ path);
   try {
     return JSON.parse(fs.readFileSync(path, 'utf8')).data;
   } catch (err) {
@@ -168,12 +169,11 @@ db.sortDB = function sortDB() {
 
 // Get from disk
 // Restores the previous database if it is a restart from a graceful shutdown
-db.backup = function backup(crashedDB = false) {
+db.backup = function backup() {
   const dbList = getMostRecentFile(dbDir);
-  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
-  // Assume DB was not crashed if only one DB is present
-  crashedDB = lastDB == 0 ? false : crashedDB;
-  const snapshot = crashedDB ? dbPath(--lastDB) : dbPath(lastDB);
+  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(
+      /\d+/)[0]))).filter((a) => !(a % 2)));
+  const snapshot = dbPath(lastDB);
   console.log('===== backup ===== ');
   if (!global.listings || global.listings.length == 0) {
     global.listings = loadData(snapshot);
@@ -224,8 +224,9 @@ db.setView = function setView() {
 // Set from disk
 db.persist = function persist() {
   const dbList = getMostRecentFile(dbDir);
-  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(/\d+/)[0]))));
-  const snapshot = dbPath(++lastDB);
+  const lastDB = Math.max(...(dbList.map((a) => parseInt(a.file.match(
+      /\d+/)[0]))).filter((a) => !(a % 2)));
+  const snapshot = dbPath(lastDB+2);
   console.log('===== persist ===== ');
   global.listings.forEach((item) => {
     item.desc = Array.from(item.desc);
