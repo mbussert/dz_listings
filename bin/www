@@ -101,9 +101,9 @@ function onListening() {
   debug('Listening on ' + bind);
   const dbList = getMostRecentFile(dbDir);
   // last2DBs: are last two DBs valid ?
-  const last2DBs = (dbList.map((a) => parseInt(a.file.match(
+  let last2DBs = (dbList.map((a) => parseInt(a.file.match(
       /\d+/)[0]))).slice(-2).filter((a) => !(a % 2)).length;
-  last2DBs = false
+  last2DBs = false;
   // if yes then send ready
   if (last2DBs) {
     // pm2
