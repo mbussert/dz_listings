@@ -1,10 +1,12 @@
 <script src="/javascripts/pell.min.js"></script>
 <script src="/javascripts/tagify.min.js"></script>
-<link href="/stylesheets/toasty.min.css" rel="stylesheet">
+<link href="/stylesheets/toasty.min.css" rel="stylesheet" />
 <script src="/javascripts/toasty.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+<script
+  src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-  crossorigin=""></script>
+  crossorigin=""
+></script>
 <script src="/javascripts/holmes.js"></script>
 <script src="/javascripts/microlight.js"></script>
 <script src="/javascripts/dz.js"></script>
@@ -13,12 +15,10 @@
 <script src="/socket.io/socket.io.min.js"></script>
 <script>
   var socket = io();
-  socket.on('broadcast', function (data) {
+  socket.on("broadcast", function (data) {
     try {
-      remove(data)
-    } catch (error) {
-
-    }
+      remove(data);
+    } catch (error) {}
   });
 </script>
 <style>
@@ -30,7 +30,7 @@
     --color-darkGrey: #cccccc;
   }
 </style>
-<script>
+<!-- <script>
   if (window.matchMedia &&
     window.matchMedia('(prefers-color-scheme: dark)').matches || (localStorage.getItem('dark') === 'true')) {
     document.body.classList.add('dark');
@@ -52,21 +52,87 @@
       document.querySelectorAll('body.dark > .svg').forEach(svgEl => { svgEl.style.filter = "invert(100%)" });
     }
   }
+</script> -->
+<script>
+  let htmlClasses = document.querySelector("html").classList;
+
+  if (
+    (window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches) ||
+    localStorage.theme === "dark"
+  ) {
+    htmlClasses.remove("dark");
+    localStorage.removeItem("theme");
+    document.querySelectorAll("body > .svg").forEach((svgEl) => {
+      svgEl.style.filter = "invert(0%)";
+    });
+    document.querySelector("#theme-switch").innerHTML = "☀️";
+  } else {
+    htmlClasses.add("dark");
+    localStorage.theme = "dark";
+    document.querySelectorAll("body.dark > .svg").forEach((svgEl) => {
+      svgEl.style.filter = "invert(100%)";
+    });
+    document.querySelector("#theme-switch").innerHTML = "🌙";
+  }
+
+  function switchMode(el) {
+    if (localStorage.theme === "dark") {
+      htmlClasses.remove("dark");
+      localStorage.removeItem("theme");
+      document.querySelectorAll("body > .svg").forEach((svgEl) => {
+        svgEl.style.filter = "invert(0%)";
+      });
+      document.querySelector("#theme-switch").innerHTML = "☀️";
+    } else {
+      htmlClasses.add("dark");
+      localStorage.theme = "dark";
+      document.querySelector("#theme-switch").innerHTML = "🌙";
+      document.querySelectorAll("body.dark > .svg").forEach((svgEl) => {
+        svgEl.style.filter = "invert(100%)";
+      });
+    }
+  }
+
+  function loadTheme() {
+    if (
+      localStorage.theme === "dark" ||
+      (!"theme" in localStorage &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.querySelector("html").classList.add("dark");
+      document.querySelectorAll("body.dark > .svg").forEach((svgEl) => {
+        svgEl.style.filter = "invert(100%)";
+      });
+      document.querySelector("#theme-switch").innerHTML = "🌙";
+    } else if (localStorage.theme === "dark") {
+      document.querySelector("html").classList.add("dark");
+      document.querySelectorAll("body.dark > .svg").forEach((svgEl) => {
+        svgEl.style.filter = "invert(100%)";
+      });
+      document.querySelector("#theme-switch").innerHTML = "🌙";
+    }
+  }
+
+  window.onload = loadTheme();
 </script>
 <script>
   function initFingerprintJS() {
     // Initialize an agent at application startup.
-    const fpPromise = FingerprintJS.load()
+    const fpPromise = FingerprintJS.load();
 
     // Get the visitor identifier when you need it.
     fpPromise
-      .then(fp => fp.get())
-      .then(result => {
+      .then((fp) => fp.get())
+      .then((result) => {
         // This is the visitor identifier:
-        const visitorId = result.visitorId
-        console.log(visitorId)
-      })
+        const visitorId = result.visitorId;
+        console.log(visitorId);
+      });
   }
 </script>
-<script async src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="initFingerprintJS()"></script>
+<script
+  async
+  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+  onload="initFingerprintJS()"
+></script>
