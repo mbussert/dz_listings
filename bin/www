@@ -76,7 +76,19 @@ function onError(error) {
       throw error;
   }
 }
+// pm2 --shutdown-with-message recieves a message to shutdown gracefully
+process.on('message', function(msg) {
+  if (msg == 'shutdown') {
+    console.log('Closing all connections...');
+    setTimeout(function() {
+      console.log('Finished closing connections');
+      process.exit(0);
+    }, 1500);
+  }
+});
 
+
+// Graceful start implemented with pm2 --wait-ready
 /**
  * Event listener for HTTP server "listening" event.
  */
@@ -85,7 +97,20 @@ function onListening() {
   const bind = typeof addr === 'string' ?
     'pipe ' + addr :
     'port ' + addr.port;
+  console.log('Listening on ' + bind);
   debug('Listening on ' + bind);
+  const dbList = getMostRecentFile(dbDir);
+  // last2DBs: are last two DBs valid ?
+  const last2DBs = (dbList.map((a) => parseInt(a.file.match(
+      /\d+/)[0]))).slice(-2).filter((a) => !(a % 2)).length;
+  last2DBs = false
+  // if yes then send ready
+  if (last2DBs) {
+    // pm2
+    process.send('ready');
+  } else {
+    process.send('shutdown');
+  }
 }
 
 const winston = require('winston');
